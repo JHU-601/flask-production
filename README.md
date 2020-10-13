@@ -1,4 +1,10 @@
-# flask-production
+# clue-less (flask production)
+
+This repository holds code for the Iron Board Games Clue-less online board game.
+
+## Requirements
+
+You must have Docker installed and running on your system.
 
 ## Setup
 
@@ -14,16 +20,59 @@ git clone https://github.com/JHU-601/flask-production
 cd flask-production
 ```
 
-3. Install dependencies.
+3. Build the docker image.
 
 ```
-pip install -r requirements.txt
+docker build -t clueless:latest .
 ```
 
-4. Run the server.
+4. Start the docker iamge (and run the server).
 
 ```bash
-python server.py
+docker run -d -p 5000:5000 --name cldev clueless
+```
+
+5. Visit [localhost:5000](http://localhost:5000) in your web browser.
+
+## Running Tests
+
+**Client-side**:
+
+```bash
+npm run test
+```
+
+**Server-side**:
+
+```bash
+pytest
+```
+
+## Docker Commands
+
+Start:
+
+```bash
+docker build -t clueless:latest .
+docker run -d -p 5000:5000 --name cldev clueless
+```
+
+Stop:
+
+```bash
+docker stop cldev
+```
+
+View logs:
+
+```bash
+docker logs cldev
+```
+
+Enter shell:
+
+```bash
+docker exec -it cldev bash
 ```
 
 ## Publishing to the Web
