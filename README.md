@@ -39,14 +39,14 @@ docker run -d -p 5000:5000 --name cldev -v $(pwd):/app clueless
 
 5. Visit [localhost:5000](http://localhost:5000) in your web browser.
 
-6. Edit the server files. Just refresh the page to see the changes (they should be reflected.)
+6. Run the tests using the commands below. If the tests run, then you're all set!
 
 ## Running Tests
 
 **Client-side**:
 
 ```bash
-npm run test
+npm test
 ```
 
 **Server-side**:

@@ -1,0 +1,22 @@
+{
+  "name": "clueless",
+  "version": "1.0.0",
+  "description": "JHU Clue-Less online game by Iron Board Games",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha tests/client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JHU-601/flask-production.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JHU-601/flask-production/issues"
+  },
+  "homepage": "https://github.com/JHU-601/flask-production#readme"
+}
