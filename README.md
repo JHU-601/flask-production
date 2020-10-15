@@ -28,11 +28,18 @@ docker build -t clueless:latest .
 
 4. Start the docker iamge (and run the server).
 
+**WINDOWS POWERSHELL:**
+```PowerShell
+docker run -d -p 5000:5000 --name cldev -v ${PWD}:/app clueless
+```
+**MAC/LINUX:**
 ```bash
-docker run -d -p 5000:5000 --name cldev clueless
+docker run -d -p 5000:5000 --name cldev -v $(pwd):/app clueless
 ```
 
 5. Visit [localhost:5000](http://localhost:5000) in your web browser.
+
+6. Edit the server files. Just refresh the page to see the changes (they should be reflected.)
 
 ## Running Tests
 
@@ -48,13 +55,12 @@ npm run test
 pytest
 ```
 
-## Docker Commands
+## More Docker Commands
 
-Start:
+Enter shell:
 
 ```bash
-docker build -t clueless:latest .
-docker run -d -p 5000:5000 --name cldev clueless
+docker exec -it cldev bash
 ```
 
 Stop:
@@ -63,16 +69,16 @@ Stop:
 docker stop cldev
 ```
 
+Remove the container:
+
+```bash
+docker rm cldev
+```
+
 View logs:
 
 ```bash
 docker logs cldev
-```
-
-Enter shell:
-
-```bash
-docker exec -it cldev bash
 ```
 
 ## Publishing to the Web
@@ -82,3 +88,5 @@ To push out the latest code changes on the master branch to the production serve
 ```bash
 git push heroku master
 ```
+
+Pending: possible AWS hosting
