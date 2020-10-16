@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/JHU-601/flask-production/issues"
   },
-  "homepage": "https://github.com/JHU-601/flask-production#readme"
+  "homepage": "https://github.com/JHU-601/flask-production#readme",
+  "dependencies": {
+    "mocha": "^8.2.0"
+  }
 }
