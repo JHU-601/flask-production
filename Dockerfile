@@ -1,32 +1,21 @@
-FROM debian:stable AS base
+FROM debian:stable
+COPY . /app
 
 # Install standard apt packages
 RUN apt-get update -y && \
-  apt-get install -y curl python3 python3-pip nginx 
+  apt-get install -y curl vim git python3 python3-pip python3-dev
 # Install NodeJS
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs
-RUN pip3 install pipenv
 
-FROM base AS dev
-RUN apt-get install -y vim
-
-FROM base AS prod
-
-COPY . /app
+COPY ./requirements.txt /app/requirements.txt
 WORKDIR /app
 
-RUN addgroup --system nginx && \
-    adduser --system --disabled-login --ingroup nginx --no-create-home --home /nonexistent --gecos "nginx user" --shell /bin/false nginx
-
-COPY nginx.conf /etc/nginx/nginx.conf
-RUN nginx -t
-
 # Install Python dependencies
-RUN pipenv install --dev
+RUN pip3 install -r requirements.txt
 # Install JavaScript dependencies
 RUN npm install
 
-COPY entrypoint.sh /root/entrypoint.sh
-
-ENTRYPOINT [ "sh", "/root/entrypoint.sh" ]
+COPY . /app
+ENTRYPOINT [ "python3" ]
+CMD [ "clueless/server.py" ]
