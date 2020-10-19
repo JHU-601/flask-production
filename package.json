@@ -7,7 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests/client"
+    "test": "mocha tests/client",
+    "start": "webpack-dev-server --open --mode development",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -20,10 +22,9 @@
   },
   "homepage": "https://github.com/JHU-601/flask-production#readme",
   "dependencies": {
-    "gulp": "^4.0.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-uglify": "^3.0.2",
     "mocha": "^8.2.0"
+  },
+  "devDependencies": {
+    "webpack": "^4.0.0"
   }
 }

@@ -17,10 +17,8 @@ RUN pip3 install -r requirements.txt
 # Install JavaScript dependencies
 RUN npm install
 
-RUN npm link gulp
-
-# Install gulp for global use
-# RUN npm install -g gulp
+# Install webpack for global use
+RUN npm install -g webpack-cli
 
 COPY . /app
 ENTRYPOINT [ "python3" ]
