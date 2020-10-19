@@ -1,4 +1,4 @@
-from clueless.messages import Character, Room, Hallway, Location
+from clueless.messages import Character, Room, Hallway, Location, Weapon
 
 """
 Character tests
@@ -176,3 +176,26 @@ def test_location_deserialize():
     test_deser(19, Hallway.DINING_KITCHEN)
     test_deser(20, Hallway.CONSERVATORY_BALLROOM)
     test_deser(21, Hallway.BALLROOM_KITCHEN)
+
+"""
+Weapon tests
+"""
+def test_weapon_serialize():
+    def test_ser(w, i):
+        assert w.serialize() == i
+    test_ser(Weapon.ROPE, 0)
+    test_ser(Weapon.PIPE, 1)
+    test_ser(Weapon.KNIFE, 2)
+    test_ser(Weapon.WRENCH, 3)
+    test_ser(Weapon.CANDLESTICK, 4)
+    test_ser(Weapon.REVOLVER, 5)
+
+def test_weapon_deserialize():
+    def test_deser(i, w):
+        assert Weapon.deserialize(i) == w
+    test_deser(0, Weapon.ROPE)
+    test_deser(1, Weapon.PIPE)
+    test_deser(2, Weapon.KNIFE)
+    test_deser(3, Weapon.WRENCH)
+    test_deser(4, Weapon.CANDLESTICK)
+    test_deser(5, Weapon.REVOLVER)
