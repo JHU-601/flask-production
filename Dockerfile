@@ -11,8 +11,6 @@ RUN apt-get install -y nodejs
 COPY ./requirements.txt /app/requirements.txt
 WORKDIR /app
 
-# Install gulp for global use
-RUN npm install -g gulp
 
 # Install Python dependencies
 RUN pip3 install -r requirements.txt
@@ -20,6 +18,9 @@ RUN pip3 install -r requirements.txt
 RUN npm install
 
 RUN npm link gulp
+
+# Install gulp for global use
+# RUN npm install -g gulp
 
 COPY . /app
 ENTRYPOINT [ "python3" ]
