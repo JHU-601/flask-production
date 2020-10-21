@@ -1,2 +1,7 @@
 package-lock.json
 node_modules
+clueless-frontend/package-lock.json
+clueless-frontend/node_modules
+.dockerfile
+Dockerfile
+Dockerfile.prod

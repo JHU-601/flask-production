@@ -20,10 +20,7 @@ WORKDIR /app
 # Install Python dependencies
 RUN pip3 install -r requirements.txt
 # Install JavaScript dependencies
-RUN npm install
-
-RUN npm install -g react-scripts
-RUN yarn add ci-info
+RUN yarn install
 
 COPY . /app
 ENTRYPOINT [ "python3" ]
