@@ -14,9 +14,11 @@
     <script src="../../clueless/static/js/main.js"></script>
     <!-- Tests -->
     <script>
-      QUnit.module('add', function() {
-        QUnit.test('should add two numbers', function(assert) {
-          assert.equal(add(1, 1), 2, '1 + 1 = 2');
+      QUnit.module('Character', function() {
+        QUnit.test('should have a color', function(assert) {
+          var c = new Character();
+          assert.true(c.color != undefined);
+          assert.equal(c.color, Color.DEFAULT);
         });
       });
     </script>
