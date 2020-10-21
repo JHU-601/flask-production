@@ -22,7 +22,8 @@ RUN pip3 install -r requirements.txt
 # Install JavaScript dependencies
 RUN npm install
 
-
+RUN npm install -g react-scripts
+RUN yarn add ci-info
 
 COPY . /app
 ENTRYPOINT [ "python3" ]
