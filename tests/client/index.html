@@ -15,10 +15,27 @@
     <!-- Tests -->
     <script>
       QUnit.module('Character', function() {
-        QUnit.test('should have a color', function(assert) {
-          var c = new Character();
-          assert.true(c.color != undefined);
-          assert.equal(c.color, Color.DEFAULT);
+        QUnit.test('exists and can be instantiated', function(assert) {
+          assert.true(Character !== undefined);
+          assert.true(Character.DEFAULT !== undefined)
+          let c = new Character(Character.DEFAULT);
+          assert.equal(c.type, Character.DEFAULT);
+        });
+      });
+      QUnit.module('Weapon', function() {
+        QUnit.test('exists and can be instantiated', function(assert) {
+          assert.true(Weapon !== undefined);
+          assert.true(Weapon.DEFAULT !== undefined)
+          let w = new Weapon(Weapon.DEFAULT);
+          assert.equal(w.type, Weapon.DEFAULT);
+        });
+      });
+      QUnit.module('Room', function() {
+        QUnit.test('exists and can be instantiated', function(assert) {
+          assert.true(Room !== undefined);
+          assert.true(Room.DEFAULT !== undefined)
+          let r = new Room(Room.DEFAULT);
+          assert.equal(r.type, Room.DEFAULT);
         });
       });
     </script>
