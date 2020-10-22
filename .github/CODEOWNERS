@@ -1,0 +1,5 @@
+tests/client/ @RachelBrodsky @stephengrice
+clueless/static @RachelBrodsky @stephengrice
+
+tests/server/ @KevinKYeh @johnso51 @nguyen-jhu
+clueless/*.py @KevinKYeh @johnso51 @nguyen-jhu
