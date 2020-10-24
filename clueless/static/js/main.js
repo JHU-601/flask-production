@@ -3,24 +3,24 @@
 // const object functions as enum. Has multiple aliases
 // Numbers are per the SRS
 class Character {
-  static DEFAULT = 0
-  static YELLOW = 0
-  static COLONEL_MUSTARD = 0
+  DEFAULT = 0
+  YELLOW = 0
+  COLONEL_MUSTARD = 0
 
-  static RED = 1
-  static MISS_SCARLET = 1
+  RED = 1
+  MISS_SCARLET = 1
 
-  static PURPLE = 2
-  static PROFESSOR_PLUM = 2
+  PURPLE = 2
+  PROFESSOR_PLUM = 2
 
-  static GREEN = 3
-  static MR_GREEN = 3
+  GREEN = 3
+  MR_GREEN = 3
 
-  static WHITE = 4
-  static MRS_WHITE = 4
+  WHITE = 4
+  MRS_WHITE = 4
 
-  static BLUE = 5
-  static MRS_PEACOCK = 5
+  BLUE = 5
+  MRS_PEACOCK = 5
 
   constructor(type) {
     this.type = type;
@@ -28,13 +28,13 @@ class Character {
 };
 
 class Weapon {
-  static DEFAULT = 0
-  static ROPE = 0
-  static PIPE = 1
-  static KNIFE = 2
-  static WRENCH = 3
-  static CANDLESTICK = 4
-  static REVOLVER = 5
+  DEFAULT = 0
+  ROPE = 0
+  PIPE = 1
+  KNIFE = 2
+  WRENCH = 3
+  CANDLESTICK = 4
+  REVOLVER = 5
 
   constructor(type) {
     this.type = type;
@@ -42,16 +42,16 @@ class Weapon {
 }
 
 class Room {
-  static DEFAULT = 0
-  static STUDY = 0
-  static HALL = 1
-  static LOUNGE = 2
-  static LIBRARY = 3
-  static BILLIARD_ROOM = 4
-  static DINING_ROOM = 5
-  static CONSERVATORY = 6
-  static BALLROOM = 7
-  static KITCHEN = 8
+  DEFAULT = 0
+  STUDY = 0
+  HALL = 1
+  LOUNGE = 2
+  LIBRARY = 3
+  BILLIARD_ROOM = 4
+  DINING_ROOM = 5
+  CONSERVATORY = 6
+  BALLROOM = 7
+  KITCHEN = 8
 
   constructor(type) {
     this.type = type;
@@ -60,7 +60,7 @@ class Room {
 
 // -------------------------------------------------------------------------
 
-WEBSOCKET_URL = 'wss://' + window.location.host + '/web_socket'
+WEBSOCKET_URL = 'ws://' + window.location.host + '/web_socket'
 
 function initGameroom() {
   // our "main method" for the gameroom page

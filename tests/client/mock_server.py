@@ -48,7 +48,16 @@ class WebSocketHandler(WebSocket):
 if __name__ == '__main__':
     WebSocketPlugin(cherrypy.engine).subscribe()
     cherrypy.tools.websocket = WebSocketTool()
-    
+
+    # cherrypy.server.socket_host = '0.0.0.0'
+    # cherrypy.server.socket_port = 443
+    cherrypy.server.socket_port = 8080
+    # cherrypy.server.ssl_module = 'builtin'
+    # get these from the 'secure' repo and copy them into the secure folder
+    # cherrypy.server.ssl_certificate = os.path.join(REPO_ROOT, 'secure', "cert.pem")
+    # cherrypy.server.ssl_private_key = os.path.join(REPO_ROOT, 'secure', "privkey.pem")
+    # cherrypy.server.ssl_certificate_chain = ""
+
     CHERRYPY_CONFIG = {
         '/': {
             # Auto-serve static assets like CSS, JS, and images
