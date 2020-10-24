@@ -2,3 +2,5 @@ flask
 flask-socketio
 gunicorn
 pytest
+cherrypy
+ws4py

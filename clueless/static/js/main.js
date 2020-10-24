@@ -57,3 +57,31 @@ class Room {
     this.type = type;
   }
 }
+
+// -------------------------------------------------------------------------
+
+WEBSOCKET_URL = 'wss://' + window.location.host + '/web_socket'
+
+function initGameroom() {
+  // our "main method" for the gameroom page
+  var socket = new WebSocket(WEBSOCKET_URL);
+  socket.onopen = function(event) {
+    console.log('connected to server');
+  };
+  socket.onmessage = function(event) {
+    console.log('received message: ' + event.data)
+  }
+}
+
+function initHomepage() {
+  // our "main method" for the homepage
+  console.log('on homepage');
+}
+
+$(document).ready(function() {
+  if (window.location.pathname.includes('gameroom')) {
+    initGameroom();
+  } else {
+    initHomepage();
+  }
+});
