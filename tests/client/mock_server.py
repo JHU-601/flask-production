@@ -4,21 +4,22 @@ import os
 
 import asyncio
 import websockets
+import json
 
 from aiohttp import web
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 STATIC_DIR = os.path.join(REPO_ROOT, 'clueless', 'static')
 
+async def handleRegister(socket):
+    await socket.send('Received register command')
+
 async def hello(websocket, path):
     while True:
-        name = await websocket.recv()
-        print(f"< {name}")
-
-        greeting = f"Hello {name}!"
-
-        await websocket.send(greeting)
-        print(f"> {greeting}")
+        msg_str = await websocket.recv()
+        msg = json.loads(msg_str)
+        if msg['message'] == 'Register':
+            await handleRegister(websocket)
 
 @asyncio.coroutine
 def index(request):
