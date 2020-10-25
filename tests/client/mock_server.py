@@ -123,6 +123,7 @@ async def websockopen(socket, path):
     # Listen for messages
     while True:
         msg_str = await socket.recv()
+        print('I just received:',msg_str)
         msg = json.loads(msg_str)
         if msg['message'] == 'Register':
             await handleRegister(socket, msg)
