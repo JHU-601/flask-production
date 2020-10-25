@@ -1,6 +1,6 @@
 __pycache__
 node_modules
 .pytest_cache
-
-secure/*.pem
-secure/*.cert
+*.swp
+*.swo
+test_env/
