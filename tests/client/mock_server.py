@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import random
 
 import asyncio
 import websockets
@@ -10,6 +11,9 @@ from aiohttp import web
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 STATIC_DIR = os.path.join(REPO_ROOT, 'clueless', 'static')
+
+# Dirty way of doing this
+first_client = None
 
 async def handleRegister(socket, msg):
     await socket.send('Received register command')
@@ -26,7 +30,22 @@ async def handleSuggestionResponse(socket, msg):
 async def handleAccuse(socket, msg):
     await socket.send('Received accuse, room is %s' % msg['room'])
 
-async def hello(socket, path):
+async def periodic_test_messages(socket):
+    while True:
+        await socket.send(json.dumps(
+            {
+                'message': 'Available',
+                'characters': [x for x in range(5) if random.getrandbits(1)]
+            }
+        ))
+        await asyncio.sleep(1)
+
+async def websockopen(socket, path):
+    # asynchronously send messages at random
+    asyncio.create_task(periodic_test_messages(socket))
+    global first_client
+    first_client = socket # TODO handle multiple clients
+    # Listen for messages
     while True:
         msg_str = await socket.recv()
         msg = json.loads(msg_str)
@@ -43,14 +62,13 @@ async def hello(socket, path):
         else:
             await socket.send('Unrecognized message')
 
-@asyncio.coroutine
-def index(request):
+async def index(request):
     return web.FileResponse(os.path.join(REPO_ROOT, 'clueless', 'static', 'index.html'))
-@asyncio.coroutine
-def gameroom(request):
+
+async def gameroom(request):
     return web.FileResponse(os.path.join(REPO_ROOT, 'clueless', 'static', 'gameroom.html'))
-@asyncio.coroutine
-def other(request):
+
+async def other(request):
     respath = os.path.join(REPO_ROOT, 'clueless', 'static', request.path[1:])
     if os.path.exists(respath):
         return web.FileResponse(respath)
@@ -59,7 +77,7 @@ def other(request):
 
 
 print('Serving on localhost:8080 (web) and localhost:8081 (ws)')
-start_server = websockets.serve(hello, "localhost", 8081)
+start_server = websockets.serve(websockopen, "localhost", 8081)
 
 app = web.Application()
 app.router.add_route('GET', '/', index)

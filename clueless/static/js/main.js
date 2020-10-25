@@ -3,6 +3,22 @@
 WEBSOCKET_URL = 'ws://localhost:8081'; // TODO update to server / something dynamic
 var socket;
 
+function handleMessage(data) {
+  // Handle message received from server
+  // TODO handle invalid message that cannot be parsed
+  try {
+    msg = JSON.parse(data);
+  } catch(err) {
+    console.log('Error parsing server message: ' + data);
+    return;
+  }
+
+  if (msg.message == 'Available') {
+    console.log('Received message Available');
+    $('#msgAvailable').html(data);
+  }
+}
+
 function handleBtnTestClick(e) {
   socket.send('test message');
   console.log('sent test message to server');
@@ -60,7 +76,7 @@ function initGameroom() {
     console.log('connected to server');
   };
   socket.onmessage = function(event) {
-    console.log('received message from server: ' + event.data);
+    handleMessage(event.data);
   }
 }
 
