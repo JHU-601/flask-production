@@ -115,11 +115,33 @@
       </div>
     </form>
     <h3>Message SuggestionResponse</h3>
-    <p>TODO</p>
-
+    <form class="form" id="formSuggestionResponse">
+      <p>Choose witness 0-9 or 10 for "denied."</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=10 name="witness" />
+      </div>
+      <div>
+        <button id="btnSuggestionResponse" class="btn btn-primary">Suggestion Response</button>
+      </div>
+    </form>
     <h3>Message Accuse</h3>
-    <p>TODO</p>
-
+    <form class="form" id="formAccuse">
+      <p>Choose a room (0 to 9).</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=9 name="room" />
+      </div>
+      <p>Choose a suspect (0 to 5).</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=5 name="suspect" />
+      </div>
+      <p>Choose a weapon (0 to 5).</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=5 name="weapon" />
+      </div>
+      <div>
+        <button id="btnAccuse" class="btn btn-primary">Accuse</button>
+      </div>
+    </form>
     <hr>
 
     <h1>Skeletal Increment: Messaging Demonstration</h1>

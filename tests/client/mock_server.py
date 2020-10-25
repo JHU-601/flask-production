@@ -20,6 +20,12 @@ async def handleMove(socket, msg):
 async def handleSuggest(socket, msg):
     await socket.send('Received suggest command to room %s' % msg['room'])
 
+async def handleSuggestionResponse(socket, msg):
+    await socket.send('Received suggestion response, witness is %s' % msg['witness'])
+
+async def handleAccuse(socket, msg):
+    await socket.send('Received accuse, room is %s' % msg['room'])
+
 async def hello(socket, path):
     while True:
         msg_str = await socket.recv()
@@ -30,6 +36,10 @@ async def hello(socket, path):
             await handleMove(socket, msg)
         elif msg['message'] == 'Suggest':
             await handleSuggest(socket, msg)
+        elif msg['message'] == 'SuggestionResponse':
+            await handleSuggestionResponse(socket, msg)
+        elif msg['message'] == 'Accuse':
+            await handleAccuse(socket, msg)
         else:
             await socket.send('Unrecognized message')
 
