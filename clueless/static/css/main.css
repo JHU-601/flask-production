@@ -9,6 +9,8 @@ canvas {
   display: none;
 }
 
+/** screen 1 **/
+
 div#splash {
   position: absolute;
   width: 100%;
@@ -39,4 +41,19 @@ div#startGame .btn-primary {
 }
 div#startGame .btn-primary:hover {
   background-color: black;
+}
+
+/** screen2 gameboard table **/
+table#gameboard td {
+  border: 1px solid black;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  vertical-align: middle;
+}
+table#gameboard td.room {
+  background-color: yellow;
+}
+table#gameboard td.passageway {
+  background-color: lightgray;
 }

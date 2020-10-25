@@ -136,6 +136,21 @@ function initGameroom() {
 function initHomepage() {
   // our "main method" for the homepage
   console.log('on homepage');
+  $('#btnStartGame').click(function() {
+    $('#screen1').fadeOut();
+    $('#screen2').fadeIn();
+  });
+  $('#btnCreateGame').click(function() {
+    console.log('Creating game.');
+    $('#screen2').fadeOut();
+    $('#screen3').fadeIn();
+  });
+  $('#btnJoinGame').click(function() {
+    var gameId = $('#txtGameId').val();
+    console.log('Joining game: ' + gameId);
+    $('#screen2').fadeOut();
+    $('#screen3').fadeIn();
+  });
 }
 //
 // $(window).on('beforeunload', function () {

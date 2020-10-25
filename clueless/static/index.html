@@ -9,13 +9,68 @@
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-  <div id="splash">
-    <img id="imgSplash" src="/img/splash.png" alt="">
+  <div id="screen1">
+    <div id="splash">
+      <img id="imgSplash" src="/img/splash.png" alt="">
+    </div>
+
+    <div id="startGame">
+      <button id="btnStartGame" class="btn btn-primary">Start</button>
+    </div>
   </div>
 
-  <div id="startGame">
-    <!-- <p>To begin, create a game.</p> -->
-    <a href="/gameroom" class="btn btn-primary">Create Game</a>
+  <div id="screen2" style="display: none;">
+    <div>
+      <h1>Choose a Game</h1>
+      <div>
+        <button id="btnCreateGame" class="btn btn-primary">Create New Game</button>
+      </div>
+      <hr>
+      <div>
+        <input id="txtGameId" type="text" placeholder="Game ID" />
+        <button id="btnJoinGame" class="btn btn-primary">Join Existing Game</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen3" style="display: none;">
+    <table class="table" id="gameboard">
+      <tr>
+        <td class="room">Study</td>
+        <td class="passageway">(passageway)</td>
+        <td class="room">Hall</td>
+        <td class="passageway">(passageway)</td>
+        <td class="room">Lounge</td>
+      </tr>
+      <tr>
+        <td class="passageway">(passageway)</td>
+        <td></td>
+        <td class="passageway">(passageway)</td>
+        <td></td>
+        <td class="passageway">(passageway)</td>
+      </tr>
+      <tr>
+        <td class="room">Library</td>
+        <td class="passageway">(passageway)</td>
+        <td class="room">Billiard Room</td>
+        <td class="passageway">(passageway)</td>
+        <td class="room">Dining Room</td>
+      </tr>
+      <tr>
+        <td class="passageway">(passageway)</td>
+        <td></td>
+        <td class="passageway">(passageway)</td>
+        <td></td>
+        <td class="passageway">(passageway)</td>
+      </tr>
+      <tr>
+        <td class="room">Conservatory</td>
+        <td class="passageway">(passageway)</td>
+        <td class="room">Ballroom</td>
+        <td class="passageway">(passageway)</td>
+        <td class="room">Kitchen</td>
+      </tr>
+    </table>
   </div>
 
   <script src="/vendor/js/jquery-3.5.1.min.js"></script>
