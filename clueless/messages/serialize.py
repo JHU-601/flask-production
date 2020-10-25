@@ -1,33 +1,54 @@
 """
 Abstract Base Class for serializeable messages
 """
-from typing import TypeVar, Type, Union, Dict, List
-from abc import ABC, abstractmethod
 
-TMessageSerialize = TypeVar("TMessageSerialize", bound = "MessageSerialize")
+from clueless.messages.location import Hallway, Room, Location
+from clueless.messages.character import Character
+from clueless.messages.weapon import Weapon
+from clueless.messages.server import *
+from clueless.messages.client import *
 
-SerializeValue = Union[str, int, List, Dict]
+import json
 
-class MessageSerialize(ABC):
-    """
-    A Message or component of a message that can be serialized or deserialized
-    """
-    @classmethod
-    def __subclasshook__(cls, subclass):
-        return (hasattr(subclass, 'serialize') and
-                callable(subclass.serialize) and
-                hasattr(subclass, 'deserialize') and
-                callable(subclass.deserialize))
+MESSAGE_NAMES = {
+    'register': Register,
+    'move': Move,
+    'suggest': Suggest,
+    'suggestion-response': SuggestionResponse,
+    'accuse': Accuse,
+    "status" : Status,
+    "available" : Available,
+    "status" : Registration,
+    "witness" : Witness,
+    "position" : Position,
+    "player-turn" : PlayerTurn,
+    "suggestion" : Suggestion,
+    "suggestion-query" : SuggestionQuery,
+    "suggestion-status" : SuggestionStatus,
+    "suggestion-witness" : SuggestionWitness,
+    "accusation" : Accusation,
+    "winner" : Winner,
+    "disqualified" : Disqualified,
+}
 
-    @abstractmethod
-    def serialize(self) -> SerializeValue:
-        """
-        Serialize the value to a valid JSON serializeable value
-        """
+class MessageEncoder(json.JSONEncoder):
+    def default(self, item):
+        if isinstance(item, Hallway) or \
+              isinstance(item, Character) or \
+              isinstance(item, Room) or \
+              isinstance(item, Location):
+            return item.value
+        elif hasattr(item, 'message_name') and callable(item.message_name):
+            value = item.__dict__
+            value['message'] = item.message_name()
+            return value
+        else:
+            return super().default(item)
 
-    @classmethod
-    @abstractmethod
-    def deserialize(cls: Type[TMessageSerialize], val: SerializeValue) -> TMessageSerialize:
-        """
-        Deserialize the value from a JSON value
-        """
+
+def decode_message(dct):
+    if 'message' in dct and dct['message'] in MESSAGE_NAMES:
+        func = MESSAGE_NAMES[dct['message']]
+        del dct['message']
+        return func(**dct)
+    return dct

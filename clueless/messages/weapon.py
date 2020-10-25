@@ -4,11 +4,9 @@ Weapon base type for backend logic and API.
 from __future__ import annotations
 
 from enum import IntEnum, auto
-from typing import Type, Set
+from typing import Union, Set
 from clueless.error import ApiError
-from clueless.messages.serialize import MessageSerialize, TMessageSerialize
 
-@MessageSerialize.register
 class Weapon(IntEnum):
     """
     Enumeration of a unique weapon in the game
@@ -25,14 +23,14 @@ class Weapon(IntEnum):
         return f'{self.name}'.lower().title()
 
     @classmethod
-    def _from_name(cls, val: str) -> Room:
+    def _from_name(cls, val: str) -> Weapon:
         try:
             return cls[val.upper()]
         except KeyError:
             raise ApiError(f'Invalid room name {val}') from KeyError
 
     @classmethod
-    def _from_ordinal(cls, ordinal: int) -> Room:
+    def _from_ordinal(cls, ordinal: int) -> Weapon:
         try:
             return cls(ordinal)
         except ValueError:
@@ -43,10 +41,12 @@ class Weapon(IntEnum):
         return self.value
 
     @classmethod
-    def deserialize(cls: Type[TMessageSerialize], val: str) -> Room: # type: ignore
+    def deserialize(cls, val: Union[str, int]) -> Weapon:
         # pylint: disable=missing-function-docstring
+        if isinstance(val, int):
+            return Weapon._from_ordinal(val)
         try:
-            intval = int(val)
+            intval: int = int(val)
             return Weapon._from_ordinal(intval)
         except ValueError:
             return Weapon._from_name(val)

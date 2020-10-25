@@ -4,9 +4,8 @@ Character base type for use in the backend logic and sent over the API.
 from __future__ import annotations
 
 from enum import IntEnum
-from typing import Type
+from typing import Union
 from clueless.error import ApiError
-from clueless.messages.serialize import MessageSerialize, TMessageSerialize
 
 _CHARACTER_NAMES = [
   "Colonel Mustard",
@@ -18,7 +17,6 @@ _CHARACTER_NAMES = [
 ]
 
 
-@MessageSerialize.register
 class Character(IntEnum):
     """
     Enumeration of characters.
@@ -51,11 +49,17 @@ class Character(IntEnum):
         except ValueError:
             raise ApiError(f'Invalid character ordinal {ordinal}') from ValueError
 
-    def serialize(self) -> str:
+    def serialize(self) -> int:
         # pylint: disable=missing-function-docstring
         return self.value
 
     @classmethod
-    def deserialize(cls: Type[TMessageSerialize], val: str) -> Character: # type: ignore
+    def deserialize(cls, val: Union[str, int]) -> Character:
         # pylint: disable=missing-function-docstring
-        return Character._from_ordinal(val)
+        if isinstance(val, int):
+          return Character._from_ordinal(val)
+        try:
+            intval: int = int(val)
+            return Character._from_ordinal(intval)
+        except ValueError:
+            return Character._from_name(val)
