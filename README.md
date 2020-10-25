@@ -4,9 +4,13 @@ This repository holds code for the Iron Board Games Clue-less online board game.
 
 ## Requirements
 
-You must have Docker installed and running on your system.
+You must have Docker installed and running on your system. Alternatively, you can develop locally with pipenv, which can be installed with:
 
-## Setup
+```bash
+pip install pipenv
+```
+
+## Setup (Docker)
 
 1. Clone this repository.
 
@@ -41,6 +45,22 @@ docker run -d -p 5000:5000 --name cldev -v $(pwd):/app clueless
 
 6. Run the tests using the commands below. If the tests run, then you're all set!
 
+## Setup (pipenv)
+
+1. Clone the repository and enter the directory as above.
+2. Install the pipenv specified by `Pipfile`.
+
+```bash
+pipenv install --dev
+```
+3. Enter the newly created pipenv.
+
+```bash
+pipenv shell
+```
+
+Alternatively, if you are using an IDE with python support (e.g. PyCharm) the pipenv will be set up automatically.
+
 ## Running Tests
 
 **Client-side**:
@@ -51,8 +71,15 @@ npm test
 
 **Server-side**:
 
+The `test.py` python file can be used to run all the tests, running `pylint`, `mypy`, and `pytest`.
 ```bash
-pytest
+python test.py
+```
+
+A single tool (or a combination of these tools) can be run by specifying the name as an argument, e.g.:
+```bash
+python test.py pytest
+python test.py mypy pylint
 ```
 
 ## More Docker Commands
