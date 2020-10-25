@@ -1,73 +1,50 @@
+#!/usr/bin/env python
+
 import os
 
-import cherrypy
-from cherrypy.lib.static import serve_file
-from ws4py.server.cherrypyserver import WebSocketPlugin, WebSocketTool
-from ws4py.websocket import WebSocket
+import asyncio
+import websockets
+
+from aiohttp import web
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 STATIC_DIR = os.path.join(REPO_ROOT, 'clueless', 'static')
 
-class CluelessTestServer:
-    def __init__(self):
-        pass
-    @cherrypy.expose
-    def default(self, tag):
-        return self.index()
-    @cherrypy.expose
-    def index(self):
-        """Render the index page
-        url: '/'
-        """
-        return serve_file(os.path.join(STATIC_DIR, 'index.html'))
-    @cherrypy.expose
-    def gameroom(self):
-        """Render the gameroom page
-        url: '/gameroom'
-        """
-        return serve_file(os.path.join(STATIC_DIR, 'gameroom.html'))
+async def hello(websocket, path):
+    while True:
+        name = await websocket.recv()
+        print(f"< {name}")
 
-class WebSocketHandler(WebSocket):
-    """WebSocketHandler
-    This class will be instantiated to represent any incoming WebSocket
-    connections.
-    It will allow us to have a very fast way to push/pull data to and from the
-    client's browser.
-    """
-    def opened(self):
-        """This function is called when the WebSocket is opened."""
-        self.running = True
-    def close(self, code=1000, reason=''):
-        self.running = False
-    def received_message(self, data):
-        """This function is called whenever this WebSocket receives a message."""
-        # Parse and act upon manual control message
-        message = json.loads(str(data))
-        self.send('I hear you.',str(data))
+        greeting = f"Hello {name}!"
 
-if __name__ == '__main__':
-    WebSocketPlugin(cherrypy.engine).subscribe()
-    cherrypy.tools.websocket = WebSocketTool()
+        await websocket.send(greeting)
+        print(f"> {greeting}")
 
-    # cherrypy.server.socket_host = '0.0.0.0'
-    # cherrypy.server.socket_port = 443
-    cherrypy.server.socket_port = 8080
-    # cherrypy.server.ssl_module = 'builtin'
-    # get these from the 'secure' repo and copy them into the secure folder
-    # cherrypy.server.ssl_certificate = os.path.join(REPO_ROOT, 'secure', "cert.pem")
-    # cherrypy.server.ssl_private_key = os.path.join(REPO_ROOT, 'secure', "privkey.pem")
-    # cherrypy.server.ssl_certificate_chain = ""
+@asyncio.coroutine
+def index(request):
+    return web.FileResponse(os.path.join(REPO_ROOT, 'clueless', 'static', 'index.html'))
+@asyncio.coroutine
+def gameroom(request):
+    return web.FileResponse(os.path.join(REPO_ROOT, 'clueless', 'static', 'gameroom.html'))
+@asyncio.coroutine
+def other(request):
+    respath = os.path.join(REPO_ROOT, 'clueless', 'static', request.path[1:])
+    if os.path.exists(respath):
+        return web.FileResponse(respath)
+    else:
+        raise web.HTTPNotFound()
 
-    CHERRYPY_CONFIG = {
-        '/': {
-            # Auto-serve static assets like CSS, JS, and images
-            'tools.staticdir.on': True,
-            'tools.staticdir.dir': STATIC_DIR,
-        },
-        '/web_socket': {
-            # WebSockets config
-            'tools.websocket.on': True,
-            'tools.websocket.handler_cls': WebSocketHandler, # This is our custom handler class
-        }
-    }
-    cherrypy.quickstart(CluelessTestServer(), config=CHERRYPY_CONFIG)
+
+print('Serving on localhost:8080 (web) and localhost:8081 (ws)')
+start_server = websockets.serve(hello, "localhost", 8081)
+
+app = web.Application()
+app.router.add_route('GET', '/', index)
+app.router.add_route('GET', '/gameroom', gameroom)
+app.router.add_route('GET', '/{tail:.*}', other)
+
+loop = asyncio.get_event_loop()
+f = loop.create_server(app.make_handler(), '0.0.0.0', 8080)
+loop.run_until_complete(start_server)
+loop.run_until_complete(f)
+asyncio.get_event_loop().run_forever()
