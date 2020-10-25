@@ -199,3 +199,15 @@ def test_weapon_deserialize():
     test_deser(3, Weapon.WRENCH)
     test_deser(4, Weapon.CANDLESTICK)
     test_deser(5, Weapon.REVOLVER)
+
+
+import json
+from clueless.messages.serialize import deserialize_message, serialize_message
+from clueless.messages.server import *
+from clueless.messages.client import *
+
+def test_register_deserialize():
+    msg = deserialize_message(json.dumps({'message': 'Register', 'character': 1, 'display_name': "foo"}))
+    assert isinstance(msg, Register)
+    assert msg.character == Character.RED
+    assert msg.display_name == "foo"
