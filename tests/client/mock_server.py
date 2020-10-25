@@ -38,6 +38,81 @@ async def periodic_test_messages(socket):
                 'characters': [x for x in range(5) if random.getrandbits(1)]
             }
         ))
+        await socket.send(json.dumps(
+            {
+                'message': 'Registration',
+                'character': random.randint(0,5),
+                'display_name': 'jimmy dean breakfast sausages',
+            }
+        ))
+        await socket.send(json.dumps(
+            {
+                'message': 'Positions',
+                'positions': {
+                    'player0': random.randint(0,20),
+                    'player1': random.randint(0,20),
+                    'player2': random.randint(0,20),
+                    'player3': random.randint(0,20),
+                    'player4': random.randint(0,20),
+                    'player5': random.randint(0,20),
+                },
+            }
+        ))
+        await socket.send(json.dumps(
+            {
+                'message': 'PlayerTurn',
+                'is_player_turn': bool(random.getrandbits(1)),
+            }
+        ))
+        await socket.send(json.dumps(
+            {
+                'message': 'Suggestion',
+                'player': random.randint(0,20),
+                'room': random.randint(0,20),
+                'suspect': random.randint(0,20),
+                'weapon': random.randint(0,20),
+            }
+        ))
+        await socket.send(json.dumps(
+            {
+                'message': 'SuggestionQuery',
+            }
+        ))
+        await socket.send(json.dumps(
+            {
+                'message': 'SuggestionStatus',
+                'character': random.randint(0,5),
+                'status': random.choice(['denied', 'witnessed'])
+            }
+        ))
+        await socket.send(json.dumps(
+            {
+                'message': 'SuggestionWitness',
+                'character': random.randint(0,5),
+                'witness': random.randint(0,10),
+            }
+        ))
+        await socket.send(json.dumps(
+            {
+                'message': 'Accusation',
+                'player': random.randint(0,5),
+                'room': random.randint(0,8),
+                'suspect': random.randint(0,5),
+                'weapon': random.randint(0,5),
+            }
+        ))
+        await socket.send(json.dumps(
+            {
+                'message': 'Winner',
+                'player': random.randint(0,5),
+            }
+        ))
+        await socket.send(json.dumps(
+            {
+                'message': 'Disqualified',
+                'player': random.randint(0,5),
+            }
+        ))
         await asyncio.sleep(1)
 
 async def websockopen(socket, path):

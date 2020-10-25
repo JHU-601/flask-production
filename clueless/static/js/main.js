@@ -14,8 +14,40 @@ function handleMessage(data) {
   }
 
   if (msg.message == 'Available') {
-    console.log('Received message Available');
+    // console.log('Received message Available');
     $('#msgAvailable').html(data);
+  } else if (msg.message == 'Registration') {
+    // console.log('Received message Registration');
+    $('#msgRegistration').html(data);
+  } else if (msg.message == 'Positions') {
+    // console.log('Received message Positions');
+    $('#msgPositions').html(data);
+  } else if (msg.message == 'PlayerTurn') {
+    // console.log('Received message PlayerTurn');
+    $('#msgPlayerTurn').html(data);
+  } else if (msg.message == 'Suggestion') {
+    // console.log('Received message Suggestion');
+    $('#msgSuggestion').html(data);
+  } else if (msg.message == 'SuggestionQuery') {
+    // console.log('Received message SuggestionQuery');
+    $('#msgSuggestionStatus').html(data);
+  } else if (msg.message == 'SuggestionStatus') {
+    // console.log('Received message SuggestionStatus');
+    $('#msgSuggestionQuery').html(data);
+  } else if (msg.message == 'SuggestionWitness') {
+    // console.log('Received message SuggestionWitness');
+    $('#msgSuggestionWitness').html(data);
+  } else if (msg.message == 'Accusation') {
+    // console.log('Received message Accusation');
+    $('#msgAccusation').html(data);
+  } else if (msg.message == 'Winner') {
+    // console.log('Received message Winner');
+    $('#msgWinner').html(data);
+  } else if (msg.message == 'Disqualified') {
+    // console.log('Received message Disqualified');
+    $('#msgDisqualified').html(data);
+  } else {
+    console.log('Unrecognized message received: ' + data);
   }
 }
 
