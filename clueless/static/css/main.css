@@ -45,15 +45,70 @@ div#startGame .btn-primary:hover {
 
 /** screen2 gameboard table **/
 table#gameboard td {
-  border: 1px solid black;
+  border: none;
   width: 150px;
   height: 150px;
   text-align: center;
   vertical-align: middle;
 }
-table#gameboard td.room {
+/* table#gameboard td.room {
   background-color: yellow;
-}
+} */
 table#gameboard td.passageway {
-  background-color: lightgray;
+  background-image: url('/img/hallway.png');
+}
+table#gameboard td.room {
+  padding: 0 5px;
+  border: 5px solid black;
+  background-size: contain;
+}
+table#gameboard td.room .name {
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+}
+table#gameboard td#study {
+  background-image: url('/img/rooms/study.png');
+  text-align: right;
+  vertical-align: bottom;
+}
+table#gameboard td#lounge {
+  background-image: url('/img/rooms/lounge.png');
+  text-align: left;
+  vertical-align: bottom;
+}
+table#gameboard td#library {
+  background-image: url('/img/rooms/library.png');
+  text-align: right;
+  vertical-align: bottom;
+}
+table#gameboard td#conservatory {
+  background-image: url('/img/rooms/conservatory.png');
+  text-align: right;
+  vertical-align: bottom;
+}
+table#gameboard td#hall {
+  background-image: url('/img/rooms/hall.jpeg');
+  text-align: center;
+  vertical-align: bottom;
+}
+table#gameboard td#ballroom {
+  background-image: url('/img/rooms/ballroom.jpeg');
+  text-align: center;
+  vertical-align: bottom;
+}
+table#gameboard td#billiard_room {
+  background-image: url('/img/rooms/billiard_room.jpeg');
+  text-align: center;
+  vertical-align: bottom;
+}
+table#gameboard td#kitchen {
+  background-image: url('/img/rooms/kitchen.jpeg');
+  text-align: left;
+  vertical-align: bottom;
+}
+table#gameboard td#dining_room {
+  background-image: url('/img/rooms/dining_room.jpeg');
+  text-align: left;
+  vertical-align: bottom;
 }
