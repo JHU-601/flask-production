@@ -1,13 +1,6 @@
-/** custom styles here **/
-canvas {
-  background-color: blue;
-  width: 100%;
-  height: 90vh;
-}
-
-#gameboard img {
-  display: none;
-}
+/* body {
+  background-color: black;
+} */
 
 /** screen 1 **/
 
@@ -44,6 +37,9 @@ div#startGame .btn-primary:hover {
 }
 
 /** screen2 gameboard table **/
+div#screen3 {
+  background-color: black;
+}
 table#gameboard td {
   border: none;
   width: 150px;

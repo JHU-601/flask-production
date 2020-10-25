@@ -2,8 +2,6 @@
 
 WEBSOCKET_URL = 'ws://localhost:8081'; // TODO update to server / something dynamic
 var socket;
-var players = 0;
-var positions = {};
 
 function handleMessage(data) {
   // Handle message received from server
@@ -21,11 +19,6 @@ function handleMessage(data) {
   } else if (msg.message == 'Registration') {
     // console.log('Received message Registration');
     $('#msgRegistration').html(data);
-    players++;
-    if (players >= 5) {
-      $('#content').fadeOut();
-      $('#gameboard').fadeIn();
-    }
   } else if (msg.message == 'Positions') {
     // console.log('Received message Positions');
     $('#msgPositions').html(data);
