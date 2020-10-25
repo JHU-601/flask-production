@@ -97,8 +97,23 @@
       </div>
     </form>
     <h3>Message Suggest</h3>
-    <p>TODO</p>
-
+    <form class="form" id="formSuggest">
+      <p>Choose a room (0 to 9).</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=9 name="room" />
+      </div>
+      <p>Choose a suspect (0 to 5).</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=5 name="suspect" />
+      </div>
+      <p>Choose a weapon (0 to 5).</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=5 name="weapon" />
+      </div>
+      <div>
+        <button id="btnSuggest" class="btn btn-primary">Suggest</button>
+      </div>
+    </form>
     <h3>Message SuggestionResponse</h3>
     <p>TODO</p>
 

@@ -17,6 +17,9 @@ async def handleRegister(socket, msg):
 async def handleMove(socket, msg):
     await socket.send('Received move command to position %s' % msg['position'])
 
+async def handleSuggest(socket, msg):
+    await socket.send('Received suggest command to room %s' % msg['room'])
+
 async def hello(socket, path):
     while True:
         msg_str = await socket.recv()
@@ -25,6 +28,8 @@ async def hello(socket, path):
             await handleRegister(socket, msg)
         elif msg['message'] == 'Move':
             await handleMove(socket, msg)
+        elif msg['message'] == 'Suggest':
+            await handleSuggest(socket, msg)
         else:
             await socket.send('Unrecognized message')
 

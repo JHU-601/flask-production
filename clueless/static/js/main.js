@@ -24,6 +24,16 @@ function handleBtnMoveClick(e) {
   }
   socket.send(JSON.stringify(msg));
 }
+function handleBtnSuggestClick(e) {
+  e.preventDefault();
+  var msg = {
+    'message': 'Suggest',
+    'room': $('#formSuggest input[name=room]').val(),
+    'suspect': $('#formSuggest input[name=suspect]').val(),
+    'weapon': $('#formSuggest input[name=weapon]').val(),
+  }
+  socket.send(JSON.stringify(msg));
+}
 
 function initGameroom() {
   // our "main method" for the gameroom page
@@ -54,6 +64,9 @@ $(document).ready(function() {
   });
   $('#btnMove').click(function(e) {
     handleBtnMoveClick(e);
+  });
+  $('#btnSuggest').click(function(e) {
+    handleBtnSuggestClick(e);
   });
   if (window.location.pathname.includes('gameroom')) {
     initGameroom();
