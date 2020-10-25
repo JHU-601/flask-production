@@ -9,14 +9,150 @@
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Clue-Less</a>
+    <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <div id="content">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dropdown
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form> -->
+    </div>
+  </nav>
+  <div class="container" id="content">
     <h1>Gameroom</h1>
     <p>Waiting for players to join...</p>
     <button class="btn btn-warning" id="btnTest">Test Send to Server</button>
+
+    <hr>
+
+    <!-- CLIENT TO SERVER -->
+    <h2>Client to Server</h2>
+    <h3>Message Register</h3>
+    <form class="form" id="formRegister">
+      <p>1. Select a character.</p>
+      <div>
+        <input id="character0" type="radio" name="character" value="0" /> <label for="character0">Colonel Mustard (Yellow)</label>
+      </div>
+      <div>
+        <input id="character1" type="radio" name="character" value="1" /> <label for="character1">Miss Scarlet (Red)</label>
+      </div>
+      <div>
+        <input id="character2" type="radio" name="character" value="2" /> <label for="character2">Professor Plum (Purple)</label>
+      </div>
+      <div>
+        <input id="character3" type="radio" name="character" value="3" /> <label for="character3">Mr. Green (Green)</label>
+      </div>
+      <div>
+        <input id="character4" type="radio" name="character" value="4" /> <label for="character4">Mrs. White (White)</label>
+      </div>
+      <div>
+        <input id="character5" type="radio" name="character" value="5" /> <label for="character5">Mrs. Peacock (Blue)</label>
+      </div>
+      <p>2. Choose a display name.</p>
+      <div>
+        <input class="form-control" type="text" name="displayName" placeholder="Display Name" />
+      </div>
+      <div>
+        <button id="btnRegister" class="btn btn-primary">Register</button>
+      </div>
+    </form>
+
+    <h3>Message Complete</h3>
+    <p>TODO</p>
+
+    <h3>Message Move</h3>
+    <p>TODO</p>
+
+    <h3>Message Suggest</h3>
+    <p>TODO</p>
+
+    <h3>Message SuggestionResponse</h3>
+    <p>TODO</p>
+
+    <h3>Message Accuse</h3>
+    <p>TODO</p>
+
+    <hr>
+
+    <h1>Skeletal Increment: Messaging Demonstration</h1>
+    <p>In the below, each message defined in our SRS can be exercised usinga button (and input fields when applicable).</p>
+    <!-- SERVER TO CLIENT -->
+    <h2>Server to Client</h2>
+    <h3>Message Available</h3>
+    <p>TODO</p>
+
+    <h3>Message Registration</h3>
+    <p>TODO</p>
+
+    <h3>Message Position</h3>
+    <p>TODO</p>
+
+    <h3>Message WitnessItem</h3>
+    <p>TODO</p>
+
+    <h3>Message Witness</h3>
+    <p>TODO</p>
+
+    <h3>Message PlayerTurn</h3>
+    <p>TODO</p>
+
+    <h3>Message Suggestion</h3>
+    <p>TODO</p>
+
+    <h3>Message SuggestionQuery</h3>
+    <p>TODO</p>
+
+    <h3>Message SuggestionStatus</h3>
+    <p>TODO</p>
+
+    <h3>Message None</h3>
+    <p>TODO</p>
+
+    <h3>Message SuggestionWitness</h3>
+    <p>TODO</p>
+
+    <h3>Message Accusation</h3>
+    <p>TODO</p>
+
+    <h3>Message Winner</h3>
+    <p>TODO</p>
+
+    <h3>Message Disqualified</h3>
+    <p>TODO</p>
+
   </div>
+  <!-- vendor scripts -->
   <script src="/vendor/js/jquery-3.5.1.min.js"></script>
   <script src="/vendor/js/bootstrap.min.js"></script>
+  <!-- messages -->
+  <script src="/js/messages/register.js"></script>
+  <!-- main script -->
   <script src="/js/main.js"></script>
 </body>
 </html>

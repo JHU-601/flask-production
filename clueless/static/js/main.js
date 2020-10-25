@@ -3,9 +3,18 @@
 WEBSOCKET_URL = 'ws://localhost:8081'; // TODO update to server / something dynamic
 var socket;
 
-function handleBtnTestClick() {
+function handleBtnTestClick(e) {
   socket.send('test message');
   console.log('sent test message to server');
+}
+function handleBtnRegisterClick(e) {
+  e.preventDefault(); // Don't submit the form & reload page
+  var msg = {
+    'message': 'Register',
+    'character': $('#formRegister input[name=character]').val(),
+    'displayName': $('#formRegister input[name=displayName]').val(),
+  };
+  socket.send(JSON.stringify(msg));
 }
 
 function initGameroom() {
@@ -29,9 +38,12 @@ function initHomepage() {
 // });
 
 $(document).ready(function() {
-  $('#btnTest').click(function() {
-    handleBtnTestClick();
+  $('#btnTest').click(function(e) {
+    handleBtnTestClick(e);
   });
+  $('#btnRegister').click(function(e) {
+    handleBtnRegisterClick(e);
+  })
   if (window.location.pathname.includes('gameroom')) {
     initGameroom();
   } else {
