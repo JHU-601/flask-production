@@ -16,6 +16,14 @@ function handleBtnRegisterClick(e) {
   };
   socket.send(JSON.stringify(msg));
 }
+function handleBtnMoveClick(e) {
+  e.preventDefault();
+  var msg = {
+    'message': 'Move',
+    'position': $('#formMove input[name=position]').val(),
+  }
+  socket.send(JSON.stringify(msg));
+}
 
 function initGameroom() {
   // our "main method" for the gameroom page
@@ -43,7 +51,10 @@ $(document).ready(function() {
   });
   $('#btnRegister').click(function(e) {
     handleBtnRegisterClick(e);
-  })
+  });
+  $('#btnMove').click(function(e) {
+    handleBtnMoveClick(e);
+  });
   if (window.location.pathname.includes('gameroom')) {
     initGameroom();
   } else {

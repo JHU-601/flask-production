@@ -11,15 +11,22 @@ from aiohttp import web
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 STATIC_DIR = os.path.join(REPO_ROOT, 'clueless', 'static')
 
-async def handleRegister(socket):
+async def handleRegister(socket, msg):
     await socket.send('Received register command')
 
-async def hello(websocket, path):
+async def handleMove(socket, msg):
+    await socket.send('Received move command to position %s' % msg['position'])
+
+async def hello(socket, path):
     while True:
-        msg_str = await websocket.recv()
+        msg_str = await socket.recv()
         msg = json.loads(msg_str)
         if msg['message'] == 'Register':
-            await handleRegister(websocket)
+            await handleRegister(socket, msg)
+        elif msg['message'] == 'Move':
+            await handleMove(socket, msg)
+        else:
+            await socket.send('Unrecognized message')
 
 @asyncio.coroutine
 def index(request):
