@@ -1,0 +1,329 @@
+{
+  "nested": {
+    "Character": {
+      "values": {
+        "YELLOW": 0,
+        "RED": 1,
+        "PURPLE": 2,
+        "GREEN": 3,
+        "WHITE": 4,
+        "BLUE": 5
+      }
+    },
+    "Weapon": {
+      "values": {
+        "ROPE": 0,
+        "PIPE": 1,
+        "KNIFE": 2,
+        "WRENCH": 3,
+        "CANDLESTICK": 4,
+        "REVOLVER": 5
+      }
+    },
+    "Room": {
+      "values": {
+        "STUDY": 0,
+        "HALL": 1,
+        "LOUNGE": 2,
+        "LIBRARY": 3,
+        "BILLIARD": 4,
+        "DINING": 5,
+        "CONSERVATORY": 6,
+        "BALLROOM": 7,
+        "KITCHEN": 8
+      }
+    },
+    "Hallway": {
+      "values": {
+        "STUDY_HALL": 0,
+        "HALL_LOUNGE": 1,
+        "STUDY_LIBRARY": 2,
+        "HALL_BILLIARD": 3,
+        "LOUNGE_DINING": 4,
+        "LIBRARY_BILLIARD": 5,
+        "BILLIARD_DINING": 6,
+        "LIBRARY_CONSERVATORY": 7,
+        "BILLIARD_BALLROOM": 8,
+        "DINING_KITCHEN": 9,
+        "CONSERVATORY_BALLROOM": 10,
+        "BALLROOM_KITCHEN": 11
+      }
+    },
+    "Location": {
+      "oneofs": {
+        "value": {
+          "oneof": [
+            "room",
+            "hallway"
+          ]
+        }
+      },
+      "fields": {
+        "room": {
+          "type": "Room",
+          "id": 1
+        },
+        "hallway": {
+          "type": "Hallway",
+          "id": 2
+        }
+      }
+    },
+    "Available": {
+      "fields": {
+        "characters": {
+          "rule": "repeated",
+          "type": "Character",
+          "id": 1
+        }
+      }
+    },
+    "Registration": {
+      "fields": {
+        "character": {
+          "type": "Character",
+          "id": 1
+        },
+        "displayName": {
+          "type": "string",
+          "id": 2
+        }
+      }
+    },
+    "Position": {
+      "fields": {
+        "player": {
+          "type": "Character",
+          "id": 1
+        },
+        "location": {
+          "type": "Location",
+          "id": 2
+        }
+      }
+    },
+    "WitnessItem": {
+      "oneofs": {
+        "value": {
+          "oneof": [
+            "character",
+            "room",
+            "weapon"
+          ]
+        }
+      },
+      "fields": {
+        "character": {
+          "type": "Character",
+          "id": 1
+        },
+        "room": {
+          "type": "Room",
+          "id": 2
+        },
+        "weapon": {
+          "type": "Weapon",
+          "id": 3
+        }
+      }
+    },
+    "Witness": {
+      "fields": {
+        "item1": {
+          "type": "WitnessItem",
+          "id": 1
+        },
+        "item2": {
+          "type": "WitnessItem",
+          "id": 2
+        },
+        "item3": {
+          "type": "WitnessItem",
+          "id": 3
+        }
+      }
+    },
+    "PlayerTurn": {
+      "fields": {}
+    },
+    "Suggestion": {
+      "fields": {
+        "player": {
+          "type": "Character",
+          "id": 1
+        },
+        "room": {
+          "type": "Room",
+          "id": 2
+        },
+        "suspect": {
+          "type": "Character",
+          "id": 3
+        },
+        "weapon": {
+          "type": "Weapon",
+          "id": 4
+        }
+      }
+    },
+    "SuggestionQuery": {
+      "fields": {}
+    },
+    "SuggestionStatus": {
+      "fields": {
+        "character": {
+          "type": "Character",
+          "id": 1
+        },
+        "status": {
+          "type": "Status",
+          "id": 2
+        }
+      },
+      "nested": {
+        "Status": {
+          "values": {
+            "DENIED": 0,
+            "WITNESSED": 1
+          }
+        }
+      }
+    },
+    "None": {
+      "values": {
+        "NONE": 0
+      }
+    },
+    "WitnessResponseItem": {
+      "oneofs": {
+        "value": {
+          "oneof": [
+            "item",
+            "none"
+          ]
+        }
+      },
+      "fields": {
+        "item": {
+          "type": "WitnessItem",
+          "id": 1
+        },
+        "none": {
+          "type": "None",
+          "id": 2
+        }
+      }
+    },
+    "SuggestionWitness": {
+      "fields": {
+        "character": {
+          "type": "Character",
+          "id": 1
+        },
+        "item": {
+          "type": "WitnessResponseItem",
+          "id": 2
+        }
+      }
+    },
+    "Accusation": {
+      "fields": {
+        "player": {
+          "type": "Character",
+          "id": 1
+        },
+        "room": {
+          "type": "Room",
+          "id": 2
+        },
+        "suspect": {
+          "type": "Character",
+          "id": 3
+        },
+        "weapon": {
+          "type": "Weapon",
+          "id": 4
+        }
+      }
+    },
+    "Winner": {
+      "fields": {
+        "player": {
+          "type": "Character",
+          "id": 1
+        }
+      }
+    },
+    "Disqualified": {
+      "fields": {
+        "player": {
+          "type": "Character",
+          "id": 1
+        }
+      }
+    },
+    "Register": {
+      "fields": {
+        "character": {
+          "type": "Character",
+          "id": 1
+        },
+        "displayName": {
+          "type": "string",
+          "id": 2
+        }
+      }
+    },
+    "Complete": {
+      "fields": {}
+    },
+    "Move": {
+      "fields": {
+        "location": {
+          "type": "Location",
+          "id": 1
+        }
+      }
+    },
+    "Suggest": {
+      "fields": {
+        "room": {
+          "type": "Room",
+          "id": 1
+        },
+        "suspect": {
+          "type": "Character",
+          "id": 2
+        },
+        "weapon": {
+          "type": "Weapon",
+          "id": 3
+        }
+      }
+    },
+    "SuggestionResponse": {
+      "fields": {
+        "item": {
+          "type": "WitnessResponseItem",
+          "id": 1
+        }
+      }
+    },
+    "Accuse": {
+      "fields": {
+        "room": {
+          "type": "Room",
+          "id": 1
+        },
+        "suspect": {
+          "type": "Character",
+          "id": 2
+        },
+        "weapon": {
+          "type": "Weapon",
+          "id": 3
+        }
+      }
+    }
+  }
+}
