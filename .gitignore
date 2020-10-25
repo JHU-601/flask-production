@@ -1,3 +1,6 @@
 __pycache__
 node_modules
 .pytest_cache
+*.swp
+*.swo
+test_env/

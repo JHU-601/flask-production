@@ -1,0 +1,161 @@
+syntax = "proto3";
+
+enum Character {
+  YELLOW = 0;
+  RED = 1;
+  PURPLE = 2;
+  GREEN = 3;
+  WHITE = 4;
+  BLUE = 5;
+}
+
+enum Weapon {
+  ROPE = 0;
+  PIPE = 1;
+  KNIFE = 2;
+  WRENCH = 3;
+  CANDLESTICK = 4;
+  REVOLVER = 5;
+}
+
+enum Room {
+  STUDY = 0;
+  HALL = 1;
+  LOUNGE = 2;
+  LIBRARY = 3;
+  BILLIARD = 4;
+  DINING = 5;
+  CONSERVATORY = 6;
+  BALLROOM = 7;
+  KITCHEN = 8;
+}
+
+enum Hallway {
+  STUDY_HALL = 0;
+  HALL_LOUNGE = 1;
+  STUDY_LIBRARY = 2;
+  HALL_BILLIARD = 3;
+  LOUNGE_DINING = 4;
+  LIBRARY_BILLIARD = 5;
+  BILLIARD_DINING = 6;
+  LIBRARY_CONSERVATORY = 7;
+  BILLIARD_BALLROOM = 8;
+  DINING_KITCHEN = 9;
+  CONSERVATORY_BALLROOM = 10;
+  BALLROOM_KITCHEN = 11;
+}
+
+message Location {
+  oneof value {
+    Room room = 1;
+    Hallway hallway = 2;
+  }
+}
+
+message Available {
+  repeated Character characters = 1;
+}
+
+message Registration {
+  Character character = 1;
+  string display_name = 2;
+}
+
+message Position {
+  Character player = 1;
+  Location location = 2;
+}
+
+message WitnessItem {
+  oneof value {
+    Character character = 1;
+    Room room = 2;
+    Weapon weapon = 3;
+  }
+}
+
+message Witness {
+  WitnessItem item1 = 1;
+  WitnessItem item2 = 2;
+  WitnessItem item3 = 3;
+}
+
+message PlayerTurn {}
+
+message Suggestion {
+  Character player = 1;
+  Room room = 2;
+  Character suspect = 3;
+  Weapon weapon = 4;
+}
+
+message SuggestionQuery {}
+
+message SuggestionStatus {
+  Character character = 1;
+  enum Status {
+    DENIED = 0;
+    WITNESSED = 1;
+  }
+  Status status = 2;
+}
+
+enum None {
+  NONE = 0;
+}
+
+message WitnessResponseItem {
+  oneof value {
+    WitnessItem item = 1;
+    None none = 2;
+  }
+}
+
+message SuggestionWitness {
+  Character character = 1;
+  WitnessResponseItem item = 2;
+}
+
+message Accusation {
+  Character player = 1;
+  Room room = 2;
+  Character suspect = 3;
+  Weapon weapon = 4;
+}
+
+message Winner {
+  Character player = 1;
+}
+
+message Disqualified {
+  Character player = 1;
+}
+
+/* Client to server */
+
+message Register {
+  Character character = 1;
+  string display_name = 2;
+}
+
+message Complete {}
+
+message Move {
+  Location location = 1;
+}
+
+message Suggest {
+  Room room = 1;
+  Character suspect = 2;
+  Weapon weapon = 3;
+}
+
+message SuggestionResponse {
+  WitnessResponseItem item = 1;
+}
+
+message Accuse {
+  Room room = 1;
+  Character suspect = 2;
+  Weapon weapon = 3;
+}
