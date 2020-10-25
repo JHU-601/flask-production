@@ -52,3 +52,9 @@ def decode_message(dct):
         del dct['message']
         return func(**dct)
     return dct
+
+def deserialize_message(data):
+    json.loads(data, class_hook=decode_message)
+
+def serialize_message(msg) -> str:
+    json.dumps(msg, cls=MessageEncoder)
