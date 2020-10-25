@@ -4,24 +4,24 @@ from clueless.messages import Character, Room, Hallway, Location, Weapon
 Character tests
 """
 def test_character_serialize():
-    def test_ser(c, name):
-        assert c.serialize() == name
-    test_ser(Character.YELLOW, "Colonel Mustard")
-    test_ser(Character.RED, "Miss Scarlet")
-    test_ser(Character.PURPLE, "Professor Plum")
-    test_ser(Character.GREEN, "Mr. Green")
-    test_ser(Character.WHITE, "Mrs. White")
-    test_ser(Character.BLUE, "Mrs. Peacock")
+    def test_ser(c, value):
+        assert c.serialize() == value
+    test_ser(Character.YELLOW, 0)
+    test_ser(Character.RED, 1)
+    test_ser(Character.PURPLE, 2)
+    test_ser(Character.GREEN, 3)
+    test_ser(Character.WHITE, 4)
+    test_ser(Character.BLUE, 5)
 
 def test_character_deserialize():
     def test_deser(name, c):
         assert Character.deserialize(name) == c
-    test_deser("Colonel Mustard", Character.YELLOW)
-    test_deser("Miss Scarlet", Character.RED)
-    test_deser("Professor Plum", Character.PURPLE)
-    test_deser("Mr. Green", Character.GREEN)
-    test_deser("Mrs. White", Character.WHITE)
-    test_deser("Mrs. Peacock", Character.BLUE)
+    test_deser(0, Character.YELLOW)
+    test_deser(1, Character.RED)
+    test_deser(2, Character.PURPLE)
+    test_deser(3, Character.GREEN)
+    test_deser(4, Character.WHITE)
+    test_deser(5, Character.BLUE)
 
 
 """

@@ -53,9 +53,9 @@ class Character(IntEnum):
 
     def serialize(self) -> str:
         # pylint: disable=missing-function-docstring
-        return f'{self._string_name}'
+        return self.value
 
     @classmethod
     def deserialize(cls: Type[TMessageSerialize], val: str) -> Character: # type: ignore
         # pylint: disable=missing-function-docstring
-        return Character._from_name(val)
+        return Character._from_ordinal(val)
