@@ -4,6 +4,8 @@ import logging
 import string
 import itertools
 
+import asyncio
+
 from clueless.messages.location import Hallway, Room, Location
 from clueless.messages.character import Character
 from clueless.messages.weapon import Weapon
@@ -30,28 +32,47 @@ class Player:
         self.location = None
         self.state = UserState.UNREGISTERED
         self.called = False
+        self.logger = logging.getLogger(f'server.player{socket.remote_address}')
+        self.logger.setLevel(logging.DEBUG)
+
+    @property
+    def sock_addr(self) -> str:
+        return f'{self.socket.remote_address}'
+
+    @property
+    def is_registered(self) -> bool:
+        return self.character is not None
 
     async def dispatch_message(self, message):
         if isinstance(message, CreateGame):
+            self.logger.debug(f"Received crate game")
             game = GameState()
             id = game.id
+            self.logger.debug(f'Created game {id}')
             GAMES[id] = game
             await GAMES[id].add_user(self)
         elif isinstance(message, JoinGame):
+            self.logger.debug(f'Joining game {message.id}')
             await GAMES[message.id].add_user(self)
         elif isinstance(message, Register):
+            self.logger.debug(f'Registering as {message.display_name} with {message.character}')
             self.character = message.character
             self.display_name = message.display_name
             await self.game.register_user(self, message)
         elif isinstance(message, Complete):
+            self.logger.debug(f'Turn completed')
             await self.game.complete_turn(self.character)
         elif isinstance(message, Move):
+            self.logger.debug(f'Move to {message.position}')
             await self.game.move_player(self.character, message.position)
         elif isinstance(message, Suggest):
+            self.logger.debug(f'Suggestion: {message.room} {message.weapon} {message.suspect}')
             await self.game.suggestion(self.character, message)
         elif isinstance(message, SuggestionResponse):
+            self.logger.debug(f'Suggestion response witness: {message.witness} type: {message.type}')
             pass
         elif isinstance(message, Accuse):
+            self.logger.debug(f'Accusation: {message.room} {message.weapon} {message.suspect}')
             await self.game.accuse(self.player, message)
         else:
             raise ApiError(f"received invalid message from client: {message}")
@@ -68,19 +89,61 @@ class Player:
         return SuggestionResponse(None, 0)
 
     async def user_loop(self):
-        logger = logging.getLogger('game_logger')
         while True:
             msg_str = await self.socket.recv()
-            logger.debug(f'got message {msg_str}')
+            self.logger.debug(f'received {msg_str}')
             try:
                 msg = deserialize_message(msg_str)
             except ApiError as e:
-                logger.error(f'message error {e}')
+                self.logger.error(f'message error {e}')
                 await self.socket.send(Status(f'error deserializing message: {e}'))
             try:
                 await self.dispatch_message(msg)
             except ApiError as e:
-                logger.error(f'message error {e}')
+                self.logger.error(f'message error {e}')
+                await self.socket.send(Status(f'error handling message: {e}'))
+
+class FakePlayer(Player):
+    def __init__(self, num, game):
+        self.num = num
+        self.game = game
+        self.character = None
+        self.display_name = f"fake player {num}"
+        self.state = UserState.UNREGISTERED
+        self.called = False
+        self.logger = logging.getLogger(f'server.{self.display_name}')
+        self.logger.setLevel(logging.DEBUG)
+
+    @property
+    def sock_addr(self) -> str:
+        return self.display_name
+
+    async def dispatch_message(self, message):
+        pass
+
+    async def send_message(self, message):
+        self.logger.debug(f'skip sending {serialize_message(message)}')
+
+    async def notify_move(self, player: Character, location: Location):
+        if player == self.character:
+            self.location = location
+        await self.send_message(Position(player, location))
+
+    async def suggestion_query(self):
+        return SuggestionResponse(None, 0)
+
+    async def user_loop(self):
+        while True:
+            msg_str = await self.socket.recv()
+            try:
+                msg = deserialize_message(msg_str)
+            except ApiError as e:
+                self.logger.error(f'message error {e}')
+                await self.socket.send(Status(f'error deserializing message: {e}'))
+            try:
+                await self.dispatch_message(msg)
+            except ApiError as e:
+                self.logger.error(f'message error {e}')
                 await self.socket.send(Status(f'error handling message: {e}'))
 
 class GameState:
@@ -97,8 +160,20 @@ class GameState:
         self.witness_items = []
         self.disqualified = set([])
 
+        self.logger = logging.getLogger(f'game-{self.id}')
+        self.logger.setLevel(logging.DEBUG)
+
 
     async def start_game(self):
+        ## START: skeletal setup
+        registered = set([player.character for player in self.players])
+        available = filter(lambda x: x not in registered, list(Character))
+        await asyncio.wait([self.add_user(FakePlayer(i, self)) for i in range(3)])
+        for player in self.players[2:]:
+            player.character = next(available)
+            await self.register_user(player, Register(player.character, player.display_name))
+        ## END: skeletal setup
+
         # sort the players by character so that they can be indexed by player id
         self.players.sort(key=lambda player: player.character.value)
 
@@ -108,33 +183,39 @@ class GameState:
             await other.notify_move(player, location)
 
     async def broadcast(self, message, skip=None):
-        for player in self.players:
-            if skip is not None and player.character == skip:
-                continue
-            await player.send_message(message)
+        self.logger.debug(f'BROADCAST: {message}')
+        players = [player for player in self.players if player != skip]
+        if players:
+            await asyncio.wait([player.send_message(message) for player in self.players if player != skip ])
 
     async def suggestion(self, player: Character, suggest: Suggest):
         suggestion = suggest.into_suggestion(player)
         self.locations[suggestion.room] = suggestion.suspect
-        self.players[suggestion.suspect].location = suggestion.room
-        self.broadcast(suggestion)
+        self.players[suggestion.suspect.value].location = suggestion.room
+        await self.broadcast(suggestion)
         for other in itertools.chain(self.players[player.value+1:], self.players[:player.value]):
             if other.character in self.disqualified:
                 continue
             response = await other.suggestion_query()
-            status = response.into_status(other)
+            status = response.into_status(other.character)
             if status.witnessed:
                 await self.broadcast(status, skip=player)
-                self.players[player].send_message(response.into_witness(other))
+                await self.players[player].send_message(response.into_witness(other.character))
             else:
                 await self.broadcast(status)
 
     async def register_user(self, player: Player, msg: Register):
         registration = msg.into_registration()
         await self.broadcast(registration, player.character)
+        ## For the skeletal, to register fake users to show "in game" messages
+        ## change to 6 after skeletal
+        registered = all([player.is_registered for player in self.players])
+        if len(self.players) == 2 and registered:
+            await self.start_game()
 
     async def add_user(self, player: Player):
         player.game = self
+        self.logger.debug(f'adding player from {player.sock_addr}')
         await self.broadcast(UserJoined())
         await player.send_message(Joined(self.id))
         self.players.append(player)

@@ -27,7 +27,6 @@ class Register:
         return Registration(self.character, self.display_name)
 
 
-
 class Move:
     def __init__(self, position: Union[Location, int]):
         self.position = position if isinstance(position, Location) else Location.deserialize(position)
@@ -57,6 +56,8 @@ class SuggestionResponse:
                 self.witness = Character.deserialize(witness)
             else:
                 self.witness = Weapon.deserialize(witness)
+        else:
+            self.witness = None
 
     def into_status(self, player: Character) -> SuggestionStatus:
         return SuggestionStatus(player, self.witness is not None)

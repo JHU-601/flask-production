@@ -95,7 +95,7 @@ function handleBtnRegisterClick(e) {
   e.preventDefault(); // Don't submit the form & reload page
   var msg = {
     'message': 'Register',
-    'character': $('#formRegister input[name=character]').val(),
+    'character': $('#formRegister input[name=character]:checked').val(),
     'display_name': $('#formRegister input[name=displayName]').val(),
   };
   socket.send(JSON.stringify(msg));

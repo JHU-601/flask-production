@@ -14,9 +14,14 @@ from .state import Player
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_DIR = os.path.join(REPO_ROOT, 'clueless', 'static')
 
+logging.basicConfig(level=logging.DEBUG)
+[logging.getLogger(logger).setLevel(logging.ERROR) for logger in ("websockets.server", "websockets.protocol", "aiohttp.access")]
+logger = logging.getLogger('server')
+logger.setLevel(logging.DEBUG)
 
 async def websockopen(socket, path):
     # Listen for messages
+    logger.debug(f"User connected from {socket.remote_address}")
     player = Player(socket)
     await player.user_loop()
     """
