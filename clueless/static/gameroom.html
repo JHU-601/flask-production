@@ -21,7 +21,8 @@
     <p>In the below, each message defined in our SRS can be exercised using a button (and input fields when applicable).</p>
     <h2>Game State Representation</h2>
     <div>
-      <b>Players:</b> <span id="statePlayers"></span>
+      <b>Players:</b> <br/>
+      <span id="statePlayers"></span>
     </div>
     <div>
       <b>Current Player Turn:</b> <span id="stateCurrentPlayerTurn"></span>
@@ -42,6 +43,22 @@
 
     <!-- CLIENT TO SERVER -->
     <h2>Client to Server</h2>
+    <h3>Message CreateGame</h3>
+    <form class="form" id="formCreateGame">
+      <div>
+        <button id="btnCreateGame" class="btn btn-primary">Create</button>
+      </div>
+    </form>
+    <h3>Message JoinGame</h3>
+    <form class="form" id="formJoinGame">
+      <p>Provide a Game ID.</p>
+      <div>
+        <input class="form-control" type="text" name="id" />
+      </div>
+      <div>
+        <button id="btnJoinGame" class="btn btn-primary">Join</button>
+      </div>
+    </form>
     <h3>Message Register</h3>
     <form class="form" id="formJoin">
         <p>0. Join or create game.</p>
@@ -142,7 +159,7 @@
     </form>
     <hr>
     <!-- SERVER TO CLIENT -->
-    <h2>Server to Client</h2>
+    <!-- <h2>Server to Client</h2>
     <h3>Message Available</h3>
     <p>When the Available message is received, results will be displayed here.</p>
     <textbox class="form-control" id="msgAvailable"></textbox>
@@ -185,7 +202,7 @@
 
     <h3>Message Disqualified</h3>
     <p>When the Disqualified message is received, results will be displayed here.</p>
-    <textbox class="form-control" id="msgDisqualified"></textbox>
+    <textbox class="form-control" id="msgDisqualified"></textbox> -->
 
   </div>
   <!-- vendor scripts -->
