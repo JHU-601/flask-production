@@ -165,6 +165,7 @@ function handleBtnSuggestionResponseClick(e) {
   var msg = {
     'message': 'SuggestionResponse',
     'witness': $('#formSuggestionResponse input[name=witness]').val(),
+    'type': $('#formSuggestionResponse input[name=type]').val(),
   }
   logMessage('Client', JSON.stringify(msg));
   socket.send(JSON.stringify(msg));

@@ -4,6 +4,9 @@ from typing import Union, Dict
 
 from enum import IntEnum, auto
 from clueless.error import ApiError
+from clueless.messages.character import Character
+from clueless.messages.weapon import Weapon
+from clueless.messages.location import Room
 
 class WitnessType(IntEnum):
     ROOM = 0
@@ -20,3 +23,15 @@ class WitnessType(IntEnum):
             return WitnessType(intval)
         except ValueError:
             raise ApiError(f"invalid witness type: {val}")
+
+    @classmethod
+    def for_item(cls, item):
+        if isinstance(item, Room):
+            return WitnessType.ROOM
+        elif isinstance(item, Character):
+            return WitnessType.CHARACTER
+        elif isinstance(item, Weapon):
+            return WitnessType.WEAPON
+        else:
+            raise ApiError(f'invalid witness item {item}')
+

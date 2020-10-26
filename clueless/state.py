@@ -73,7 +73,7 @@ class Player:
             pass
         elif isinstance(message, Accuse):
             self.logger.debug(f'Accusation: {message.room} {message.weapon} {message.suspect}')
-            await self.game.accuse(self.player, message)
+            await self.game.accuse(self.character, message)
         else:
             raise ApiError(f"received invalid message from client: {message}")
 
@@ -157,7 +157,7 @@ class GameState:
         self.characters = dict([(character, None) for character in list(Character)])
         self.locations = dict([(location, None) for location in itertools.chain(list(Room), list(Hallway))])
         self.current_player = None
-        self.witness_items = []
+        self.witness_items = [None, None, None, None, None]
         self.disqualified = set([])
 
         self.logger = logging.getLogger(f'game-{self.id}')
@@ -176,6 +176,20 @@ class GameState:
 
         # sort the players by character so that they can be indexed by player id
         self.players.sort(key=lambda player: player.character.value)
+
+        items = [item for item in itertools.chain(
+            [c for c in list(Character) if c != self.crime_character],
+            [w for w in list(Weapon) if w != self.crime_weapon],
+            [r for r in list(Room) if r != self.crime_room],
+            )]
+        random.shuffle(items)
+        items_iter = iter(items)
+        for player in self.players:
+            player_items = (next(items_iter), next(items_iter), next(items_iter))
+            self.witness_items[player.character.value] = player_items
+            i1, i2, i3 = player_items
+            await player.send_message(Witness(i1, i2, i3))
+
 
     async def move_player(self, player: Character, location: Location):
         self.locations[location] = player
@@ -222,12 +236,12 @@ class GameState:
 
     async def accuse(self, player: Character, accuse: Accuse):
         accusation = accuse.into_accusation(player)
-        self.broadcast(accusation, skip=player)
+        await self.broadcast(accusation, skip=player)
         if accusation.suspect == self.crime_character and accusation.room == self.crime_room and accusation.weapon == self.crime_weapon:
-            self.broadcast(Winner(player))
+            await self.broadcast(Winner(player))
         else:
             self.disqualified.add(player)
-            self.broadcast(Disqualified(player))
+            await self.broadcast(Disqualified(player))
 
     async def complete_turn(self, player: Character):
         try:

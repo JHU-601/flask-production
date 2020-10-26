@@ -6,6 +6,7 @@ from clueless.error import ApiError
 from clueless.messages.location import Hallway, Room, Location
 from clueless.messages.character import Character
 from clueless.messages.weapon import Weapon
+from clueless.messages.witness import WitnessType
 
 class Status:
     def __init__(self, message=None):
@@ -34,8 +35,11 @@ class Registration:
 class Witness:
     def __init__(self, item1: Union[Character, Room, Weapon], item2: Union[Character, Room, Weapon], item3: Union[Character, Room, Weapon]):
         self.item1 = item1
+        self.type1 = WitnessType.for_item(item1)
         self.item2 = item2
+        self.type2 = WitnessType.for_item(item2)
         self.item3 = item3
+        self.type3 = WitnessType.for_item(item3)
 
 class Position:
     def __init__(self, player: Character, location: Location):
