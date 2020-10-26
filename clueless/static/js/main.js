@@ -4,33 +4,27 @@ WEBSOCKET_URL = 'ws://localhost:8081'; // TODO update to server / something dyna
 var socket;
 
 var gameState = {
-  players: [],
-  currentPlayer: {},
-  witnessItems: [],
-  turn: false,
-  disqualified: false,
-  microstate: {},
+  players: [], // each player: location (int), disqualified (true/false)
+  currentPlayerTurn: -1,
+  localPlayer: -1, // indicates which character this client is playing as
+  witnessItems: [], // 3 witness items
+  microstate: 'n/a',
 };
-// TODO change Positions to Position (only one player can move at a time) - Steve
-// TODO improve server response to mock client messages (just change it to a json message) - Steve
+var messagesReceived = 0;
 // TODO code to update state when each message received (w/o logic/validation) - Steve, Ken
 // TODO output box for client mock messages - Steve
-// TODO add logging in server so video can show it coming up on the console. - Steve
-// TODO demo: run server with overrides. run tests.
-  // TODO demo:
-  // 1) Video of each message - Rachel
-  // 2) Video of UI so far - Rachel
-  // 3) Voiceover  - Kevin, Phuong
-    // script
-    // record
 
-// timeline:
-  // Steve codes tonight
-  // Rachel does videos tomorrow before class
-  // 9 pm ET: Phuong and Kevin do PowerPoint / voiceover
-  // Video review: async on Tuesday. Turn in by 9 pm
+function showGameState() {
+  $('#statePlayers').html(gameState.players);
+  $('#stateCurrentPlayerTurn').html(gameState.currentPlayerTurn);
+  $('#stateLocalPlayer').html(gameState.localPlayer);
+  $('#stateWitnessItems').html(gameState.witnessItems);
+  $('#stateMicrostate').html(gameState.microstate);
+}
 
 function handleMessage(data) {
+  $('#txtMessages').prepend(messagesReceived + ' <b>Server:</b> ' + data + '<br/>');
+  messagesReceived++;
   // Handle message received from server
   // TODO handle invalid message that cannot be parsed
   try {
@@ -46,11 +40,12 @@ function handleMessage(data) {
   } else if (msg.message == 'Registration') {
     // console.log('Received message Registration');
     $('#msgRegistration').html(data);
-  } else if (msg.message == 'Positions') {
+  } else if (msg.message == 'Position') {
     // console.log('Received message Positions');
-    $('#msgPositions').html(data);
+    $('#msgPosition').html(data);
   } else if (msg.message == 'PlayerTurn') {
     gameState.turn = true;
+    $('#msgPlayerTurn').html(data);
   } else if (msg.message == 'Suggestion') {
     // console.log('Received message Suggestion');
     $('#msgSuggestion').html(data);
@@ -136,19 +131,6 @@ function initGameroom() {
   socket.onmessage = function(event) {
     handleMessage(event.data);
   }
-  // setup canvas
-  var canvas = $('canvas#game')[0];
-  canvas.width = canvas.getBoundingClientRect().width;
-  canvas.height = canvas.getBoundingClientRect().height;
-  var ctx = canvas.getContext('2d');
-  var imgSplash = $('#imgSplash')[0];
-  // setInterval(function() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'red';
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.drawImage(imgSplash, 10, 10);
-    console.log('drew it all')
-  // }, 10);
 }
 
 function initHomepage() {

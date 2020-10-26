@@ -11,48 +11,33 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/">Clue-Less</a>
-    <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form> -->
     </div>
   </nav>
-  <!-- <div id="gameboard">
-    <canvas id="game"></canvas>
-    <img id="imgSplash" src="/img/splash.png" alt="">
-  </div> -->
   <div class="container" id="content">
-    <h1>Gameroom</h1>
+    <!-- <h1>Gameroom</h1>
     <p id="txtWaiting">Waiting for players to join...</p>
-    <button class="btn btn-warning" id="btnTest">Test Send to Server</button>
-
+    <button class="btn btn-warning" id="btnTest">Test Send to Server</button> -->
+    <h1>Skeletal Increment: Messaging Demonstration</h1>
+    <p>In the below, each message defined in our SRS can be exercised using a button (and input fields when applicable).</p>
+    <h2>Game State Representation</h2>
+    <div>
+      <b>Players:</b> <span id="statePlayers"></span>
+    </div>
+    <div>
+      <b>Current Player Turn:</b> <span id="stateCurrentPlayerTurn"></span>
+    </div>
+    <div>
+      <b>Local Player:</b> <span id="stateLocalPlayer"></span>
+    </div>
+    <div>
+      <b>Witness Items:</b> <span id="stateWitnessItems"></span>
+    </div>
+    <div>
+      <b>Microstate:</b> <span id="stateMicrostate"></span>
+    </div>
+    <hr>
+    <h2>Messages</h2>
+    <div id="txtMessages"></div>
     <hr>
 
     <!-- CLIENT TO SERVER -->
@@ -144,9 +129,6 @@
       </div>
     </form>
     <hr>
-
-    <h1>Skeletal Increment: Messaging Demonstration</h1>
-    <p>In the below, each message defined in our SRS can be exercised using a button (and input fields when applicable).</p>
     <!-- SERVER TO CLIENT -->
     <h2>Server to Client</h2>
     <h3>Message Available</h3>
@@ -157,9 +139,9 @@
     <p>When the Registration message is received, results will be displayed here.</p>
     <textbox class="form-control" id="msgRegistration"></textbox>
 
-    <h3>Message Positions</h3>
-    <p>When the Positions message is received, results will be displayed here.</p>
-    <textbox class="form-control" id="msgPositions"></textbox>
+    <h3>Message Position</h3>
+    <p>When the Position message is received, results will be displayed here.</p>
+    <textbox class="form-control" id="msgPosition"></textbox>
 
     <h3>Message PlayerTurn</h3>
     <p>When the PlayerTurn message is received, results will be displayed here.</p>

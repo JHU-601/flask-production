@@ -108,3 +108,10 @@ table#gameboard td#dining_room {
   text-align: left;
   vertical-align: bottom;
 }
+
+/** gameboard **/
+div#txtMessages {
+  height: 100px;
+  overflow-y: scroll;
+  border: 1px solid gray;
+}

@@ -16,19 +16,34 @@ STATIC_DIR = os.path.join(REPO_ROOT, 'clueless', 'static')
 first_client = None
 
 async def handleRegister(socket, msg):
-    await socket.send('Received register command')
+    await socket.send(json.dumps({
+        'message': 'temp',
+        'body': 'Received register command',
+    }))
 
 async def handleMove(socket, msg):
-    await socket.send('Received move command to position %s' % msg['position'])
+    await socket.send(json.dumps({
+        'message': 'temp',
+        'body': 'Received move command to position %s' % msg['position'],
+    }))
 
 async def handleSuggest(socket, msg):
-    await socket.send('Received suggest command to room %s' % msg['room'])
+    await socket.send(json.dumps({
+        'message': 'temp',
+        'body': 'Received suggest command to room %s' % msg['room'],
+    }))
 
 async def handleSuggestionResponse(socket, msg):
-    await socket.send('Received suggestion response, witness is %s' % msg['witness'])
+    await socket.send(json.dumps({
+        'message': 'temp',
+        'body': 'Received suggestion response, witness is %s' % msg['witness'],
+    }))
 
 async def handleAccuse(socket, msg):
-    await socket.send('Received accuse, room is %s' % msg['room'])
+    await socket.send(json.dumps({
+        'message': 'temp',
+        'body': 'Received accuse, room is %s' % msg['room'],
+    }))
 
 async def periodic_test_messages(socket):
     while True:
@@ -47,15 +62,9 @@ async def periodic_test_messages(socket):
         ))
         await socket.send(json.dumps(
             {
-                'message': 'Positions',
-                'positions': {
-                    'player0': random.randint(0,20),
-                    'player1': random.randint(0,20),
-                    'player2': random.randint(0,20),
-                    'player3': random.randint(0,20),
-                    'player4': random.randint(0,20),
-                    'player5': random.randint(0,20),
-                },
+                'message': 'Position',
+                'position': random.randint(0,20),
+                'character': random.randint(0,5),
             }
         ))
         await socket.send(json.dumps(
@@ -123,7 +132,7 @@ async def websockopen(socket, path):
     # Listen for messages
     while True:
         msg_str = await socket.recv()
-        print('I just received:',msg_str)
+        print('Server received client message:', msg_str)
         msg = json.loads(msg_str)
         if msg['message'] == 'Register':
             await handleRegister(socket, msg)
