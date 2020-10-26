@@ -15,7 +15,6 @@ class Register:
         return Registration(self.character, self.display_name)
 
 
-
 class Move:
     def __init__(self, position: Union[Location, int]):
         self.position = position if isinstance(position, Location) else Location.deserialize(position)

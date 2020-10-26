@@ -23,7 +23,6 @@ def test_character_deserialize():
     test_deser(4, Character.WHITE)
     test_deser(5, Character.BLUE)
 
-
 """
 Room tests
 """
@@ -206,8 +205,39 @@ from clueless.messages.serialize import deserialize_message, serialize_message
 from clueless.messages.server import *
 from clueless.messages.client import *
 
+'''
+Message Deserialized Test - Client to Server
+'''
+
 def test_register_deserialize():
-    msg = deserialize_message(json.dumps({'message': 'Register', 'character': 1, 'display_name': "foo"}))
+
+    msg = deserialize_message(json.dumps({'message': "Register", 'character': 1, 'display_name': "foo"}))
     assert isinstance(msg, Register)
     assert msg.character == Character.RED
     assert msg.display_name == "foo"
+
+def test_move_deserialize():
+    msg = deserialize_message(json.dumps({'message': 'Move', 'position': 0}))
+    assert isinstance(msg, Move)
+    assert msg.position == Room.STUDY
+
+def test_suggest_deserialize():
+    
+    msg = deserialize_message(json.dumps({'message': 'Suggest', 'room': 8, 'suspect': 1, 'weapon': 4}))
+    assert isinstance(msg, Suggest)
+    assert msg.room == Room.KITCHEN
+    assert msg.suspect == Character.RED
+    assert msg.weapon == Weapon.CANDLESTICK
+
+def test_suggestionresponse_deserialize():
+    msg = deserialize_message(json.dumps({'message': 'SuggestionResponse', 'witness': 6, 'type': 0}))
+    assert isinstance(msg, SuggestionResponse)
+    assert msg.witness == Room.CONSERVATORY
+    assert msg.type == WitnessType.ROOM
+
+def test_accuse_deserialize():
+    msg = deserialize_message(json.dumps({'message': 'Accuse', 'room': 4, 'weapon': 5, 'suspect': 5}))
+    assert isinstance(msg,  Accuse)
+    assert msg.room == Room.BILLIARD
+    assert msg.weapon == Weapon.REVOLVER
+    assert msg.suspect == Character.BLUE
