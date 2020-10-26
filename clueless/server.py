@@ -105,14 +105,22 @@ async def periodic_test_messages(socket):
             'character': random.randint(0,5),
         }
     ))
+    await socket.send(json.dumps(
+        {
+            'message': 'Witness',
+            'room': random.randint(0,8),
+            'character': random.randint(0,8),
+            'weapon': random.randint(0,8),
+        }
+    ))
 
     await socket.send(json.dumps(
         {
             'message': 'Suggestion',
-            'character': random.randint(0,20),
+            'character': random.randint(0,5),
             'room': random.randint(0,20),
-            'suspect': random.randint(0,20),
-            'weapon': random.randint(0,20),
+            'suspect': random.randint(0,5),
+            'weapon': random.randint(0,8),
         }
     ))
     await asyncio.sleep(1)

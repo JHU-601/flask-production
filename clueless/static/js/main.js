@@ -19,7 +19,11 @@ var gameState = {
   players: [], // each player: location (int), disqualified (true/false)
   currentPlayerTurn: -1,
   localPlayer: 0, // indicates which character this client is playing as // TODO actually update this
-  witnessItems: [], // 3 witness items
+  witnessItems: {
+    room: null,
+    character: null,
+    weapon: null,
+  }, // 3 witness items
   microstate: 'n/a',
 };
 var messagesReceived = 0;
@@ -33,7 +37,7 @@ function displayGameState() {
   }
   $('#stateCurrentPlayerTurn').html(gameState.currentPlayerTurn);
   $('#stateLocalPlayer').html(gameState.localPlayer);
-  $('#stateWitnessItems').html(gameState.witnessItems);
+  $('#stateWitnessItems').html(`room=${gameState.witnessItems.room} character=${gameState.witnessItems.character} weapon=${gameState.witnessItems.weapon}`);
   $('#stateMicrostate').html(gameState.microstate);
 }
 
@@ -56,6 +60,10 @@ function handleMessage(data) {
   if (msg.message == 'Available') {
   } else if (msg.message == 'Registration') {
     gameState.players.push(new Player(msg.character, msg.display_name));
+  } else if (msg.message == 'Witness') {
+    gameState.witnessItems.room = msg.room;
+    gameState.witnessItems.character = msg.character;
+    gameState.witnessItems.weapon = msg.weapon;
   } else if (msg.message == 'Position') {
     // Find player with the right id
     var foundPlayer;
