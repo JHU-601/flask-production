@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Clueless</title>
+  <link rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <div id="screen1">
+    <div id="splash">
+      <img id="imgSplash" src="/img/splash.png" alt="">
+    </div>
+
+    <div id="startGame">
+      <button id="btnStartGame" class="btn btn-primary">Start</button>
+    </div>
+  </div>
+
+  <div id="screen2" style="display: none;">
+    <div>
+      <h1>Choose a Game</h1>
+      <div>
+        <button id="btnCreateGame" class="btn btn-primary">Create New Game</button>
+      </div>
+      <hr>
+      <div>
+        <input id="txtGameId" type="text" placeholder="Game ID" />
+        <button id="btnJoinGame" class="btn btn-primary">Join Existing Game</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen3" style="display: none;">
+    <table class="table" id="gameboard">
+      <tr>
+        <td id="study" class="room"><span class="name">Dining Hall</span></td>
+        <td class="passageway horiz"></td>
+        <td id="hall" class="room"><span class="name">Peabody Institute</span></td>
+        <td class="passageway horiz"></td>
+        <td id="lounge" class="room"><span class="name">Gilman Hall</span></td>
+      </tr>
+      <tr>
+        <td class="passageway vert"></td>
+        <td></td>
+        <td class="passageway vert"></td>
+        <td></td>
+        <td class="passageway vert"></td>
+      </tr>
+      <tr>
+        <td id="library" class="room"><span class="name">Library</span></td>
+        <td class="passageway"></td>
+        <td id="billiard_room" class="room"><span class="name">The Hospital</span></td>
+        <td class="passageway"></td>
+        <td id="dining_room" class="room"><span class="name">The Lounge</span></td>
+      </tr>
+      <tr>
+        <td class="passageway"></td>
+        <td></td>
+        <td class="passageway"></td>
+        <td></td>
+        <td class="passageway"></td>
+      </tr>
+      <tr>
+        <td id="conservatory" class="room"><span class="name">Hutzler Reading Room</span></td>
+        <td class="passageway"></td>
+        <td id="ballroom" class="room"><span class="name">The Stacks</span></td>
+        <td class="passageway"></td>
+        <td id="kitchen" class="room"><span class="name">Shriver Hall</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <script src="/vendor/js/jquery-3.5.1.min.js"></script>
+  <script src="/vendor/js/bootstrap.min.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
