@@ -76,12 +76,27 @@ function handleBtnTestClick(e) {
   socket.send('test message');
   console.log('sent test message to server');
 }
+function handleBtnJoinClick(e) {
+    e.preventDefault(); // Don't submit the form & reload page
+    var msg = {
+        'message': 'JoinGame',
+        'id': $('#formJoin input[name=gameId]').val(),
+    };
+    socket.send(JSON.stringify(msg));
+}
+function handleBtnCreateClick(e) {
+    e.preventDefault(); // Don't submit the form & reload page
+    var msg = {
+        'message': 'CreateGame',
+    };
+    socket.send(JSON.stringify(msg));
+}
 function handleBtnRegisterClick(e) {
   e.preventDefault(); // Don't submit the form & reload page
   var msg = {
     'message': 'Register',
     'character': $('#formRegister input[name=character]').val(),
-    'displayName': $('#formRegister input[name=displayName]').val(),
+    'display_name': $('#formRegister input[name=displayName]').val(),
   };
   socket.send(JSON.stringify(msg));
 }
@@ -164,6 +179,12 @@ $(document).ready(function() {
   });
   $('#btnRegister').click(function(e) {
     handleBtnRegisterClick(e);
+  });
+  $('#btnCreate').click(function(e) {
+      handleBtnCreateClick(e);
+  });
+  $('#btnJoin').click(function(e) {
+      handleBtnJoinClick(e);
   });
   $('#btnMove').click(function(e) {
     handleBtnMoveClick(e);

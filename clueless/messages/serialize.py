@@ -24,9 +24,9 @@ class MessageEncoder(json.JSONEncoder):
               isinstance(item, Room) or \
               isinstance(item, Location):
             return item.value
-        elif item.__name__ in SERIALIZE:
+        elif item.__class__.__name__ in SERIALIZE:
             value = item.__dict__
-            value['message'] = item.__name__
+            value['message'] = item.__class__.__name__
             return value
         else:
             return super().default(item)

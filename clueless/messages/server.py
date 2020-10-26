@@ -14,6 +14,13 @@ class Status:
     def message_name(self) -> str:
         return "status"
 
+class Joined:
+    def __init__(self, id: str):
+        self.id = id
+
+class UserJoined:
+    def __init__(self):
+        pass
 
 class Available:
     def __init__(self, characters=None):
@@ -36,8 +43,8 @@ class Position:
         self.location = location
 
 class PlayerTurn:
-    def __init__(self):
-        pass
+    def __init__(self, player: Character):
+        self.player = player
 
 class Suggestion:
     def __init__(self, player: Character, room: Room, weapon: Weapon, suspect: Character):
