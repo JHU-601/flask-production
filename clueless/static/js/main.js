@@ -183,6 +183,30 @@ function handleBtnAccuseClick(e) {
 
 function initGameroom() {
   // our "main method" for the gameroom page
+  $('#btnTest').click(function(e) {
+    handleBtnTestClick(e);
+  });
+  $('#btnCreateGame').click(function(e) {
+    handleBtnCreateGameClick(e);
+  });
+  $('#btnJoinGame').click(function(e) {
+    handleBtnJoinGameClick(e);
+  });
+  $('#btnRegister').click(function(e) {
+    handleBtnRegisterClick(e);
+  });
+  $('#btnMove').click(function(e) {
+    handleBtnMoveClick(e);
+  });
+  $('#btnSuggest').click(function(e) {
+    handleBtnSuggestClick(e);
+  });
+  $('#btnSuggestionResponse').click(function(e) {
+    handleBtnSuggestionResponseClick(e);
+  });
+  $('#btnAccuse').click(function(e) {
+    handleBtnAccuseClick(e);
+  });
   socket = new WebSocket(WEBSOCKET_URL);
   socket.onopen = function(event) {
     console.log('connected to server');
@@ -218,30 +242,6 @@ function initHomepage() {
 
 $(document).ready(function() {
   // Main method
-  $('#btnTest').click(function(e) {
-    handleBtnTestClick(e);
-  });
-  $('#btnCreateGame').click(function(e) {
-    handleBtnCreateGameClick(e);
-  });
-  $('#btnJoinGame').click(function(e) {
-    handleBtnJoinGameClick(e);
-  });
-  $('#btnRegister').click(function(e) {
-    handleBtnRegisterClick(e);
-  });
-  $('#btnMove').click(function(e) {
-    handleBtnMoveClick(e);
-  });
-  $('#btnSuggest').click(function(e) {
-    handleBtnSuggestClick(e);
-  });
-  $('#btnSuggestionResponse').click(function(e) {
-    handleBtnSuggestionResponseClick(e);
-  });
-  $('#btnAccuse').click(function(e) {
-    handleBtnAccuseClick(e);
-  });
   if (window.location.pathname.includes('gameroom')) {
     initGameroom();
   } else {
