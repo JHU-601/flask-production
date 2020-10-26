@@ -80,6 +80,8 @@ function handleMessage(data) {
     alert(`Accusation! player=${msg.player} room=${msg.room} suspect=${msg.suspect} weapon=${msg.weapon}`);
   } else if (msg.message == 'Winner') {
     alert(`Winner! player=${msg.character}`);
+  } else if (msg.message == 'GameCreated') {
+    alert(`Game Created! game id=${msg.id}`);
   } else if (msg.message == 'Disqualified') {
     // Find player with the right id
     var foundPlayer;
@@ -103,6 +105,23 @@ function handleBtnTestClick(e) {
   socket.send('test message');
   console.log('sent test message to server');
 }
+function handleBtnCreateGameClick(e) {
+  e.preventDefault(); // Don't submit the form & reload page
+  var msg = {
+    'message': 'CreateGame',
+  };
+  logMessage('Client', JSON.stringify(msg));
+  socket.send(JSON.stringify(msg));
+}
+function handleBtnJoinGameClick(e) {
+  e.preventDefault(); // Don't submit the form & reload page
+  var msg = {
+    'message': 'JoinGame',
+    'id': $('#formJoinGame input[name=id]').val(),
+  };
+  logMessage('Client', JSON.stringify(msg));
+  socket.send(JSON.stringify(msg));
+}
 function handleBtnRegisterClick(e) {
   e.preventDefault(); // Don't submit the form & reload page
   var msg = {
@@ -110,7 +129,6 @@ function handleBtnRegisterClick(e) {
     'character': $('#formRegister input[name=character]').val(),
     'displayName': $('#formRegister input[name=displayName]').val(),
   };
-  $('#txtMessages').append()
   logMessage('Client', JSON.stringify(msg));
   socket.send(JSON.stringify(msg));
 }
@@ -194,6 +212,12 @@ $(document).ready(function() {
   // Main method
   $('#btnTest').click(function(e) {
     handleBtnTestClick(e);
+  });
+  $('#btnCreateGame').click(function(e) {
+    handleBtnCreateGameClick(e);
+  });
+  $('#btnJoinGame').click(function(e) {
+    handleBtnJoinGameClick(e);
   });
   $('#btnRegister').click(function(e) {
     handleBtnRegisterClick(e);

@@ -15,6 +15,18 @@ STATIC_DIR = os.path.join(REPO_ROOT, 'clueless', 'static')
 # Dirty way of doing this
 first_client = None
 
+async def handleCreateGame(socket, msg):
+    await socket.send(json.dumps({
+        'message': 'temp',
+        'body': 'Received CreateGame command',
+    }))
+
+async def handleJoinGame(socket, msg):
+    await socket.send(json.dumps({
+        'message': 'temp',
+        'body': 'Received JoinGame command',
+    }))
+
 async def handleRegister(socket, msg):
     await socket.send(json.dumps({
         'message': 'temp',
@@ -46,6 +58,16 @@ async def handleAccuse(socket, msg):
     }))
 
 async def periodic_test_messages(socket):
+    # Create game (after user has requested it)
+    import string
+    await socket.send(json.dumps(
+        {
+            'message': 'GameCreated',
+            # 10 char long game id with random letters
+            'id': ''.join([random.choice(string.ascii_letters) for x in range(0,10)]),
+        }
+    ))
+    await asyncio.sleep(1)
     # Register a few people to join
     players = [{'character': 0, 'display_name': 'DJ Mustard'},
                 {'character': 1, 'display_name': 'scarlet'},
@@ -152,7 +174,11 @@ async def websockopen(socket, path):
         msg_str = await socket.recv()
         print('Server received client message:', msg_str)
         msg = json.loads(msg_str)
-        if msg['message'] == 'Register':
+        if msg['message'] == 'CreateGame':
+            await handleCreateGame(socket, msg)
+        elif msg['message'] == 'JoinGame':
+            await handleJoinGame(socket, msg)
+        elif msg['message'] == 'Register':
             await handleRegister(socket, msg)
         elif msg['message'] == 'Move':
             await handleMove(socket, msg)
