@@ -1,30 +1,49 @@
 // Clue-Less Main JavaScript File
 
+class Player {
+  constructor(character, display_name) {
+    this.character = character;
+    this.display_name = display_name;
+    this.position = -1;
+    this.disqualified = false;
+  }
+  to_string() {
+    return 'Player(character=' + this.character + ', display_name=' + this.display_name + ', position: ' + this.position + ', disqualified: '+this.disqualified+')';
+  }
+}
+
 WEBSOCKET_URL = 'ws://localhost:8081'; // TODO update to server / something dynamic
 var socket;
 
 var gameState = {
   players: [], // each player: location (int), disqualified (true/false)
   currentPlayerTurn: -1,
-  localPlayer: -1, // indicates which character this client is playing as
+  localPlayer: 0, // indicates which character this client is playing as // TODO actually update this
   witnessItems: [], // 3 witness items
   microstate: 'n/a',
 };
 var messagesReceived = 0;
-// TODO code to update state when each message received (w/o logic/validation) - Steve, Ken
-// TODO output box for client mock messages - Steve
 
-function showGameState() {
-  $('#statePlayers').html(gameState.players);
+function displayGameState() {
+  $('#statePlayers').html('');
+  for (var i = 0; i < gameState.players.length; i++) {
+    $('#statePlayers').append(gameState.players[i].to_string());
+    if (i < gameState.players.length - 1) $('#statePlayers').append(', ');
+    $('#statePlayers').append('<br/>');
+  }
   $('#stateCurrentPlayerTurn').html(gameState.currentPlayerTurn);
   $('#stateLocalPlayer').html(gameState.localPlayer);
   $('#stateWitnessItems').html(gameState.witnessItems);
   $('#stateMicrostate').html(gameState.microstate);
 }
 
-function handleMessage(data) {
-  $('#txtMessages').prepend(messagesReceived + ' <b>Server:</b> ' + data + '<br/>');
+function logMessage(actor, data) {
+  $('#txtMessages').prepend(messagesReceived + ' <b>'+actor+':</b> ' + data + '<br/>');
   messagesReceived++;
+}
+
+function handleMessage(data) {
+  logMessage('Server', data);
   // Handle message received from server
   // TODO handle invalid message that cannot be parsed
   try {
@@ -35,44 +54,52 @@ function handleMessage(data) {
   }
 
   if (msg.message == 'Available') {
-    // console.log('Received message Available');
-    $('#msgAvailable').html(data);
   } else if (msg.message == 'Registration') {
-    // console.log('Received message Registration');
-    $('#msgRegistration').html(data);
+    gameState.players.push(new Player(msg.character, msg.display_name));
   } else if (msg.message == 'Position') {
-    // console.log('Received message Positions');
-    $('#msgPosition').html(data);
+    // Find player with the right id
+    var foundPlayer;
+    for (var i = 0; i < gameState.players.length; i++) {
+      if (gameState.players[i].character == msg.character) {
+        foundPlayer = gameState.players[i];
+      }
+    }
+    // TODO validation
+    foundPlayer.position = msg.position;
   } else if (msg.message == 'PlayerTurn') {
-    gameState.turn = true;
-    $('#msgPlayerTurn').html(data);
+    gameState.currentPlayerTurn = msg.character;
   } else if (msg.message == 'Suggestion') {
-    // console.log('Received message Suggestion');
-    $('#msgSuggestion').html(data);
+    alert(`Suggestion! player=${msg.player} room=${msg.room} suspect=${msg.suspect} weapon=${msg.weapon}`);
   } else if (msg.message == 'SuggestionQuery') {
-    // console.log('Received message SuggestionQuery');
-    $('#msgSuggestionStatus').html(data);
+    alert(`SuggestionQuery!`);
   } else if (msg.message == 'SuggestionStatus') {
-    // console.log('Received message SuggestionStatus');
-    $('#msgSuggestionQuery').html(data);
+    alert(`SuggestionStatus! character=${msg.character} status=${msg.status}`);
   } else if (msg.message == 'SuggestionWitness') {
-    // console.log('Received message SuggestionWitness');
-    $('#msgSuggestionWitness').html(data);
+    alert(`SuggestionWitness! character=${msg.character} witness=${msg.witness}`);
   } else if (msg.message == 'Accusation') {
-    // console.log('Received message Accusation');
-    $('#msgAccusation').html(data);
+    alert(`Accusation! player=${msg.player} room=${msg.room} suspect=${msg.suspect} weapon=${msg.weapon}`);
   } else if (msg.message == 'Winner') {
-    // console.log('Received message Winner');
-    $('#msgWinner').html(data);
+    alert(`Winner! player=${msg.character}`);
   } else if (msg.message == 'Disqualified') {
-    // console.log('Received message Disqualified');
-    $('#msgDisqualified').html(data);
+    // Find player with the right id
+    var foundPlayer;
+    for (var i = 0; i < gameState.players.length; i++) {
+      if (gameState.players[i].character == msg.character) {
+        foundPlayer = gameState.players[i];
+      }
+    }
+    // TODO validation
+    foundPlayer.disqualified = true;
+    alert(`Disqualified! player=${msg.character}`);
   } else {
     console.log('Unrecognized message received: ' + data);
   }
+
+  displayGameState();
 }
 
 function handleBtnTestClick(e) {
+  logMessage('Client', 'test message');
   socket.send('test message');
   console.log('sent test message to server');
 }
@@ -83,6 +110,8 @@ function handleBtnRegisterClick(e) {
     'character': $('#formRegister input[name=character]').val(),
     'displayName': $('#formRegister input[name=displayName]').val(),
   };
+  $('#txtMessages').append()
+  logMessage('Client', JSON.stringify(msg));
   socket.send(JSON.stringify(msg));
 }
 function handleBtnMoveClick(e) {
@@ -91,6 +120,7 @@ function handleBtnMoveClick(e) {
     'message': 'Move',
     'position': $('#formMove input[name=position]').val(),
   }
+  logMessage('Client', JSON.stringify(msg));
   socket.send(JSON.stringify(msg));
 }
 function handleBtnSuggestClick(e) {
@@ -101,6 +131,7 @@ function handleBtnSuggestClick(e) {
     'suspect': $('#formSuggest input[name=suspect]').val(),
     'weapon': $('#formSuggest input[name=weapon]').val(),
   }
+  logMessage('Client', JSON.stringify(msg));
   socket.send(JSON.stringify(msg));
 }
 function handleBtnSuggestionResponseClick(e) {
@@ -109,6 +140,7 @@ function handleBtnSuggestionResponseClick(e) {
     'message': 'SuggestionResponse',
     'witness': $('#formSuggestionResponse input[name=witness]').val(),
   }
+  logMessage('Client', JSON.stringify(msg));
   socket.send(JSON.stringify(msg));
 }
 function handleBtnAccuseClick(e) {
@@ -119,6 +151,7 @@ function handleBtnAccuseClick(e) {
     'suspect': $('#formAccuse input[name=suspect]').val(),
     'weapon': $('#formAccuse input[name=weapon]').val(),
   }
+  logMessage('Client', JSON.stringify(msg));
   socket.send(JSON.stringify(msg));
 }
 
