@@ -1,3 +1,31 @@
+body {
+  background-color: lightgray;
+}
+
+#main-container {
+  background-color: white;
+}
+
+#game-container {
+  display: flex;
+  padding: 0;
+  justify-content: center;
+}
+#display-panel,
+#interaction-panel {
+  height: 800px;
+}
+#display-panel {
+  width: 600px;
+  background-color:lightblue;
+}
+#interaction-panel {
+  width: 400px;
+  background-color:lightgreen;
+}
+
+/** Skeletal is bvelow this line - can be deleted eventually **/
+
 /* body {
   background-color: black;
 } */
@@ -10,11 +38,16 @@ div#splash {
   height: 100%;
   max-width: 100%;
   overflow: hidden;
+  background-color: black;
+  text-align: center;
+  display: flex;
+  align-content: center;
 }
 img#imgSplash {
-  width: 100%;
-  height: 100%;
+  width: 909px;
+  height: 701px;
   object-fit: cover;
+  border: 1px solid white;
 }
 
 div#startGame {
@@ -39,6 +72,14 @@ div#startGame .btn-primary:hover {
 /** screen2 gameboard table **/
 div#screen3 {
   background-color: black;
+  min-height: 100vh;
+  overflow: hidden;
+}
+table#gameboard {
+  background-color: black;
+  width: 800px;
+  height: 800px;
+  margin: 50px;
 }
 table#gameboard td {
   border: none;
