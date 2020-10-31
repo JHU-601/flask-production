@@ -24,6 +24,36 @@ body {
   background-color:lightgreen;
 }
 
+.screen {
+  height: 800px;
+}
+#screen1 {
+  display: inherit;
+}
+#screen2 {
+  display: none;
+}
+#screen3 {
+  display: none;
+}
+
+#display-panel #screen1 {
+  background-color: black;
+  background-image: url('/img/splash.png');
+  background-position: center;
+  background-size: 600px 800px;
+  background-repeat: no-repeat;
+}
+#interaction-panel #screen1 {
+  padding: 50px;
+  text-align: center;
+}
+
+footer {
+  text-align: center;
+  margin: 2em;
+}
+
 /** Skeletal is bvelow this line - can be deleted eventually **/
 
 /* body {
@@ -70,11 +100,11 @@ div#startGame .btn-primary:hover {
 }
 
 /** screen2 gameboard table **/
-div#screen3 {
+/* div#screen3 {
   background-color: black;
   min-height: 100vh;
   overflow: hidden;
-}
+} */
 table#gameboard {
   background-color: black;
   width: 800px;

@@ -220,6 +220,7 @@ function initGameroom() {
 function initHomepage() {
   // our "main method" for the homepage
   console.log('on homepage');
+
   $('#btnStartGame').click(function() {
     $('#screen1').fadeOut();
     $('#screen2').fadeIn();
