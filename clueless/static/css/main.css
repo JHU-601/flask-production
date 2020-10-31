@@ -14,6 +14,7 @@ body {
 #display-panel,
 #interaction-panel {
   height: 800px;
+  overflow: hidden;
 }
 #display-panel {
   width: 600px;
@@ -27,26 +28,43 @@ body {
 .screen {
   height: 800px;
 }
-#screen1 {
+.screen1 {
   display: inherit;
 }
-#screen2 {
+.screen2 {
   display: none;
 }
-#screen3 {
+.screen3 {
   display: none;
 }
 
-#display-panel #screen1 {
+#display-panel .screen1 {
   background-color: black;
   background-image: url('/img/splash.png');
   background-position: center;
   background-size: 600px 800px;
   background-repeat: no-repeat;
 }
-#interaction-panel #screen1 {
-  padding: 50px;
+#display-panel .screen2 h2 {
   text-align: center;
+  width: 100%;
+}
+#display-panel .screen2 table.table td {
+  border: none;
+}
+
+#interaction-panel .screen1,
+#interaction-panel .screen2 {
+  padding: 50px;
+}
+#interaction-panel .screen1 h2 {
+  text-align: center;
+}
+#interaction-panel .screen2 {
+
+}
+#interaction-panel .screen3 {
+  padding: 0;
 }
 
 footer {

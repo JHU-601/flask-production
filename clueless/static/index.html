@@ -16,35 +16,85 @@
     </div>
     <div id="game-container" class="container">
       <div id="display-panel">
-        <div id="screen1" class="screen">
+        <div class="screen screen1">
 
         </div>
-        <div id="screen2" class="screen">
-          WAITING ROOM
+        <div class="screen screen2">
+          <h2>Waiting Room</h2>
+          <p>When all players have joined, press the Start Game button to begin.</p>
+          <table class="table">
+            <tr>
+              <td>player</td>
+              <td>icon</td>
+            </tr>
+            <tr>
+              <td>player</td>
+              <td>icon</td>
+            </tr>
+            <tr>
+              <td>player</td>
+              <td>icon</td>
+            </tr>
+            <tr>
+              <td>player</td>
+              <td>icon</td>
+            </tr>
+            <tr>
+              <td>player</td>
+              <td>icon</td>
+            </tr>
+            <tr>
+              <td>player</td>
+              <td>icon</td>
+            </tr>
+          </table>
         </div>
-        <div id="screen3" class="screen">
+        <div class="screen screen3">
           GAME BOARD
         </div>
       </div>
       <div id="interaction-panel">
-        <div id="screen1" class="screen">
+        <div class="screen screen1">
           <div>
-            <button class="btn btn-primary">Start New Game</button>
+            <h2>Welcome!</h2>
           </div>
           <hr>
           <div>
-            <input class="form-control" type="text" placeholder="Game ID" />
-            <button class="btn btn-primary">Join Game</button>
+            <button id="btnCreateGame" class="btn btn-primary">Start New Game</button>
           </div>
           <hr>
           <div>
-            <button class="btn btn-primary">About</button>
+            <input id="txtGameId" class="form-control" type="text" placeholder="Game ID" />
+            <button id="btnJoinGame" class="btn btn-primary">Join Game</button>
+          </div>
+          <hr>
+          <div>
+            <button id="btnAbout" class="btn btn-primary">About</button>
           </div>
         </div>
-        <div id="screen2" class="screen">
-          WAITING ROOM
+        <div class="screen screen2">
+          <div>
+            <h4>Choose Your Character</h4>
+            <select class="form-control" name="" id="">
+              <option value="0">Colonel Mustard</option>
+              <option value="1">tmp</option>
+              <option value="2">tmp</option>
+              <option value="3">tmp</option>
+              <option value="4">tmp</option>
+              <option value="5">tmp</option>
+            </select>
+          </div>
+          <hr>
+          <div>
+            <h4>Choose Your Display Name</h4>
+            <input id="txtDisplayName" class="form-control" type="text" placeholder="Display Name" />
+          </div>
+          <hr>
+          <div>
+            <button id="btnRegister" class="btn btn-primary">Submit</button>
+          </div>
         </div>
-        <div id="screen3" class="screen">
+        <div class="screen screen3">
           GAME BOARD
         </div>
       </div>
