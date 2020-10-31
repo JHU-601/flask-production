@@ -50,7 +50,43 @@
           </table>
         </div>
         <div class="screen screen3">
-          GAME BOARD
+          <table class="table" id="gameboard">
+              <tr>
+                <td id="study" class="room"><span class="name">Dining Hall</span></td>
+                <td class="passageway horiz"></td>
+                <td id="hall" class="room"><span class="name">Peabody Institute</span></td>
+                <td class="passageway horiz"></td>
+                <td id="lounge" class="room"><span class="name">Gilman Hall</span></td>
+              </tr>
+              <tr>
+                <td class="passageway vert"></td>
+                <td></td>
+                <td class="passageway vert"></td>
+                <td></td>
+                <td class="passageway vert"></td>
+              </tr>
+              <tr>
+                <td id="library" class="room"><span class="name">Library</span></td>
+                <td class="passageway"></td>
+                <td id="billiard_room" class="room"><span class="name">The Hospital</span></td>
+                <td class="passageway"></td>
+                <td id="dining_room" class="room"><span class="name">The Lounge</span></td>
+              </tr>
+              <tr>
+                <td class="passageway"></td>
+                <td></td>
+                <td class="passageway"></td>
+                <td></td>
+                <td class="passageway"></td>
+              </tr>
+              <tr>
+                <td id="conservatory" class="room"><span class="name">Hutzler Reading Room</span></td>
+                <td class="passageway"></td>
+                <td id="ballroom" class="room"><span class="name">The Stacks</span></td>
+                <td class="passageway"></td>
+                <td id="kitchen" class="room"><span class="name">Shriver Hall</span></td>
+              </tr>
+            </table>
         </div>
       </div>
       <div id="interaction-panel">
@@ -95,7 +131,45 @@
           </div>
         </div>
         <div class="screen screen3">
-          GAME BOARD
+          <div id="top">
+            <ul class="nav nav-tabs">
+              <li><a data-toggle="tab" href="#notepad" class="active">Notepad</a></li>
+              <li><a data-toggle="tab" href="#chat">Chat</a></li>
+            </ul>
+
+            <div class="tab-content">
+              <div id="notepad" class="tab-pane active">
+                <h3>Notepad</h3>
+                <p>Some content.</p>
+              </div>
+              <div id="chat" class="tab-pane">
+                <h3>Chat</h3>
+                <p>Me: Hi everyone.</p>
+              </div>
+            </div>
+          </div> <!-- /top -->
+          <div id="bottom">
+            <ul class="nav nav-tabs">
+              <li><a data-toggle="tab" href="#menu-move" class="active">Move</a></li>
+              <li><a data-toggle="tab" href="#menu-suggest">Suggest</a></li>
+              <li><a data-toggle="tab" href="#menu-accuse">Accuse</a></li>
+            </ul>
+
+            <div class="tab-content">
+              <div id="menu-move" class="tab-pane active">
+                <h3>Move</h3>
+                <p>Some content.</p>
+              </div>
+              <div id="menu-suggest" class="tab-pane">
+                <h3>Suggest</h3>
+                <p>Some content in menu 1.</p>
+              </div>
+              <div id="menu-accuse" class="tab-pane">
+                <h3>Accuse</h3>
+                <p>Some content in menu 2.</p>
+              </div>
+            </div>
+          </div> <!-- /bottom -->
         </div>
       </div>
     </div>
