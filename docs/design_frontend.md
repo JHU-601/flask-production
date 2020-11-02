@@ -99,3 +99,19 @@ classDiagram
         -sendMessage(Map message)
       }
 ```
+
+# Sequence Diagrams
+
+## Receive message
+
+```mermaid
+sequenceDiagram
+    WebSocket->>GameHub: Hello John, how are you?
+```
+
+## Send Message
+
+```mermaid
+sequenceDiagram
+    GameHub-->>WebSocket: Great!
+```
