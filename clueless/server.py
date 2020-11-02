@@ -1,7 +1,7 @@
 # Clueless Flask Prototype
 from flask import Flask
 from flask import render_template
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit # type: ignore
 
 SERVER_ADDR = '0.0.0.0'
 SERVER_PORT = 5000
