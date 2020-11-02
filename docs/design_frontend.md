@@ -1,4 +1,4 @@
-Front-end panels:
+# Client Side Design
 
 ```mermaid
 classDiagram
@@ -9,9 +9,16 @@ classDiagram
       Panel: **display(gameState)
       Panel <|-- GamePanel
       class GamePanel{
-        +Panel homePanel
-        +Panel startPanel
-        display(gameState)
+        -HomePanel homePanel
+        -StartPanel startPanel
+        -WaitingRoomPanel waitingRoomPanel
+        -RegistrationPanel registrationPanel
+        -GameBoardPanel gameboardPanel
+        -InteractionPanel interactionPanel
+        +display(gameState)
+        +showScreen1()
+        +showScreen2()
+        +showScreen3()
       }
       Panel <|-- HomePanel
       class HomePanel {
@@ -20,7 +27,8 @@ classDiagram
       Panel <|-- StartPanel
       class StartPanel {
         display(gameState)
-        handleBtnXClick()
+        handleBtnCreateGameClick()
+        handleBtnJoinGameClick()
       }
       Panel <|-- WaitingRoomPanel
       class WaitingRoomPanel {
@@ -29,6 +37,9 @@ classDiagram
       Panel <|-- RegistrationPanel
       class RegistrationPanel {
         display(gameState)
+        handleCharacterClick()
+        handleBtnRegisterClick()
+        handleBtnStartGameClick()
       }
       Panel <|-- GameBoardPanel
       class GameBoardPanel {
@@ -37,11 +48,13 @@ classDiagram
       Panel <|-- InteractionPanel
       class InteractionPanel {
         display(gameState)
+        TabbedPanel topPanel
+        TabbedPanel bottomPanel
       }
       Panel <|-- TabbedPanel
       class TabbedPanel {
         display(gameState)
-        childPanels
+        List<Panel> childPanels
       }
       Panel <|-- NotepadPanel
       class NotepadPanel {
@@ -50,17 +63,39 @@ classDiagram
       Panel <|-- ChatPanel
       class ChatPanel {
         display(gameState)
+        handleBtnSendClick()
       }
       Panel <|-- MovePanel
       class MovePanel {
         display(gameState)
+        handleDirectionalClick()
+        handleBtnMoveClick()
       }
       Panel <|-- SuggestPanel
       class SuggestPanel {
         display(gameState)
+        handleBtnSuggestClick()
       }
       Panel <|-- AccusePanel
       class AccusePanel {
         display(gameState)
+        handleBtnAccuseClick()
+      }
+      class Player {
+        bool disqualified
+        int character
+      }
+      class GameState {
+        List<Player> players
+        Player currentPlayer
+        int witnessItem_character
+        int witnessItem_room
+        int witnessItem_weapon
+      }
+      class GameHub {
+        +GameState gameState
+        +GamePanel gamePanel
+        -receiveMessage(Map message)
+        -sendMessage(Map message)
       }
 ```
