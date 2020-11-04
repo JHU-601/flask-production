@@ -15,10 +15,12 @@ classDiagram
         -RegistrationPanel registrationPanel
         -GameBoardPanel gameboardPanel
         -InteractionPanel interactionPanel
+        -ModalPanel modalPanel
         +display(gameState)
         +showScreen1()
         +showScreen2()
         +showScreen3()
+        +showModal()
       }
       Panel <|-- HomePanel
       class HomePanel {
@@ -80,6 +82,11 @@ classDiagram
       class AccusePanel {
         display(gameState)
         handleBtnAccuseClick()
+      }
+      Panel <|-- ModalPanel
+      class ModalPanel {
+        display(gameState)
+        handleBtnOkayClick()
       }
       class Player {
         bool disqualified
