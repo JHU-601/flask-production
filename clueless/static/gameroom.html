@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Clueless</title>
+  <link rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Clue-Less</a>
+    </div>
+  </nav>
+  <div class="container" id="content">
+    <!-- <h1>Gameroom</h1>
+    <p id="txtWaiting">Waiting for players to join...</p>
+    <button class="btn btn-warning" id="btnTest">Test Send to Server</button> -->
+    <h1>Skeletal Increment: Messaging Demonstration</h1>
+    <p>In the below, each message defined in our SRS can be exercised using a button (and input fields when applicable).</p>
+    <h2>Game State Representation</h2>
+    <div>
+      <b>Players:</b> <br/>
+      <span id="statePlayers"></span>
+    </div>
+    <div>
+      <b>Current Player Turn:</b> <span id="stateCurrentPlayerTurn"></span>
+    </div>
+    <div>
+      <b>Local Player:</b> <span id="stateLocalPlayer"></span>
+    </div>
+    <div>
+      <b>Witness Items:</b> <span id="stateWitnessItems"></span>
+    </div>
+    <div>
+      <b>Microstate:</b> <span id="stateMicrostate"></span>
+    </div>
+    <hr>
+    <h2>Messages</h2>
+    <div id="txtMessages"></div>
+    <hr>
+
+    <!-- CLIENT TO SERVER -->
+    <h2>Client to Server</h2>
+    <h3>Message CreateGame</h3>
+    <form class="form" id="formCreateGame">
+      <div>
+        <button id="btnCreateGame" class="btn btn-primary">Create</button>
+      </div>
+    </form>
+    <h3>Message JoinGame</h3>
+    <form class="form" id="formJoinGame">
+      <p>Provide a Game ID.</p>
+      <div>
+        <input class="form-control" type="text" name="id" />
+      </div>
+      <div>
+        <button id="btnJoinGame" class="btn btn-primary">Join</button>
+      </div>
+    </form>
+    <h3>Message Register</h3>
+    <form class="form" id="formRegister">
+      <p>1. Select a character.</p>
+      <div>
+        <input id="character0" type="radio" name="character" value="0" /> <label for="character0">Colonel Mustard (Yellow)</label>
+      </div>
+      <div>
+        <input id="character1" type="radio" name="character" value="1" /> <label for="character1">Miss Scarlet (Red)</label>
+      </div>
+      <div>
+        <input id="character2" type="radio" name="character" value="2" /> <label for="character2">Professor Plum (Purple)</label>
+      </div>
+      <div>
+        <input id="character3" type="radio" name="character" value="3" /> <label for="character3">Mr. Green (Green)</label>
+      </div>
+      <div>
+        <input id="character4" type="radio" name="character" value="4" /> <label for="character4">Mrs. White (White)</label>
+      </div>
+      <div>
+        <input id="character5" type="radio" name="character" value="5" /> <label for="character5">Mrs. Peacock (Blue)</label>
+      </div>
+      <p>2. Choose a display name.</p>
+      <div>
+        <input class="form-control" type="text" name="displayName" placeholder="Display Name" />
+      </div>
+      <div>
+        <button id="btnRegister" class="btn btn-primary">Register</button>
+      </div>
+    </form>
+
+    <h3>Message Move</h3>
+    <form class="form" id="formMove">
+      <p>Choose a position between 0 and 20.</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=20 name="position" />
+      </div>
+      <div>
+        <button id="btnMove" class="btn btn-primary">Move</button>
+      </div>
+    </form>
+    <h3>Message Suggest</h3>
+    <form class="form" id="formSuggest">
+      <p>Choose a room (0 to 9).</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=9 name="room" />
+      </div>
+      <p>Choose a suspect (0 to 5).</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=5 name="suspect" />
+      </div>
+      <p>Choose a weapon (0 to 5).</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=5 name="weapon" />
+      </div>
+      <div>
+        <button id="btnSuggest" class="btn btn-primary">Suggest</button>
+      </div>
+    </form>
+    <h3>Message SuggestionResponse</h3>
+    <form class="form" id="formSuggestionResponse">
+      <p>Choose witness 0-9 or 10 for "denied."</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=10 name="witness" />
+      </div>
+      <div>
+          <input class="form-control" type="number" min=0 max=2 name="type" />
+      </div>
+      <div>
+        <button id="btnSuggestionResponse" class="btn btn-primary">Suggestion Response</button>
+      </div>
+    </form>
+    <h3>Message Accuse</h3>
+    <form class="form" id="formAccuse">
+      <p>Choose a room (0 to 9).</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=9 name="room" />
+      </div>
+      <p>Choose a suspect (0 to 5).</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=5 name="suspect" />
+      </div>
+      <p>Choose a weapon (0 to 5).</p>
+      <div>
+        <input class="form-control" type="number" min=0 max=5 name="weapon" />
+      </div>
+      <div>
+        <button id="btnAccuse" class="btn btn-primary">Accuse</button>
+      </div>
+    </form>
+    <hr>
+    <!-- SERVER TO CLIENT -->
+    <!-- <h2>Server to Client</h2>
+    <h3>Message Available</h3>
+    <p>When the Available message is received, results will be displayed here.</p>
+    <textbox class="form-control" id="msgAvailable"></textbox>
+
+    <h3>Message Registration</h3>
+    <p>When the Registration message is received, results will be displayed here.</p>
+    <textbox class="form-control" id="msgRegistration"></textbox>
+
+    <h3>Message Position</h3>
+    <p>When the Position message is received, results will be displayed here.</p>
+    <textbox class="form-control" id="msgPosition"></textbox>
+
+    <h3>Message PlayerTurn</h3>
+    <p>When the PlayerTurn message is received, results will be displayed here.</p>
+    <textbox class="form-control" id="msgPlayerTurn"></textbox>
+
+    <h3>Message Suggestion</h3>
+    <p>When the Suggestion message is received, results will be displayed here.</p>
+    <textbox class="form-control" id="msgSuggestion"></textbox>
+
+    <h3>Message SuggestionQuery</h3>
+    <p>When the SuggestionQuery message is received, results will be displayed here.</p>
+    <textbox class="form-control" id="msgSuggestionQuery"></textbox>
+
+    <h3>Message SuggestionStatus</h3>
+    <p>When the SuggestionStatus message is received, results will be displayed here.</p>
+    <textbox class="form-control" id="msgSuggestionStatus"></textbox>
+
+    <h3>Message SuggestionWitness</h3>
+    <p>When the SuggestionWitness message is received, results will be displayed here.</p>
+    <textbox class="form-control" id="msgSuggestionWitness"></textbox>
+
+    <h3>Message Accusation</h3>
+    <p>When the Accusation message is received, results will be displayed here.</p>
+    <textbox class="form-control" id="msgAccusation"></textbox>
+
+    <h3>Message Winner</h3>
+    <p>When the Winner message is received, results will be displayed here.</p>
+    <textbox class="form-control" id="msgWinner"></textbox>
+
+    <h3>Message Disqualified</h3>
+    <p>When the Disqualified message is received, results will be displayed here.</p>
+    <textbox class="form-control" id="msgDisqualified"></textbox> -->
+
+  </div>
+  <!-- vendor scripts -->
+  <script src="/vendor/js/jquery-3.5.1.min.js"></script>
+  <script src="/vendor/js/bootstrap.min.js"></script>
+  <!-- main script -->
+  <script src="/js/main.js"></script>
+</body>
+</html>

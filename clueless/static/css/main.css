@@ -1,1 +1,117 @@
-/** custom styles here **/
+/* body {
+  background-color: black;
+} */
+
+/** screen 1 **/
+
+div#splash {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+img#imgSplash {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+div#startGame {
+  text-align: center;
+  /* background-color: white; */
+  border-radius: 10px;
+  padding: 1em;
+  position: absolute;
+  top: 43%;
+  left: 53%;
+  transform: translate(-50%, -50%);
+}
+div#startGame .btn-primary {
+  background-color: #f57f17;
+  border: 3px solid white;
+  font: 24px Arial;
+}
+div#startGame .btn-primary:hover {
+  background-color: black;
+}
+
+/** screen2 gameboard table **/
+div#screen3 {
+  background-color: black;
+}
+table#gameboard td {
+  border: none;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  vertical-align: middle;
+}
+/* table#gameboard td.room {
+  background-color: yellow;
+} */
+table#gameboard td.passageway {
+  background-image: url('/img/hallway.png');
+}
+table#gameboard td.room {
+  padding: 0 5px;
+  border: 5px solid black;
+  background-size: contain;
+}
+table#gameboard td.room .name {
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+}
+table#gameboard td#study {
+  background-image: url('/img/rooms/study.png');
+  text-align: right;
+  vertical-align: bottom;
+}
+table#gameboard td#lounge {
+  background-image: url('/img/rooms/lounge.png');
+  text-align: left;
+  vertical-align: bottom;
+}
+table#gameboard td#library {
+  background-image: url('/img/rooms/library.png');
+  text-align: right;
+  vertical-align: bottom;
+}
+table#gameboard td#conservatory {
+  background-image: url('/img/rooms/conservatory.png');
+  text-align: right;
+  vertical-align: bottom;
+}
+table#gameboard td#hall {
+  background-image: url('/img/rooms/hall.jpeg');
+  text-align: center;
+  vertical-align: bottom;
+}
+table#gameboard td#ballroom {
+  background-image: url('/img/rooms/ballroom.jpeg');
+  text-align: center;
+  vertical-align: bottom;
+}
+table#gameboard td#billiard_room {
+  background-image: url('/img/rooms/billiard_room.jpeg');
+  text-align: center;
+  vertical-align: bottom;
+}
+table#gameboard td#kitchen {
+  background-image: url('/img/rooms/kitchen.jpeg');
+  text-align: left;
+  vertical-align: bottom;
+}
+table#gameboard td#dining_room {
+  background-image: url('/img/rooms/dining_room.jpeg');
+  text-align: left;
+  vertical-align: bottom;
+}
+
+/** gameboard **/
+div#txtMessages {
+  height: 100px;
+  overflow-y: scroll;
+  border: 1px solid gray;
+}

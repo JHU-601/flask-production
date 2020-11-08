@@ -21,12 +21,13 @@ class MessageEncoder(json.JSONEncoder):
     def default(self, item):
         if isinstance(item, Hallway) or \
               isinstance(item, Character) or \
-              isinstance(item, Room) or \
-              isinstance(item, Location):
+              isinstance(item, Room):
             return item.value
-        elif item.__name__ in SERIALIZE:
+        elif isinstance(item, Location):
+            return item.inner.value
+        elif item.__class__.__name__ in SERIALIZE:
             value = item.__dict__
-            value['message'] = item.__name__
+            value['message'] = item.__class__.__name__
             return value
         else:
             return super().default(item)
