@@ -17,7 +17,6 @@ class Panel {
   show() {
     // Only attempt to show if already hidden
     if (this.element.style.display == "none") {
-      alert('debug2')
       // If we saved the display value, restore it
       if (this.orig_display != null) {
         this.element.style.display = this.orig_display;
@@ -178,11 +177,19 @@ class NotepadPanel extends Panel {
 }
 
 class ModalPanel extends Panel {
+  constructor(id) {
+    super(id);
+    this.btnOkay = this.element.querySelector('#btnOkay');
+    this.btnOkay.onclick = this.handleBtnOkayClick.bind(this);
+  }
   display(gameState) {
 
   }
   show(title, message) {
     // TODO insert title, message into element
     super.show();
+  }
+  handleBtnOkayClick() {
+    this.hide();
   }
 }
