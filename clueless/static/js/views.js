@@ -17,6 +17,7 @@ class Panel {
   show() {
     // Only attempt to show if already hidden
     if (this.element.style.display == "none") {
+      alert('debug2')
       // If we saved the display value, restore it
       if (this.orig_display != null) {
         this.element.style.display = this.orig_display;
@@ -58,6 +59,7 @@ class GamePanel extends Panel {
     this.registrationPanel.hide();
     this.gameboardPanel.hide();
     this.interactionPanel.hide();
+    this.modalPanel.hide();
   }
   showScreen2() {
     this.homePanel.hide();
@@ -66,6 +68,7 @@ class GamePanel extends Panel {
     this.registrationPanel.show();
     this.gameboardPanel.hide();
     this.interactionPanel.hide();
+    this.modalPanel.hide();
   }
   showScreen3() {
     this.homePanel.hide();
@@ -74,6 +77,7 @@ class GamePanel extends Panel {
     this.registrationPanel.hide();
     this.gameboardPanel.show();
     this.interactionPanel.show();
+    this.modalPanel.hide();
   }
   showModal(title, message) {
     this.modalPanel.show(title, message);
@@ -103,7 +107,7 @@ class StartPanel extends Panel {
 
   }
   handleBtnCreateGameClick() {
-    alert('btnCreateGame clicked');
+    gameHub.gamePanel.showModal('Create Game', 'Not implemented.');
   }
   handleBtnJoinGameClick() {
     alert('btnJoinGame clicked with gameid=' + this.txtGameId.value);
