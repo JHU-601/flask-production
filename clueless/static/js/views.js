@@ -9,7 +9,9 @@ class Panel {
 }
 
 class GamePanel extends Panel {
-
+  display(gameState) {
+    this.element.innerHTML = 'i just updated game state!';
+  }
 }
 
 class HomePanel extends Panel {

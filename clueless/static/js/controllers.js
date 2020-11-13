@@ -11,9 +11,9 @@ class GameState {
 class GameHub {
   constructor() {
     this.gameState = new GameState();
-    this.gamePanel = new GamePanel();
+    this.gamePanel = new GamePanel('game-panel');
 
-    updateDisplay();
+    this.updateDisplay();
   }
 
   updateDisplay() {
