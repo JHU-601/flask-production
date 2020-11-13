@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 // Clue-Less Main JavaScript File
 
 class Player {
@@ -221,25 +220,20 @@ function initGameroom() {
 function initHomepage() {
   // our "main method" for the homepage
   console.log('on homepage');
-
+  $('#btnStartGame').click(function() {
+    $('#screen1').fadeOut();
+    $('#screen2').fadeIn();
+  });
   $('#btnCreateGame').click(function() {
     console.log('Creating game.');
-    $('.screen1').fadeOut();
-    $('.screen2').fadeIn();
+    $('#screen2').fadeOut();
+    $('#screen3').fadeIn();
   });
   $('#btnJoinGame').click(function() {
     var gameId = $('#txtGameId').val();
     console.log('Joining game: ' + gameId);
-    $('.screen1').fadeOut();
-    $('.screen2').fadeIn();
-  });
-  $('#btnAbout').click(function() {
-    alert('This is Clue-Less, ')
-  });
-
-  $('#btnRegister').click(function() {
-    $('.screen2').fadeOut();
-    $('.screen3').fadeIn();
+    $('#screen2').fadeOut();
+    $('#screen3').fadeIn();
   });
 }
 //
@@ -247,8 +241,71 @@ function initHomepage() {
 //      socket.close();
 // });
 
-=======
->>>>>>> Stashed changes
 $(document).ready(function() {
-  var gamehub = new GameHub();
+  // Main method
+  if (window.location.pathname.includes('gameroom')) {
+    initGameroom();
+  } else {
+    initHomepage();
+  }
 });
+
+
+
+// const object functions as enum. Has multiple aliases
+// Numbers are per the SRS
+class Character {
+  static DEFAULT = 0
+  static YELLOW = 0
+  static COLONEL_MUSTARD = 0
+
+  static RED = 1
+  static MISS_SCARLET = 1
+
+  static PURPLE = 2
+  static PROFESSOR_PLUM = 2
+
+  static GREEN = 3
+  static MR_GREEN = 3
+
+  static WHITE = 4
+  static MRS_WHITE = 4
+
+  static BLUE = 5
+  static MRS_PEACOCK = 5
+
+  constructor(type) {
+    this.type = type;
+  }
+};
+
+class Weapon {
+  static DEFAULT = 0
+  static ROPE = 0
+  static PIPE = 1
+  static KNIFE = 2
+  static WRENCH = 3
+  static CANDLESTICK = 4
+  static REVOLVER = 5
+
+  constructor(type) {
+    this.type = type;
+  }
+}
+
+class Room {
+  static DEFAULT = 0
+  static STUDY = 0
+  static HALL = 1
+  static LOUNGE = 2
+  static LIBRARY = 3
+  static BILLIARD_ROOM = 4
+  static DINING_ROOM = 5
+  static CONSERVATORY = 6
+  static BALLROOM = 7
+  static KITCHEN = 8
+
+  constructor(type) {
+    this.type = type;
+  }
+}
