@@ -1,3 +1,4 @@
+/* General */
 body {
   background-color: lightgray;
 }
@@ -6,6 +7,84 @@ body {
   background-color: white;
 }
 
+/* Game - New */
+
+/* GENERAL PANEL STYLES */
+.panel {
+  height: 800px;
+}
+.panel-left {
+  width: 60%;
+  border-right: none;
+}
+.panel-right {
+  width: 40%;
+}
+/* SPECIFIC PANEL STYLES */
+/* GamePanel */
+#game-panel {
+  display: flex;
+  padding: 0;
+  justify-content: center;
+}
+
+/* HomePanel */
+#home-panel {
+  background-color: red;
+}
+
+/* StartPanel */
+#start-panel {
+  background-color: green;
+}
+
+/* WaitingRoomPanel */
+#waitingroom-panel {
+
+}
+
+/* RegistrationPanel */
+#registration-panel {
+
+}
+
+/* Gameboard Panel */
+#gameboard-panel {
+
+}
+
+/* InteractionPanel */
+#interaction-panel {
+
+}
+/* InteractionPanel Sub-panels */
+#tabbed-panel {
+
+}
+#accuse-panel {
+
+}
+#suggest-panel {
+
+}
+#move-panel {
+
+}
+#chat-panel {
+
+}
+#notepad-panel {
+
+}
+
+/* ModalPanel */
+#modal-panel {
+
+}
+
+
+/*------------ old below this line, needs to be migrated up ------------------*/
+/* Game - OLD */
 #game-container {
   display: flex;
   padding: 0;
@@ -93,12 +172,6 @@ footer {
   text-align: center;
   margin: 2em;
 }
-
-/** Skeletal is bvelow this line - can be deleted eventually **/
-
-/* body {
-  background-color: black;
-} */
 
 /** screen 1 **/
 
