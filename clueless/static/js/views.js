@@ -87,8 +87,29 @@ class HomePanel extends Panel {
 }
 
 class StartPanel extends Panel {
+  constructor(id) {
+    super(id);
+    // Get references to relevant elements
+    this.btnCreateGame = this.element.querySelector('#btnCreateGame');
+    this.txtGameId = this.element.querySelector('#txtGameId');
+    this.btnJoinGame = this.element.querySelector('#btnJoinGame');
+    this.btnAbout = this.element.querySelector('#btnAbout');
+    // Set up click listeners
+    this.btnCreateGame.onclick = this.handleBtnCreateGameClick.bind(this);
+    this.btnJoinGame.onclick = this.handleBtnJoinGameClick.bind(this);
+    this.btnAbout.onclick = this.handleBtnAboutClick.bind(this);
+  }
   display(gameState) {
 
+  }
+  handleBtnCreateGameClick() {
+    alert('btnCreateGame clicked');
+  }
+  handleBtnJoinGameClick() {
+    alert('btnJoinGame clicked with gameid=' + this.txtGameId.value);
+  }
+  handleBtnAboutClick() {
+    alert('btnAbout clicked');
   }
 }
 

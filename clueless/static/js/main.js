@@ -1,3 +1,5 @@
+var gameHub;
+
 document.addEventListener("DOMContentLoaded", function(){
-  var gamehub = new GameHub();
+  gameHub = new GameHub();
 });

@@ -30,7 +30,11 @@ body {
 
 /* HomePanel */
 #home-panel {
-  background-color: red;
+  background-color: black;
+  background-image: url('/img/splash.png');
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }
 
 /* StartPanel */
