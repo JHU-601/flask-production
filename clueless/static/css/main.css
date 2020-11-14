@@ -76,8 +76,12 @@ body {
   transform: translate(-50%, 0);
 }
 
+#waitingroom-panel #listOfPlayers {
+  margin-top: 20px;
+}
+
 #waitingroom-panel #lstOfPlayers .character {
-  background-color: green;
+
 }
 
 /* RegistrationPanel */
@@ -114,6 +118,10 @@ body {
   width: 70px;
   height: 70px;
   border: 1px solid black;
+}
+
+#registration-panel button.icon.taken img {
+  opacity: 0.5;
 }
 
 #registration-panel #btnRegister {

@@ -138,7 +138,7 @@ class WaitingRoomPanel extends Panel {
       this.lstOfPlayers.innerHTML = "";
       for (var i = 0; i < gameState.players.length; i++) {
         var curPlayer = gameState.players[i];
-        this.lstOfPlayers.innerHTML += '<div class="character">Character ' + curPlayer.character + ' - display_name=' + curPlayer.display_name + '</div>';
+        this.lstOfPlayers.innerHTML += '<div class="character">' + curPlayer.character + ' - ' + curPlayer.display_name + '</div>';
       }
     }
   }
@@ -170,14 +170,25 @@ class RegistrationPanel extends Panel {
     this.btnRegister.onclick = this.handleBtnRegisterClick.bind(this);
   }
   display(gameState) {
-
+    for (var i = 0; i < gameState.players.length; i++) {
+      var currPlayer = gameState.players[i];
+      this.characters[currPlayer.character].classList.add("taken");
+    }
   }
   handleCharacterClick(e) {
     // Remove class from old one (if it exists)
+    var clickedCharacter = e.target.dataset.character - 1;
+    for (var i = 0; gameHub.gameState.players.length; i++) {
+      if (gameHub.gameState.players[i].character == clickedCharacter) {
+        console.log("hello Steve");
+        return;
+      }
+    }
+
     if (this.clickedCharacter != null) {
       this.characters[this.clickedCharacter].classList.remove("clicked");
     }
-    this.clickedCharacter = e.target.dataset.character - 1;
+    this.clickedCharacter = clickedCharacter;
     this.characters[this.clickedCharacter].classList.add("clicked");
   }
   handleBtnRegisterClick() {
