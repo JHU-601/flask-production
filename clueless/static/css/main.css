@@ -184,6 +184,8 @@ body {
 .tabbed-panel {
   background-color: black;
   color: white;
+  display: flex;
+  flex-direction: column;
 }
 .tabbed-panel .selectors {
   display: flex;
@@ -204,7 +206,8 @@ body {
   background-color: lightgray;
 }
 .tabbed-panel .tab {
-
+  flex-grow: 1;
+  display: block;
 }
 #accuse-panel {
 
@@ -216,10 +219,43 @@ body {
 
 }
 #chat-panel {
+  height: 87%;
+}
+#chat-panel .inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+#chat-panel #chatlog {
+  flex-grow: 15;
+}
+#chat-panel #sendgroup {
+  flex-grow: 1;
+  background-color:green;
+  display: flex;
+  flex-direction: row;
+}
+#chat-panel #sendgroup #txtChat {
+  flex-grow: 9;
+}
+#chat-panel #sendgroup #btnSend {
+  flex-grow: 1;
 
 }
 #notepad-panel {
-
+  overflow-y: scroll;
+}
+#notepad-panel table {
+  width: 100%;
+}
+#notepad-panel table td.check {
+  border: 1px solid white;
+  width: 1em;
+  height: 1em;
+  cursor: pointer;
+}
+#notepad-panel table td.check.clicked {
+  background-color: darkgray;
 }
 
 /* ModalPanel */

@@ -256,6 +256,10 @@ class TabbedPanel extends Panel {
     this.childPanels = childPanels;
     this.selectors = this.element.querySelectorAll('.tab-selector');
     this.selectedPanel = 0;
+    // Ensure block for child panels
+    for (var i = 0; i < this.childPanels.length; i++) {
+      
+    }
     // Set up listeners
     for (var i = 0; i < this.selectors.length; i++) {
       this.selectors[i].onclick = this.handleSelectorClick.bind(this);
@@ -309,8 +313,23 @@ class ChatPanel extends Panel {
 }
 
 class NotepadPanel extends Panel {
+  constructor(id) {
+    super(id);
+    this.checkboxes = this.element.querySelectorAll('.check');
+    for (var i = 0; i < this.checkboxes.length; i++) {
+      this.checkboxes[i].onclick = this.handleCheckboxClick.bind(this);
+    }
+  }
   display(gameState) {
 
+  }
+  handleCheckboxClick(e) {
+    // Toggle checked class
+    if (e.target.classList.contains('clicked')) {
+      e.target.classList.remove('clicked');
+    } else {
+      e.target.classList.add('clicked');
+    }
   }
 }
 
