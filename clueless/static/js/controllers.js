@@ -51,6 +51,6 @@ class GameHub {
   }
   // Individual message handlers
   handleMsgJoined() {
-    alert('message joined!')
+    this.gamePanel.showScreen2();
   }
 }

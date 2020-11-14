@@ -17,8 +17,8 @@ first_client = None
 
 async def handleCreateGame(socket, msg):
     await socket.send(json.dumps({
-        'message': 'temp',
-        'body': 'Received CreateGame command',
+        'message': 'Joined',
+        'id': 'fakeid',
     }))
 
 async def handleJoinGame(socket, msg):
@@ -174,7 +174,7 @@ async def periodic_test_messages(socket):
 
 async def websockopen(socket, path):
     # asynchronously send messages at random
-    asyncio.create_task(periodic_test_messages(socket))
+    # asyncio.create_task(periodic_test_messages(socket))
     global first_client
     first_client = socket # TODO handle multiple clients
     # Listen for messages

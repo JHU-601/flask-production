@@ -11,7 +11,7 @@ body {
 
 /* GENERAL PANEL STYLES */
 .panel {
-  height: 800px;
+  height: 50vh;
 }
 .panel-left {
   width: 60%;
@@ -83,7 +83,7 @@ body {
 
 /* ModalPanel */
 #modal-panel {
-  /* display: none; /* hidden by default */ 
+  /* display: none; /* hidden by default */
   /* take over the whole screen */
   position: fixed;
   top: 0;
