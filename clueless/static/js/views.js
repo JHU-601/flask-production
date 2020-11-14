@@ -180,6 +180,8 @@ class NotepadPanel extends Panel {
 class ModalPanel extends Panel {
   constructor(id) {
     super(id);
+    this.txtNotifTitle = this.element.querySelector('#txtNotifTitle');
+    this.txtNotifContent = this.element.querySelector("#txtNotifContent");
     this.btnOkay = this.element.querySelector('#btnOkay');
     this.btnOkay.onclick = this.handleBtnOkayClick.bind(this);
   }
@@ -187,8 +189,9 @@ class ModalPanel extends Panel {
 
   }
   show(title, message) {
-    // TODO insert title, message into element
     super.show();
+    this.txtNotifTitle.innerHTML = title;
+    this.txtNotifContent.innerHTML = message;
   }
   handleBtnOkayClick() {
     this.hide();
