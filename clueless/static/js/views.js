@@ -223,12 +223,22 @@ class GameboardPanel extends Panel {
 }
 
 class InteractionPanel extends Panel {
+  constructor(id) {
+    super(id);
+    this.topPanel = new TabbedPanel('top-panel');
+    this.bottomPanel = new TabbedPanel('bottom-panel');
+  }
   display(gameState) {
 
   }
 }
 
 class TabbedPanel extends Panel {
+  constructor(id) {
+    super(id);
+    this.childPanels = this.element.querySelectorAll('tab');
+    this.selectedPanel = 0;
+  }
   display(gameState) {
 
   }

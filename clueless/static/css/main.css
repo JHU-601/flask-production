@@ -170,10 +170,38 @@ body {
 
 /* InteractionPanel */
 #interaction-panel {
-
+  display: flex;
+  flex-direction: column;
+}
+#interaction-panel #top-panel {
+  flex-grow: 2;
+  background-color: red;
+}
+#interaction-panel #bottom-panel {
+  flex-grow: 1;
+  background-color: green;
 }
 /* InteractionPanel Sub-panels */
-#tabbed-panel {
+.tabbed-panel {
+
+}
+.tabbed-panel .selectors {
+  display: flex;
+  flex-direction: row;
+}
+.tabbed-panel .selectors .tab-selector {
+  border: 1px solid black;
+  text-align: center;
+  flex-grow: 1;
+  background-color: white;
+  font-weight: bold;
+  color: #2962ff;
+  padding: 0.5em;
+}
+.tabbed-panel .selectors .tab-selector.active {
+  background-color: lightgray;
+}
+.tabbed-panel .tab {
 
 }
 #accuse-panel {
