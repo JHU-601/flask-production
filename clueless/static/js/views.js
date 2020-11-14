@@ -113,7 +113,7 @@ class StartPanel extends Panel {
     alert('btnJoinGame clicked with gameid=' + this.txtGameId.value);
   }
   handleBtnAboutClick() {
-    gameHub.gamePanel.showModal('Yes', 'Yes');
+    gameHub.gamePanel.showModal('About Clue-Less', 'Clue-Less was developed by Iron Board Games.');
   }
 }
 
