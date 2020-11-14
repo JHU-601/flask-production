@@ -108,6 +108,7 @@ body {
   margin-bottom: 15px;
   border: 0;
   padding: 0;
+  outline: none;
 }
 
 #registration-panel button.icon.clicked img {

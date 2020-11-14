@@ -174,17 +174,27 @@ class RegistrationPanel extends Panel {
       var currPlayer = gameState.players[i];
       this.characters[currPlayer.character].classList.add("taken");
     }
+    // Disable all buttons if we already have a character
+    for (var i = 0; i < this.characters.length; i++) {
+      if (gameHub != null && gameHub.gameState.localPlayer != null) {
+        this.characters[i].disabled = true;
+      }
+    }
   }
   handleCharacterClick(e) {
-    // Remove class from old one (if it exists)
+    // Ignore this click if we already have chosen a player
+    if (gameHub.gameState.localPlayer != null) {
+      return;
+    }
+    // Ignore this click if the character is already taken
     var clickedCharacter = e.target.dataset.character - 1;
-    for (var i = 0; gameHub.gameState.players.length; i++) {
+    for (var i = 0; i < gameHub.gameState.players.length; i++) {
       if (gameHub.gameState.players[i].character == clickedCharacter) {
-        console.log("hello Steve");
         return;
       }
     }
 
+    // Remove class from old one (if it exists)
     if (this.clickedCharacter != null) {
       this.characters[this.clickedCharacter].classList.remove("clicked");
     }

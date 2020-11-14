@@ -4,6 +4,7 @@ class GameState {
   constructor() {
     this.players = [];
     this.localPlayer = null;
+    this.chosenPlayer = null;
     this.witnessCharacter = null;
     this.witnessRoom = null;
     this.witnessWeapon = null;
@@ -57,6 +58,7 @@ class GameHub {
       character: character,
       display_name: display_name,
     };
+    this.gameState.chosenPlayer = character;
     this.sendMessage(message);
   }
   // Individual message handlers
@@ -65,6 +67,10 @@ class GameHub {
     this.gameState.gameid = message.id;
   }
   handleMsgRegister(message) {
-    this.gameState.players.push(new Player(message.character, message.display_name));
+    var p = new Player(message.character, message.display_name);
+    if (p.character == this.gameState.chosenPlayer) {
+      this.gameState.localPlayer = p;
+    }
+    this.gameState.players.push(p);
   }
 }
