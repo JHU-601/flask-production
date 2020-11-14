@@ -76,6 +76,10 @@ body {
   transform: translate(-50%, 0);
 }
 
+#waitingroom-panel #lstOfPlayers .character {
+  background-color: green;
+}
+
 /* RegistrationPanel */
 #registration-panel {
   text-align: center;

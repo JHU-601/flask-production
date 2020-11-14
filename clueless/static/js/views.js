@@ -135,7 +135,11 @@ class WaitingRoomPanel extends Panel {
     if (gameState.players.length < 1) {
       this.lstOfPlayers.innerHTML = "No one has joined yet.";
     } else {
-      alert('not implemented');
+      this.lstOfPlayers.innerHTML = "";
+      for (var i = 0; i < gameState.players.length; i++) {
+        var curPlayer = gameState.players[i];
+        this.lstOfPlayers.innerHTML += '<div class="character">Character ' + curPlayer.character + ' - display_name=' + curPlayer.display_name + '</div>';
+      }
     }
   }
   handleBtnStartGameClick() {

@@ -29,8 +29,9 @@ async def handleJoinGame(socket, msg):
 
 async def handleRegister(socket, msg):
     await socket.send(json.dumps({
-        'message': 'temp',
-        'body': 'Received register command',
+        'message': 'Registration',
+        'character': msg['character'],
+        'display_name': msg['display_name'],
     }))
 
 async def handleMove(socket, msg):

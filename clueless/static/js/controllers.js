@@ -35,6 +35,8 @@ class GameHub {
   receiveMessage(message) {
     if (message.message == 'Joined') {
       this.handleMsgJoined(message);
+    } else if (message.message == 'Registration') {
+      this.handleMsgRegister(message);
     }
     this.updateDisplay();
   }
@@ -61,5 +63,8 @@ class GameHub {
   handleMsgJoined(message) {
     this.gamePanel.showScreen2();
     this.gameState.gameid = message.id;
+  }
+  handleMsgRegister(message) {
+    this.gameState.players.push(new Player(message.character, message.display_name));
   }
 }
