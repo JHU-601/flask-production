@@ -39,17 +39,78 @@ body {
 
 /* StartPanel */
 #start-panel {
-  background-color: green;
+  background-color: lightgray;
+  border: 5px solid black;
+  padding: 75px 0;
+  text-align: center;
+}
+
+#start-panel input {
+  margin-bottom: 3px;
+}
+
+#start-panel button {
+  margin-bottom: 20px;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
 }
 
 /* WaitingRoomPanel */
 #waitingroom-panel {
+  text-align: center;
+  background-color: black;
+  color: white;
+  padding: 25px 0;
+  position: relative;
+}
 
+#waitingroom-panel h2 {
+  margin-bottom: 0;
+}
+
+#waitingroom-panel button {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translate(-50%, 0);
 }
 
 /* RegistrationPanel */
 #registration-panel {
+  text-align: center;
+  background-color: lightgray;
+  border: 5px solid black;
+  position: relative;
+}
 
+#registration-panel h2#chooseIcon {
+  font-size: 21px;
+  margin-top: 30px;
+}
+
+#registration-panel h2#chooseDisplay {
+  font-size: 15px;
+  margin-bottom: 0;
+
+}
+
+#registration-panel button.icon {
+  margin-right: 5px;
+  margin-bottom: 15px;
+  width: 52px;
+  height: 52px;
+}
+
+#registration-panel button.icon#character1 {
+  background: url('/img/characterIcons/EdS.png')
+}
+
+#registration-panel #btnRegister {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  bottom: 5%;
 }
 
 /* Gameboard Panel */
