@@ -141,9 +141,15 @@ class WaitingRoomPanel extends Panel {
         this.lstOfPlayers.innerHTML += '<div class="character">' + curPlayer.character + ' - ' + curPlayer.display_name + '</div>';
       }
     }
+    // Disable start button until everyone joins
+    if (gameState.players.length < 6) {
+      this.btnStartGame.disabled = true;
+    } else {
+      this.btnStartGame.disabled = false;
+    }
   }
   handleBtnStartGameClick() {
-    alert('Start Game Clicked', 'Not implemented');
+    alert('btnStart clicked');
   }
 }
 
@@ -176,7 +182,7 @@ class RegistrationPanel extends Panel {
     }
     // Disable all buttons if we already have a character
     for (var i = 0; i < this.characters.length; i++) {
-      if (gameHub != null && gameHub.gameState.localPlayer != null) {
+      if (gameState.localPlayer != null) {
         this.characters[i].disabled = true;
       }
     }

@@ -37,7 +37,7 @@ class GameHub {
     if (message.message == 'Joined') {
       this.handleMsgJoined(message);
     } else if (message.message == 'Registration') {
-      this.handleMsgRegister(message);
+      this.handleMsgRegistration(message);
     }
     this.updateDisplay();
   }
@@ -66,11 +66,15 @@ class GameHub {
     this.gamePanel.showScreen2();
     this.gameState.gameid = message.id;
   }
-  handleMsgRegister(message) {
+  handleMsgRegistration(message) {
     var p = new Player(message.character, message.display_name);
     if (p.character == this.gameState.chosenPlayer) {
       this.gameState.localPlayer = p;
     }
     this.gameState.players.push(p);
+    // Check if game is ready to start
+    if (this.gameState.players.length == 6) {
+      gameHub.gamePanel.showScreen3();
+    }
   }
 }
