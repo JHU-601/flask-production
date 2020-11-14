@@ -98,12 +98,18 @@ body {
 #registration-panel button.icon {
   margin-right: 5px;
   margin-bottom: 15px;
-  width: 52px;
-  height: 52px;
+  border: 0;
+  padding: 0;
 }
 
-#registration-panel button.icon#character1 {
-  background: url('/img/characterIcons/EdS.png')
+#registration-panel button.icon.clicked img {
+  border: 3px solid black;
+}
+
+#registration-panel button.icon img {
+  width: 70px;
+  height: 70px;
+  border: 1px solid black;
 }
 
 #registration-panel #btnRegister {
@@ -144,7 +150,6 @@ body {
 
 /* ModalPanel */
 #modal-panel {
-  /* display: none; /* hidden by default */
   /* take over the whole screen */
   position: fixed;
   top: 0;

@@ -49,6 +49,14 @@ class GameHub {
     };
     this.sendMessage(message);
   }
+  sendRegister(character, display_name) {
+    var message = {
+      message: 'Register',
+      character: character,
+      display_name: display_name,
+    };
+    this.sendMessage(message);
+  }
   // Individual message handlers
   handleMsgJoined(message) {
     this.gamePanel.showScreen2();

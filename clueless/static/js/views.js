@@ -20,7 +20,7 @@ class Panel {
     // Only attempt to show if already hidden
     if (this.element.style.display == "none") {
       // If we saved the display value, restore it
-      if (this.orig_display != null) {
+      if (this.orig_display != 'none') {
         this.element.style.display = this.orig_display;
       }
       // otherwise, just set it to inherit to get it to show up
@@ -144,8 +144,44 @@ class WaitingRoomPanel extends Panel {
 }
 
 class RegistrationPanel extends Panel {
+  constructor(id) {
+    super(id);
+    // Class vars
+    this.clickedCharacter = null;
+    // Set up refs
+    this.characters = [
+      this.element.querySelector('#character1'),
+      this.element.querySelector('#character2'),
+      this.element.querySelector('#character3'),
+      this.element.querySelector('#character4'),
+      this.element.querySelector('#character5'),
+      this.element.querySelector('#character6'),
+    ];
+    this.txtDisplayName = this.element.querySelector('#txtDisplayName');
+    this.btnRegister = this.element.querySelector('#btnRegister');
+    // set up listeners
+    for (var i = 0; i < this.characters.length; i++) {
+      this.characters[i].onclick = this.handleCharacterClick.bind(this);
+    }
+    this.btnRegister.onclick = this.handleBtnRegisterClick.bind(this);
+  }
   display(gameState) {
 
+  }
+  handleCharacterClick(e) {
+    // Remove class from old one (if it exists)
+    if (this.clickedCharacter != null) {
+      this.characters[this.clickedCharacter].classList.remove("clicked");
+    }
+    this.clickedCharacter = e.target.dataset.character - 1;
+    this.characters[this.clickedCharacter].classList.add("clicked");
+  }
+  handleBtnRegisterClick() {
+    if (this.clickedCharacter == null || this.txtDisplayName.value == null || this.txtDisplayName.value.length < 1) {
+      gameHub.gamePanel.showModal('Validation Error', 'You must select a character and enter a display name.');
+    } else {
+      gameHub.sendRegister(this.clickedCharacter, this.txtDisplayName.value);
+    }
   }
 }
 
@@ -209,9 +245,9 @@ class ModalPanel extends Panel {
 
   }
   show(title, message) {
-    super.show();
     this.txtNotifTitle.innerHTML = title;
     this.txtNotifContent.innerHTML = message;
+    super.show();
   }
   handleBtnOkayClick() {
     this.hide();
