@@ -35,7 +35,7 @@ async def handleRegister(socket, msg):
     }))
     for i in range(6):
         if i != int(msg['character']):
-            await asyncio.sleep(1)
+            await asyncio.sleep(.1)
             await socket.send(json.dumps({'message': 'Registration','character': i,'display_name': 'rando' + str(i),}))
 
 async def handleMove(socket, msg):

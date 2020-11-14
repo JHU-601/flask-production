@@ -5,230 +5,173 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Clueless</title>
-  <link rel="stylesheet" href="/vendor/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-  <div id="main-container" class="container">
-    <div class="section">
-      <h1>Clue-Less</h1>
-      <p>Optional text section describing game</p>
+  <div id="game-panel">
+    <!-- home panel -->
+    <div id="home-panel" class="panel panel-left">
+      <!-- just displays the background image -->
     </div>
-    <hr>
-    new design:
-    <div id="game-panel">
-      <!-- home panel -->
-      <div id="home-panel" class="panel panel-left">
-        <!-- just displays the background image -->
-      </div>
-      <div id="start-panel" class="panel panel-right">
+    <div id="start-panel" class="panel panel-right">
+      <div>
         <button id="btnCreateGame">Create Game</button>
+      </div>
+      <div>
         <input id="txtGameId" type="text" placeholder="Game ID" />
+      </div>
+      <div>
         <button id="btnJoinGame">Join Game</button>
-        <div>
-          <button id="btnAbout">About</button>
-        </div>
       </div>
-      <div id="waitingroom-panel" class="panel panel-left">
-        <h2>Current Players</h2>
-        <div>
-          Game ID: <span id="lblGameId"></span>
-        </div>
-        <div id="lstOfPlayers"></div>
-        <button id="btnStartGame">
-          Start Game
-        </button>
-      </div>
-      <div id="registration-panel" class="panel panel-right">
-        <h2 id="chooseIcon">Choose Your Icon</h2>
-        <div>
-          <div>
-            <button class="icon" id="character1"><img data-character=1 src="/img/characterIcons/EdS.png" alt="Ed S."></button>
-            <button class="icon" id="character2"><img data-character=2 src="/img/characterIcons/JeffG.png" alt="Jeff G."></button>
-          </div>
-          <div>
-            <button class="icon" id="character3"><img data-character=3 src="/img/characterIcons/JoeD.png" alt="Joe D."></button>
-            <button class="icon" id="character4"><img data-character=4 src="/img/characterIcons/RalphS.png" alt="Ralph S."></button>
-          </div>
-          <div>
-            <button class="icon" id="character5"><img data-character=5 src="/img/characterIcons/RonaldD.png" alt="Roanld D."></button>
-            <button class="icon" id="character6"><img data-character=6 src="/img/characterIcons/SamS.png" alt="Sam S."></button>
-          </div>
-        </div>
-        <h2 id="chooseDisplay">Choose Your Display Name</h2>
-        <input type="text" id="txtDisplayName">
-        <button id="btnRegister">Register</button>
-      </div>
-      <div id="gameboard-panel" class="panel panel-left">
-        gameboard panel
-      </div>
-      <div id="interaction-panel" class="panel panel-right">
-        interaction panel
+      <div>
+        <button id="btnAbout">About</button>
       </div>
     </div>
-    <hr>
-    <!-- <div id="game-container" class="container">
-      <div id="display-panel">
-        <div class="screen screen1">
-
+    <div id="waitingroom-panel" class="panel panel-left">
+      <h2>Current Players</h2>
+      <div>
+        Game ID: <span id="lblGameId"></span>
+      </div>
+      <div id="lstOfPlayers"></div>
+      <button id="btnStartGame">
+        Start Game
+      </button>
+    </div>
+    <div id="registration-panel" class="panel panel-right">
+      <h2 id="chooseIcon">Choose Your Icon</h2>
+      <div>
+        <div>
+          <button class="icon" id="character1"><img data-character=1 src="/img/characterIcons/EdS.png" alt="Ed S."></button>
+          <button class="icon" id="character2"><img data-character=2 src="/img/characterIcons/JeffG.png" alt="Jeff G."></button>
         </div>
-        <div class="screen screen2">
-          <h2>Waiting Room</h2>
-          <p>When all players have joined, press the Start Game button to begin.</p>
-          <table class="table">
-            <tr>
-              <td>player</td>
-              <td>icon</td>
-            </tr>
-            <tr>
-              <td>player</td>
-              <td>icon</td>
-            </tr>
-            <tr>
-              <td>player</td>
-              <td>icon</td>
-            </tr>
-            <tr>
-              <td>player</td>
-              <td>icon</td>
-            </tr>
-            <tr>
-              <td>player</td>
-              <td>icon</td>
-            </tr>
-            <tr>
-              <td>player</td>
-              <td>icon</td>
-            </tr>
-          </table>
+        <div>
+          <button class="icon" id="character3"><img data-character=3 src="/img/characterIcons/JoeD.png" alt="Joe D."></button>
+          <button class="icon" id="character4"><img data-character=4 src="/img/characterIcons/RalphS.png" alt="Ralph S."></button>
         </div>
-        <div class="screen screen3">
-          <table class="table" id="gameboard">
-              <tr>
-                <td id="study" class="room"><span class="name">Dining Hall</span></td>
-                <td class="passageway horiz"></td>
-                <td id="hall" class="room"><span class="name">Peabody Institute</span></td>
-                <td class="passageway horiz"></td>
-                <td id="lounge" class="room"><span class="name">Gilman Hall</span></td>
-              </tr>
-              <tr>
-                <td class="passageway vert"></td>
-                <td></td>
-                <td class="passageway vert"></td>
-                <td></td>
-                <td class="passageway vert"></td>
-              </tr>
-              <tr>
-                <td id="library" class="room"><span class="name">Library</span></td>
-                <td class="passageway"></td>
-                <td id="billiard_room" class="room"><span class="name">The Hospital</span></td>
-                <td class="passageway"></td>
-                <td id="dining_room" class="room"><span class="name">The Lounge</span></td>
-              </tr>
-              <tr>
-                <td class="passageway"></td>
-                <td></td>
-                <td class="passageway"></td>
-                <td></td>
-                <td class="passageway"></td>
-              </tr>
-              <tr>
-                <td id="conservatory" class="room"><span class="name">Hutzler Reading Room</span></td>
-                <td class="passageway"></td>
-                <td id="ballroom" class="room"><span class="name">The Stacks</span></td>
-                <td class="passageway"></td>
-                <td id="kitchen" class="room"><span class="name">Shriver Hall</span></td>
-              </tr>
-            </table>
+        <div>
+          <button class="icon" id="character5"><img data-character=5 src="/img/characterIcons/RonaldD.png" alt="Roanld D."></button>
+          <button class="icon" id="character6"><img data-character=6 src="/img/characterIcons/SamS.png" alt="Sam S."></button>
         </div>
       </div>
-      <div id="interaction-panel">
-        <div class="screen screen1">
-          <div>
-            <h2>Welcome!</h2>
-          </div>
-          <hr>
-          <div>
-            <button id="btnCreateGame" class="btn btn-primary">Start New Game</button>
-          </div>
-          <hr>
-          <div>
-            <input id="txtGameId" class="form-control" type="text" placeholder="Game ID" />
-            <button id="btnJoinGame" class="btn btn-primary">Join Game</button>
-          </div>
-          <hr>
-          <div>
-            <button id="btnAbout" class="btn btn-primary">About</button>
-          </div>
+      <h2 id="chooseDisplay">Choose Your Display Name</h2>
+      <input type="text" id="txtDisplayName">
+      <button id="btnRegister">Register</button>
+    </div>
+    <div id="gameboard-panel" class="panel panel-left">
+      <div class="row">
+        <div class="col">
+          <img class="room-image" src="/img/rooms/study.png" alt="Study">
+          <span class="room-label">Dining Hall</span>
         </div>
-        <div class="screen screen2">
-          <div>
-            <h4>Choose Your Character</h4>
-            <select class="form-control" name="" id="">
-              <option value="0">Colonel Mustard</option>
-              <option value="1">tmp</option>
-              <option value="2">tmp</option>
-              <option value="3">tmp</option>
-              <option value="4">tmp</option>
-              <option value="5">tmp</option>
-            </select>
-          </div>
-          <hr>
-          <div>
-            <h4>Choose Your Display Name</h4>
-            <input id="txtDisplayName" class="form-control" type="text" placeholder="Display Name" />
-          </div>
-          <hr>
-          <div>
-            <button id="btnRegister" class="btn btn-primary">Submit</button>
-          </div>
+        <div class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
         </div>
-        <div class="screen screen3">
-          <div id="top">
-            <ul class="nav nav-tabs">
-              <li><a data-toggle="tab" href="#notepad" class="active">Notepad</a></li>
-              <li><a data-toggle="tab" href="#chat">Chat</a></li>
-            </ul>
-
-            <div class="tab-content">
-              <div id="notepad" class="tab-pane active">
-                <h3>Notepad</h3>
-                <p>Some content.</p>
-              </div>
-              <div id="chat" class="tab-pane">
-                <h3>Chat</h3>
-                <p>Me: Hi everyone.</p>
-              </div>
-            </div>
-          </div> <!-- /top --> <!--
-          <div id="bottom">
-            <ul class="nav nav-tabs">
-              <li><a data-toggle="tab" href="#menu-move" class="active">Move</a></li>
-              <li><a data-toggle="tab" href="#menu-suggest">Suggest</a></li>
-              <li><a data-toggle="tab" href="#menu-accuse">Accuse</a></li>
-            </ul>
-
-            <div class="tab-content">
-              <div id="menu-move" class="tab-pane active">
-                <h3>Move</h3>
-                <p>Some content.</p>
-              </div>
-              <div id="menu-suggest" class="tab-pane">
-                <h3>Suggest</h3>
-                <p>Some content in menu 1.</p>
-              </div>
-              <div id="menu-accuse" class="tab-pane">
-                <h3>Accuse</h3>
-                <p>Some content in menu 2.</p>
-              </div>
-            </div>
-          </div> <!-- /bottom --> <!--
+        <div class="col">
+          <img class="room-image" src="/img/rooms/hall.jpeg" alt="Hall">
+          <span class="room-label">Peabody Institute</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/rooms/lounge.png" alt="Lounge">
+          <span class="room-label">Gilman Hall</span>
         </div>
       </div>
-    </div> -->
-    <footer>
-      <p>Clue-Less &copy; 2020 Iron Board Games</p>
-    </footer>
+      <div class="row">
+        <div class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/blank.png" alt="blank">
+          <span class="room-label" style="color:white;">blank</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/blank.png" alt="blank">
+          <span class="room-label" style="color:white;">blank</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <img class="room-image" src="/img/rooms/library.png" alt="Library">
+          <span class="room-label">Library</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/rooms/billiard_room.jpeg" alt="Billiard Room">
+          <span class="room-label">The Hospital</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/rooms/dining_room.jpeg" alt="Dining Room">
+          <span class="room-label">The Lounge</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/blank.png" alt="blank">
+          <span class="room-label" style="color:white;">blank</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/blank.png" alt="blank">
+          <span class="room-label" style="color:white;">blank</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <img class="room-image" src="/img/rooms/conservatory.png" alt="Conservatory">
+          <span class="room-label">Hutzler Reading Room</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/rooms/ballroom.jpeg" alt="Ballroom">
+          <span class="room-label">Stacks</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/rooms/kitchen.jpeg" alt="Kitchen">
+          <span class="room-label">Shriver Hall</span>
+        </div>
+      </div>
+    </div>
+    <div id="interaction-panel" class="panel panel-right">
+      interaction panel
+    </div>
   </div>
 
   <div id="modal-panel">
@@ -240,7 +183,6 @@
   </div>
 
   <script src="/vendor/js/jquery-3.5.1.min.js"></script>
-  <script src="/vendor/js/bootstrap.min.js"></script>
   <script src="/js/models.js"></script>
   <script src="/js/views.js"></script>
   <script src="/js/controllers.js"></script>
