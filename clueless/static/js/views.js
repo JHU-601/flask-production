@@ -11,7 +11,9 @@ class Panel {
     throw 'Error: display not overrided for ' + this.constructor.name;
   }
   hide() {
-    this.orig_display = this.element.style.display;
+    if (this.element.style.display != 'hidden') {
+      this.orig_display = this.element.style.display;
+    }
     this.element.style.display = "none";
   }
   show() {
@@ -120,12 +122,24 @@ class StartPanel extends Panel {
 class WaitingRoomPanel extends Panel {
   constructor(id) {
     super(id);
-    this.lblGameId = this.element.querySelector("lblGameId");
-    this.lstOfPlayers = this.element.querySelector("lstOfPlayers");
-    this.btnStartGame = this.element.querySelector("btnStartGame");
+    this.lblGameId = this.element.querySelector("#lblGameId");
+    this.lstOfPlayers = this.element.querySelector("#lstOfPlayers");
+    this.btnStartGame = this.element.querySelector("#btnStartGame");
+    // handlers
+    this.btnStartGame.onclick = this.handleBtnStartGameClick.bind(this);
   }
   display(gameState) {
+    // Display lblGameId
     this.lblGameId.innerHTML = gameState.gameid;
+    // Display lstOfPlayers
+    if (gameState.players.length < 1) {
+      this.lstOfPlayers.innerHTML = "No one has joined yet.";
+    } else {
+      alert('not implemented');
+    }
+  }
+  handleBtnStartGameClick() {
+    alert('Start Game Clicked', 'Not implemented');
   }
 }
 

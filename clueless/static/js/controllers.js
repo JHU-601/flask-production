@@ -33,13 +33,12 @@ class GameHub {
   }
 
   receiveMessage(message) {
-    console.log('received a message!!!!!!', message);
     if (message.message == 'Joined') {
       this.handleMsgJoined(message);
     }
+    this.updateDisplay();
   }
   sendMessage(message) {
-    console.log('sending a message!!!!!!', message);
     this.socket.send(JSON.stringify(message));
   }
 
