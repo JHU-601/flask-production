@@ -7,6 +7,7 @@ class GameState {
     this.witnessCharacter = null;
     this.witnessRoom = null;
     this.witnessWeapon = null;
+    this.gameid = null;
   }
 }
 
@@ -50,7 +51,8 @@ class GameHub {
     this.sendMessage(message);
   }
   // Individual message handlers
-  handleMsgJoined() {
+  handleMsgJoined(message) {
     this.gamePanel.showScreen2();
+    this.gameState.gameid = message.id;
   }
 }

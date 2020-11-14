@@ -118,8 +118,14 @@ class StartPanel extends Panel {
 }
 
 class WaitingRoomPanel extends Panel {
+  constructor(id) {
+    super(id);
+    this.lblGameId = this.element.querySelector("lblGameId");
+    this.lstOfPlayers = this.element.querySelector("lstOfPlayers");
+    this.btnStartGame = this.element.querySelector("btnStartGame");
+  }
   display(gameState) {
-
+    this.lblGameId.innerHTML = gameState.gameid;
   }
 }
 
