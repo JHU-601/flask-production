@@ -197,6 +197,8 @@ body {
   font-weight: bold;
   color: #2962ff;
   padding: 0.5em;
+  cursor: pointer;
+  user-select: none;
 }
 .tabbed-panel .selectors .tab-selector.active {
   background-color: lightgray;

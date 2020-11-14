@@ -225,22 +225,62 @@ class GameboardPanel extends Panel {
 class InteractionPanel extends Panel {
   constructor(id) {
     super(id);
-    this.topPanel = new TabbedPanel('top-panel');
-    this.bottomPanel = new TabbedPanel('bottom-panel');
+    this.notepadPanel = new NotepadPanel('notepad-panel');
+    this.chatPanel = new ChatPanel('chat-panel');
+
+    this.topPanel = new TabbedPanel('top-panel', [this.notepadPanel, this.chatPanel]);
+
+    this.movePanel = new MovePanel('move-panel');
+    this.suggestPanel = new SuggestPanel('suggest-panel');
+    this.accusePanel = new AccusePanel('accuse-panel');
+
+    this.bottomPanel = new TabbedPanel('bottom-panel', [this.movePanel, this.suggestPanel, this.accusePanel]);
   }
   display(gameState) {
+    this.notepadPanel.display(gameState);
+    this.chatPanel.display(gameState);
 
+    this.topPanel.display(gameState);
+
+    this.movePanel.display(gameState);
+    this.suggestPanel.display(gameState);
+    this.accusePanel.display(gameState);
+
+    this.bottomPanel.display(gameState);
   }
 }
 
 class TabbedPanel extends Panel {
-  constructor(id) {
+  constructor(id, childPanels) {
     super(id);
-    this.childPanels = this.element.querySelectorAll('tab');
+    this.childPanels = childPanels;
+    this.selectors = this.element.querySelectorAll('.tab-selector');
     this.selectedPanel = 0;
+    // Set up listeners
+    for (var i = 0; i < this.selectors.length; i++) {
+      this.selectors[i].onclick = this.handleSelectorClick.bind(this);
+    }
   }
   display(gameState) {
-
+    var numTabs = this.selectors.length;
+    for (var i = 0; i < numTabs; i++) {
+      // Show / hide panels
+      if (i == this.selectedPanel) {
+        // Show the panel
+        this.childPanels[i].show();
+        // Add active class to selector
+        this.selectors[i].classList.add('active');
+      } else {
+        // Hide the panel
+        this.childPanels[i].hide();
+        // Remove active class from selector
+        this.selectors[i].classList.remove('active');
+      }
+    }
+  }
+  handleSelectorClick(e) {
+    this.selectedPanel = e.target.dataset.index;
+    this.display(null);
   }
 }
 
