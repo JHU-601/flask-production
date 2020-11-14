@@ -1,3 +1,5 @@
+WEBSOCKET_URL = 'ws://localhost:8081'; // TODO update to server / something dynamic
+
 class GameState {
   constructor() {
     this.players = [];
@@ -10,9 +12,18 @@ class GameState {
 
 class GameHub {
   constructor() {
+    // set up child instances
     this.gameState = new GameState();
     this.gamePanel = new GamePanel('game-panel');
-
+    // set up websockets
+    this.socket = new WebSocket(WEBSOCKET_URL);
+    this.socket.onopen = function(event) {
+      console.log('connected to server');
+    };
+    this.socket.onmessage = function(event) {
+      this.receiveMessage(JSON.parse(event.data));
+    }.bind(this);
+    // do initial display update
     this.updateDisplay();
   }
 
@@ -21,11 +32,25 @@ class GameHub {
   }
 
   receiveMessage(message) {
-    // TODO
+    console.log('received a message!!!!!!', message);
+    if (message.message == 'Joined') {
+      this.handleMsgJoined(message);
+    }
   }
   sendMessage(message) {
-    // TODO
+    console.log('sending a message!!!!!!', message);
+    this.socket.send(JSON.stringify(message));
   }
 
-  // TODO individual message handlers
+  // Individual message senders
+  sendCreateGame() {
+    var message = {
+      message: 'CreateGame'
+    };
+    this.sendMessage(message);
+  }
+  // Individual message handlers
+  handleMsgJoined() {
+    alert('message joined!')
+  }
 }

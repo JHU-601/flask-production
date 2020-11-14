@@ -83,6 +83,7 @@ body {
 
 /* ModalPanel */
 #modal-panel {
+  /* display: none; /* hidden by default */ 
   /* take over the whole screen */
   position: fixed;
   top: 0;

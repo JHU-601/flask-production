@@ -106,13 +106,14 @@ class StartPanel extends Panel {
 
   }
   handleBtnCreateGameClick() {
-    gameHub.gamePanel.showModal('Create Game', 'Not implemented.');
+    // gameHub.gamePanel.showModal('Create Game', 'Not implemented.');
+    gameHub.sendCreateGame();
   }
   handleBtnJoinGameClick() {
     alert('btnJoinGame clicked with gameid=' + this.txtGameId.value);
   }
   handleBtnAboutClick() {
-    alert('btnAbout clicked');
+    gameHub.gamePanel.showModal('Yes', 'Yes');
   }
 }
 
