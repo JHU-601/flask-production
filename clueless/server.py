@@ -46,8 +46,9 @@ async def handleRegister(socket, msg):
 
 async def handleMove(socket, msg):
     await socket.send(json.dumps({
-        'message': 'temp',
-        'body': 'Received move command to position %s' % msg['position'],
+        'message': 'Position',
+        'player': 0,
+        'location': 0,
     }))
 
 async def handleSuggest(socket, msg):

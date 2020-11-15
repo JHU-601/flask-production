@@ -40,6 +40,8 @@ class GameHub {
       this.handleMsgRegistration(message);
     } else if (message.message == 'WitnessItems') {
       this.handleMsgWitnessItems(message);
+    } else if (message.message == 'HandlePosition') {
+      this.handleMsgPosition(message);
     }
     this.updateDisplay();
   }
@@ -72,7 +74,7 @@ class GameHub {
   }
   sendMove(position) {
     var message = {
-      message: 'Position',
+      message: 'Move',
       position: position,
     }
   }
@@ -98,5 +100,17 @@ class GameHub {
       // console.log(this.gameState);
     }
     this.gamePanel.showScreen3();
+  }
+  handleMsgPosition(message) {
+    // Update localPlayer if needed
+    if (message.player == this.gameState.localPlayer.character.id) {
+      this.gameState.localPlayer.character.position = message.location;
+    }
+    // Find and update the right player
+    for (var i = 0; i < this.gameState.players.length; i++) {
+      if (this.gameState.players[i].character.id == message.player) {
+        this.gameState.players[i].character.position = message.location;
+      }
+    }
   }
 }

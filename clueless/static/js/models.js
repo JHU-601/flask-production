@@ -16,6 +16,18 @@ var Room = {
   CONSERVATORY: 6,
   BALLROOM: 7,
   KITCHEN: 8,
+  STUDY_TO_HALL: 10,
+  HALL_TO_LOUNGE: 11,
+  STUDY_TO_LIBRARY: 12,
+  HALL_TO_BILLIARD_ROOM: 13,
+  LOUNGE_TO_DINING_ROOM: 14,
+  LIBRARY_TO_BILLIARD_ROOM: 15,
+  BILLIARD_ROOM_TO_DINING_ROOM: 16,
+  LIBRARY_TO_CONSERVATORY: 17,
+  BILLIARD_ROOM_TO_BALLROOM: 18,
+  DINING_ROOM_TO_KITCHEN: 19,
+  CONSERVATORY_TO_BALLROOM: 20,
+  BALLROOM_TO_KITCHEN: 21,
 };
 
 class Position {
@@ -115,7 +127,7 @@ class Position {
       case 'up':
         new_x = this.x;
         new_y = this.y - 1;
-        if (new_y > 0) {
+        if (new_y >= 0) {
           return new Position(MAP[new_y][new_x]);
         } else {
           return null;
@@ -131,7 +143,7 @@ class Position {
       case 'left':
         new_x = this.x - 1;
         new_y = this.y;
-        if (new_x > 0) {
+        if (new_x >= 0) {
           return new Position(MAP[new_y][new_x]);
         } else {
           return null;
