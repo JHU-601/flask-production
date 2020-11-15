@@ -2,6 +2,7 @@ WEBSOCKET_URL = 'ws://localhost:8081'; // TODO update to server / something dyna
 
 class GameState {
   constructor() {
+    this.usersJoined = 0;
     this.players = [];
     this.localPlayer = null;
     this.chosenPlayer = null;
@@ -37,10 +38,12 @@ class GameHub {
     console.log('Received message.', message);
     if (message.message == 'Joined') {
       this.handleMsgJoined(message);
+    } else if (message.message == 'UserJoined') {
+      this.handleMsgUserJoined(message);
     } else if (message.message == 'Registration') {
       this.handleMsgRegistration(message);
-    } else if (message.message == 'WitnessItems') {
-      this.handleMsgWitnessItems(message);
+    } else if (message.message == 'Witness') {
+      this.handleMsgWitness(message);
     } else if (message.message == 'Position') {
       this.handleMsgPosition(message);
     } else if (message.message == 'SuggestionWitness') {
@@ -51,10 +54,12 @@ class GameHub {
       this.handleMsgAccusation(message);
     } else if (message.message == 'Winner') {
       this.handleMsgWinner(message);
-    } else if (message.message = 'Disqualified') {
+    } else if (message.message == 'Disqualified') {
       this.handleMsgDisqualified(message);
     } else if (message.message == 'ServerChat') {
       this.handleMsgServerChat(message);
+    } else if (message.message == 'Status') {
+      this.handleMsgStatus(message);
     }
     this.updateDisplay();
   }
@@ -123,6 +128,9 @@ class GameHub {
     this.gamePanel.showScreen2();
     this.gameState.gameid = message.id;
   }
+  handleMsgUserJoined(message) {
+    this.gamePanel.showModal('User Joined', 'New user has entered the lobby.');
+  }
   handleMsgRegistration(message) {
     var p = new Player(message.character, message.display_name);
     if (p.character.id == this.gameState.chosenPlayer) {
@@ -130,7 +138,7 @@ class GameHub {
     }
     this.gameState.players.push(p);
   }
-  handleMsgWitnessItems(message) {
+  handleMsgWitness(message) {
     this.gameState.witnessCharacter = message.character;
     this.gameState.witnessRoom = message.room;
     this.gameState.witnessWeapon = message.weapon;
@@ -170,5 +178,8 @@ class GameHub {
   }
   handleMsgServerChat(message) {
     this.gamePanel.showModal('Server Chat', message);
+  }
+  handleMsgStatus(message) {
+    this.gamePanel.showModal('Status', 'An error occurred');
   }
 }
