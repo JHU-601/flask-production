@@ -162,7 +162,10 @@ body {
 #gameboard-panel .col {
   flex-grow: 1;
   position: relative;
-  border: 3px solid black;
+  border: 1px solid darkgray;
+}
+#gameboard-panel .col.room {
+  /* border: 1px solid white; */
 }
 #gameboard-panel .room-image {
   position: absolute;
@@ -258,15 +261,29 @@ body {
 }
 #notepad-panel table {
   width: 100%;
+  height: 100%;
+  table-layout: fixed;
+  /* border: 1px solid white; */
+}
+#notepad-panel table, #notepad-panel th, #notepad-panel td {
+  border: 1px solid white;
+}
+#notepad-panel table th {
+  text-align: left;
+  font-size: 2rem;
+  vertical-align: bottom;
 }
 #notepad-panel table td.check {
-  border: 1px solid white;
+  /* border: 1px solid white; */
   width: 1em;
   height: 1em;
   cursor: pointer;
 }
-#notepad-panel table td.check.clicked {
-  background-color: darkgray;
+#notepad-panel table td.check.yes {
+  background-color: green;
+}
+#notepad-panel table td.check.no {
+  background-color: red;
 }
 
 /* ModalPanel */

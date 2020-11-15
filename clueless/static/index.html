@@ -59,7 +59,7 @@
     </div>
     <div id="gameboard-panel" class="panel panel-left">
       <div class="row">
-        <div id="room0" class="col">
+        <div id="room0" class="col room">
           <img class="room-image" src="/img/rooms/study.png" alt="Study">
           <span class="room-label">Dining Hall</span>
         </div>
@@ -67,7 +67,7 @@
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
-        <div id="room1" class="col">
+        <div id="room1" class="col room">
           <img class="room-image" src="/img/rooms/hall.jpeg" alt="Hall">
           <span class="room-label">Peabody Institute</span>
         </div>
@@ -75,7 +75,7 @@
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
-        <div id="room2" class="col">
+        <div id="room2" class="col room">
           <img class="room-image" src="/img/rooms/lounge.png" alt="Lounge">
           <span class="room-label">Gilman Hall</span>
         </div>
@@ -103,7 +103,7 @@
         </div>
       </div>
       <div class="row">
-        <div id="room3" class="col">
+        <div id="room3" class="col room">
           <img class="room-image" src="/img/rooms/library.png" alt="Library">
           <span class="room-label">Library</span>
         </div>
@@ -111,7 +111,7 @@
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
-        <div id="room4" class="col">
+        <div id="room4" class="col room">
           <img class="room-image" src="/img/rooms/billiard_room.jpeg" alt="Billiard Room">
           <span class="room-label">The Hospital</span>
         </div>
@@ -119,7 +119,7 @@
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
-        <div id="room5" class="col">
+        <div id="room5" class="col room">
           <img class="room-image" src="/img/rooms/dining_room.jpeg" alt="Dining Room">
           <span class="room-label">The Lounge</span>
         </div>
@@ -147,7 +147,7 @@
         </div>
       </div>
       <div class="row">
-        <div id="room6" class="col">
+        <div id="room6" class="col room">
           <img class="room-image" src="/img/rooms/conservatory.png" alt="Conservatory">
           <span class="room-label">Hutzler Reading Room</span>
         </div>
@@ -155,7 +155,7 @@
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
-        <div id="room7" class="col">
+        <div id="room7" class="col room">
           <img class="room-image" src="/img/rooms/ballroom.jpeg" alt="Ballroom">
           <span class="room-label">Stacks</span>
         </div>
@@ -163,7 +163,7 @@
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
-        <div id="room8" class="col">
+        <div id="room8" class="col room">
           <img class="room-image" src="/img/rooms/kitchen.jpeg" alt="Kitchen">
           <span class="room-label">Shriver Hall</span>
         </div>
@@ -186,23 +186,10 @@
         <div class="tab" id="notepad-panel">
           <table>
             <tr>
-              <th colspan=11>Suspects</th>
+              <th colspan=13>Suspects</th>
             </tr>
             <tr>
-              <td>Colonel Mustard</td>
-              <td class="check"></td>
-              <td class="check"></td>
-              <td class="check"></td>
-              <td class="check"></td>
-              <td class="check"></td>
-              <td class="check"></td>
-              <td class="check"></td>
-              <td class="check"></td>
-              <td class="check"></td>
-              <td class="check"></td>
-            </tr>
-            <tr>
-              <td>Professor Plum</td>
+              <td colspan=3>Colonel Mustard</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -215,7 +202,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Reverend Green</td>
+              <td colspan=3>Professor Plum</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -228,7 +215,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Mrs. Peacock</td>
+              <td colspan=3>Reverend Green</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -241,7 +228,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Miss Scarlet</td>
+              <td colspan=3>Mrs. Peacock</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -254,7 +241,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Mrs. White</td>
+              <td colspan=3>Miss Scarlet</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -267,10 +254,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <th colspan=11>Weapons</th>
-            </tr>
-            <tr>
-              <td>Dagger</td>
+              <td colspan=3>Mrs. White</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -283,7 +267,10 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Candle Stick</td>
+              <th colspan=13>Weapons</th>
+            </tr>
+            <tr>
+              <td colspan=3>Dagger</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -296,7 +283,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Revolver</td>
+              <td colspan=3>Candle Stick</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -309,7 +296,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Rope</td>
+              <td colspan=3>Revolver</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -322,7 +309,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Lead Pipe</td>
+              <td colspan=3>Rope</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -335,7 +322,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Wrench</td>
+              <td colspan=3>Lead Pipe</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -348,10 +335,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <th colspan=11>Rooms</th>
-            </tr>
-            <tr>
-              <td>Hall</td>
+              <td colspan=3>Wrench</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -364,7 +348,10 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Lounge</td>
+              <th colspan=13>Rooms</th>
+            </tr>
+            <tr>
+              <td colspan=3>Hall</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -377,7 +364,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Dining Room</td>
+              <td colspan=3>Lounge</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -390,7 +377,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Kitchen</td>
+              <td colspan=3>Dining Room</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -403,7 +390,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Ballroom</td>
+              <td colspan=3>Kitchen</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -416,7 +403,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Conservatory</td>
+              <td colspan=3>Ballroom</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -429,7 +416,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Billiard Room</td>
+              <td colspan=3>Conservatory</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -442,7 +429,7 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Library</td>
+              <td colspan=3>Billiard Room</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
@@ -455,7 +442,20 @@
               <td class="check"></td>
             </tr>
             <tr>
-              <td>Study</td>
+              <td colspan=3>Library</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Study</td>
               <td class="check"></td>
               <td class="check"></td>
               <td class="check"></td>
