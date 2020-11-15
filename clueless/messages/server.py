@@ -70,6 +70,7 @@ class SuggestionWitness:
     def __init__(self, character: Character, witness: Optional[Union[Character, Room, Weapon]]):
         self.character = character
         self.witness = witness
+        self.type = WitnessType.for_item(self.witness)
 
 class Accusation:
     def __init__(self, player: Character, room: Room, weapon: Weapon, suspect: Character):
