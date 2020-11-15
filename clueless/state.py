@@ -253,8 +253,8 @@ class GameState:
     async def accuse(self, player: Character, accuse: Accuse):
         accusation = accuse.into_accusation(player)
 
-        # validate accusation objects are within dictionary of available objects
-        if 0 <= accusation.suspect <= 5 and 0 <= accusation.weapon <= 5 and 0 <= accusation.room <= 9:
+        # validate player's turn who's making accusation
+        if self.current_player == player:
             await self.broadcast(accusation, skip=player)
             if accusation.suspect == self.crime_character and accusation.room == self.crime_room and accusation.weapon == self.crime_weapon:
                 await self.broadcast(Winner(player))
@@ -262,8 +262,8 @@ class GameState:
                 self.disqualified.add(player)
                 await self.broadcast(Disqualified(player))
         else:
-            self.logger.error(f'Invalid witness items given for accusation')
-            await self.players[player].send_message(f'Invalid witness items given for accusation')
+            self.logger.debug(f'Invalid move, not currently turn of accuser')
+            await self.players[player].send_message(f'Invalid move, not currently turn of accuser')
 
     async def complete_turn(self, player: Character):
         try:
