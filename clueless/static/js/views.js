@@ -315,6 +315,7 @@ class SuggestPanel extends Panel {
     this.txtSuspect = this.element.querySelector('#txtSuspect');
     this.txtWeapon = this.element.querySelector('#txtWeapon');
     this.btnSuggest = this.element.querySelector('#btnSuggest')
+    this.btnSuggest.onclick = this.handleBtnSuggestClick.bind(this);
   }
   display(gameState) {
 
@@ -325,8 +326,19 @@ class SuggestPanel extends Panel {
 }
 
 class AccusePanel extends Panel {
+  constructor(id) {
+    super(id);
+    this.txtRoom = this.element.querySelector('#txtRoom');
+    this.txtSuspect = this.element.querySelector('#txtSuspect');
+    this.txtWeapon = this.element.querySelector('#txtWeapon');
+    this.btnAccuse = this.element.querySelector('#btnAccuse');
+    this.btnAccuse.onclick = this.handleBtnAccuseClick.bind(this);
+  }
   display(gameState) {
 
+  }
+  handleBtnAccuseClick() {
+    gameHub.sendAccuse(this.txtRoom.value, this.txtSuspect.value, this.txtWeapon.value);
   }
 }
 

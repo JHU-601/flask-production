@@ -88,6 +88,14 @@ class GameHub {
     };
     this.sendMessage(message);
   }
+  sendAccuse(room, suspect, weapon) {
+    var message = {
+      room: room,
+      suspect: suspect,
+      weapon: weapon,
+    };
+    this.sendMessage(message);
+  }
   // Individual message handlers
   handleMsgJoined(message) {
     this.gamePanel.showScreen2();
