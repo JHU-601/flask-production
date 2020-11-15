@@ -5,77 +5,618 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Clueless</title>
-  <link rel="stylesheet" href="/vendor/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-  <div id="screen1">
-    <div id="splash">
-      <img id="imgSplash" src="/img/splash.png" alt="">
+  <div id="game-panel">
+    <!-- home panel -->
+    <div id="home-panel" class="panel panel-left">
+      <!-- just displays the background image -->
     </div>
-
-    <div id="startGame">
-      <button id="btnStartGame" class="btn btn-primary">Start</button>
-    </div>
-  </div>
-
-  <div id="screen2" style="display: none;">
-    <div>
-      <h1>Choose a Game</h1>
+    <div id="start-panel" class="panel panel-right">
       <div>
-        <button id="btnCreateGame" class="btn btn-primary">Create New Game</button>
+        <button id="btnCreateGame">Create Game</button>
       </div>
-      <hr>
       <div>
         <input id="txtGameId" type="text" placeholder="Game ID" />
-        <button id="btnJoinGame" class="btn btn-primary">Join Existing Game</button>
+      </div>
+      <div>
+        <button id="btnJoinGame">Join Game</button>
+      </div>
+      <div>
+        <button id="btnAbout">About</button>
+      </div>
+    </div>
+    <div id="waitingroom-panel" class="panel panel-left">
+      <h2>Current Players</h2>
+      <div>
+        Game ID: <span id="lblGameId"></span>
+      </div>
+      <div id="lstOfPlayers"></div>
+      <button id="btnStartGame">
+        Start Game
+      </button>
+    </div>
+    <div id="registration-panel" class="panel panel-right">
+      <h2 id="chooseIcon">Choose Your Icon</h2>
+      <div>
+        <div>
+          <button class="icon" id="character1"><img data-character=0 src="/img/characterIcons/EdS.png" alt="Ed S."></button>
+          <button class="icon" id="character2"><img data-character=1 src="/img/characterIcons/JeffG.png" alt="Jeff G."></button>
+        </div>
+        <div>
+          <button class="icon" id="character3"><img data-character=2 src="/img/characterIcons/JoeD.png" alt="Joe D."></button>
+          <button class="icon" id="character4"><img data-character=3 src="/img/characterIcons/RalphS.png" alt="Ralph S."></button>
+        </div>
+        <div>
+          <button class="icon" id="character5"><img data-character=4 src="/img/characterIcons/RonaldD.png" alt="Roanld D."></button>
+          <button class="icon" id="character6"><img data-character=5 src="/img/characterIcons/SamS.png" alt="Sam S."></button>
+        </div>
+      </div>
+      <h2 id="chooseDisplay">Choose Your Display Name</h2>
+      <input type="text" id="txtDisplayName">
+      <button id="btnRegister">Register</button>
+    </div>
+    <div id="gameboard-panel" class="panel panel-left">
+      <div class="row">
+        <div id="room0" class="col room">
+          <img class="room-image" src="/img/rooms/study.png" alt="Study">
+          <span class="room-label">Dining Hall</span>
+        </div>
+        <div id="room10" class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div id="room1" class="col room">
+          <img class="room-image" src="/img/rooms/hall.jpeg" alt="Hall">
+          <span class="room-label">Peabody Institute</span>
+        </div>
+        <div id="room11" class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div id="room2" class="col room">
+          <img class="room-image" src="/img/rooms/lounge.png" alt="Lounge">
+          <span class="room-label">Gilman Hall</span>
+        </div>
+      </div>
+      <div class="row">
+        <div id="room12" class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/blank.png" alt="blank">
+          <span class="room-label">blank</span>
+        </div>
+        <div id="room13" class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/blank.png" alt="blank">
+          <span class="room-label">blank</span>
+        </div>
+        <div id="room14" class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+      </div>
+      <div class="row">
+        <div id="room3" class="col room">
+          <img class="room-image" src="/img/rooms/library.png" alt="Library">
+          <span class="room-label">Library</span>
+        </div>
+        <div id="room15" class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div id="room4" class="col room">
+          <img class="room-image" src="/img/rooms/billiard_room.jpeg" alt="Billiard Room">
+          <span class="room-label">The Hospital</span>
+        </div>
+        <div id="room16" class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div id="room5" class="col room">
+          <img class="room-image" src="/img/rooms/dining_room.jpeg" alt="Dining Room">
+          <span class="room-label">The Lounge</span>
+        </div>
+      </div>
+      <div class="row">
+        <div id="room17" class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/blank.png" alt="blank">
+          <span class="room-label">blank</span>
+        </div>
+        <div id="room18" class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div class="col">
+          <img class="room-image" src="/img/blank.png" alt="blank">
+          <span class="room-label">blank</span>
+        </div>
+        <div id="room19" class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+      </div>
+      <div class="row">
+        <div id="room6" class="col room">
+          <img class="room-image" src="/img/rooms/conservatory.png" alt="Conservatory">
+          <span class="room-label">Hutzler Reading Room</span>
+        </div>
+        <div id="room20" class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div id="room7" class="col room">
+          <img class="room-image" src="/img/rooms/ballroom.jpeg" alt="Ballroom">
+          <span class="room-label">Stacks</span>
+        </div>
+        <div id="room21" class="col">
+          <img class="room-image" src="/img/hallway.png" alt="hallway">
+          <span class="room-label">hallway</span>
+        </div>
+        <div id="room8" class="col room">
+          <img class="room-image" src="/img/rooms/kitchen.jpeg" alt="Kitchen">
+          <span class="room-label">Shriver Hall</span>
+        </div>
+      </div>
+      <div class="characters">
+        <div class="icon" id="player0"><img data-character=0 src="/img/characterIcons/EdS.png" alt="Ed S."></div>
+        <div class="icon" id="player1"><img data-character=1 src="/img/characterIcons/JeffG.png" alt="Jeff G."></div>
+        <div class="icon" id="player2"><img data-character=2 src="/img/characterIcons/JoeD.png" alt="Joe D."></div>
+        <div class="icon" id="player3"><img data-character=3 src="/img/characterIcons/RalphS.png" alt="Ralph S."></div>
+        <div class="icon" id="player4"><img data-character=4 src="/img/characterIcons/RonaldD.png" alt="Roanld D."></div>
+        <div class="icon" id="player5"><img data-character=5 src="/img/characterIcons/SamS.png" alt="Sam S."></div>
+      </div>
+    </div>
+    <div id="interaction-panel" class="panel panel-right">
+      <div class="tabbed-panel" id="top-panel">
+        <div class="selectors">
+          <div data-index=0 class="tab-selector">Notepad</div>
+          <div data-index=1 class="tab-selector">Chat</div>
+        </div>
+        <div class="tab" id="notepad-panel">
+          <table>
+            <tr>
+              <th colspan=13>Suspects</th>
+            </tr>
+            <tr>
+              <td colspan=3>Colonel Mustard</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Professor Plum</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Reverend Green</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Mrs. Peacock</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Miss Scarlet</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Mrs. White</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <th colspan=13>Weapons</th>
+            </tr>
+            <tr>
+              <td colspan=3>Dagger</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Candle Stick</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Revolver</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Rope</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Lead Pipe</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Wrench</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <th colspan=13>Rooms</th>
+            </tr>
+            <tr>
+              <td colspan=3>Hall</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Lounge</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Dining Room</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Kitchen</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Ballroom</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Conservatory</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Billiard Room</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Library</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+            <tr>
+              <td colspan=3>Study</td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+              <td class="check"></td>
+            </tr>
+          </table>
+        </div>
+        <div class="tab" id="chat-panel">
+          <div class="inner">
+            <div id="chatlog">
+              Chat log
+            </div>
+            <div id="sendgroup">
+              <input type="text" id="txtChat">
+              <button id="btnSend">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tabbed-panel" id="bottom-panel">
+        <div class="selectors">
+          <div data-index=0 class="tab-selector">Move</div>
+          <div data-index=1 class="tab-selector">Suggest</div>
+          <div data-index=2 class="tab-selector">Accuse</div>
+        </div>
+        <div class="tab" id="move-panel">
+          <div>
+            <div>
+              <button class="direction" data-direction="upleft">.</button>
+              <button class="direction" data-direction="up">^</button>
+              <button class="direction" data-direction="upright">.</button>
+            </div>
+            <div>
+              <button class="direction" data-direction="left">&lt;</button>
+              <button id="move-middle" disabled>.</button>
+              <button class="direction" data-direction="right">&gt;</button>
+            </div>
+            <div>
+              <button class="direction" data-direction="downleft">.</button>
+              <button class="direction" data-direction="down">v</button>
+              <button class="direction" data-direction="downright">.</button>
+            </div>
+          </div>
+          <button id="btnMove">Move</button>
+        </div>
+        <div class="tab" id="suggest-panel">
+          <div>
+            Room
+          </div>
+          <div>
+            <select name="room" id="txtRoom">
+              <option value=0>Study</option>
+              <option value=1>Hall</option>
+              <option value=2>Lounge</option>
+              <option value=3>Library</option>
+              <option value=4>Billiard Room</option>
+              <option value=5>Dining Room</option>
+              <option value=6>Conservatory</option>
+              <option value=7>Ballroom</option>
+              <option value=8>Kitchen</option>
+            </select>
+          </div>
+          <div>
+            Suspect
+          </div>
+          <div>
+            <select name="suspect" id="txtSuspect">
+              <option value=0>Yellow</option>
+              <option value=1>Red</option>
+              <option value=2>Purple</option>
+              <option value=3>Green</option>
+              <option value=4>White</option>
+              <option value=5>Blue</option>
+            </select>
+          </div>
+          <div>
+            Weapon
+          </div>
+          <div>
+            <select name="weapon" id="txtWeapon">
+              <option value=0>Rope</option>
+              <option value=1>Pipe</option>
+              <option value=2>Knife</option>
+              <option value=3>Wrench</option>
+              <option value=4>Candlestick</option>
+              <option value=5>Revolver</option>
+            </select>
+          </div>
+          <div>
+            <button id="btnSuggest">Suggest</button>
+          </div>
+        </div>
+        <div class="tab" id="accuse-panel">
+          <div>
+            Room
+          </div>
+          <div>
+            <select name="room" id="txtRoom">
+              <option value=0>Study</option>
+              <option value=1>Hall</option>
+              <option value=2>Lounge</option>
+              <option value=3>Library</option>
+              <option value=4>Billiard Room</option>
+              <option value=5>Dining Room</option>
+              <option value=6>Conservatory</option>
+              <option value=7>Ballroom</option>
+              <option value=8>Kitchen</option>
+            </select>
+          </div>
+          <div>
+            Suspect
+          </div>
+          <div>
+            <select name="suspect" id="txtSuspect">
+              <option value=0>Yellow</option>
+              <option value=1>Red</option>
+              <option value=2>Purple</option>
+              <option value=3>Green</option>
+              <option value=4>White</option>
+              <option value=5>Blue</option>
+            </select>
+          </div>
+          <div>
+            Weapon
+          </div>
+          <div>
+            <select name="weapon" id="txtWeapon">
+              <option value=0>Rope</option>
+              <option value=1>Pipe</option>
+              <option value=2>Knife</option>
+              <option value=3>Wrench</option>
+              <option value=4>Candlestick</option>
+              <option value=5>Revolver</option>
+            </select>
+          </div>
+          <div>
+            <button id="btnAccuse">Accuse</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div id="screen3" style="display: none;">
-    <table class="table" id="gameboard">
-      <tr>
-        <td id="study" class="room"><span class="name">Dining Hall</span></td>
-        <td class="passageway horiz"></td>
-        <td id="hall" class="room"><span class="name">Peabody Institute</span></td>
-        <td class="passageway horiz"></td>
-        <td id="lounge" class="room"><span class="name">Gilman Hall</span></td>
-      </tr>
-      <tr>
-        <td class="passageway vert"></td>
-        <td></td>
-        <td class="passageway vert"></td>
-        <td></td>
-        <td class="passageway vert"></td>
-      </tr>
-      <tr>
-        <td id="library" class="room"><span class="name">Library</span></td>
-        <td class="passageway"></td>
-        <td id="billiard_room" class="room"><span class="name">The Hospital</span></td>
-        <td class="passageway"></td>
-        <td id="dining_room" class="room"><span class="name">The Lounge</span></td>
-      </tr>
-      <tr>
-        <td class="passageway"></td>
-        <td></td>
-        <td class="passageway"></td>
-        <td></td>
-        <td class="passageway"></td>
-      </tr>
-      <tr>
-        <td id="conservatory" class="room"><span class="name">Hutzler Reading Room</span></td>
-        <td class="passageway"></td>
-        <td id="ballroom" class="room"><span class="name">The Stacks</span></td>
-        <td class="passageway"></td>
-        <td id="kitchen" class="room"><span class="name">Shriver Hall</span></td>
-      </tr>
-    </table>
-    <a href="/gameroom" class="btn btn-warning">Messaging Demo</a>
+  <div id="modal-panel">
+    <div class="inner">
+      <h1 id = "txtNotifTitle"></h1>
+      <p id = "txtNotifContent"></p>
+      <button id="btnOkay">Okay</button>
+    </div>
   </div>
 
   <script src="/vendor/js/jquery-3.5.1.min.js"></script>
-  <script src="/vendor/js/bootstrap.min.js"></script>
+  <script src="/js/models.js"></script>
+  <script src="/js/views.js"></script>
+  <script src="/js/controllers.js"></script>
   <script src="/js/main.js"></script>
 </body>
 </html>

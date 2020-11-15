@@ -1,117 +1,320 @@
-/* body {
-  background-color: black;
-} */
+/* General */
+body {
+  background-color: white;
+}
 
-/** screen 1 **/
+/* GENERAL PANEL STYLES */
+.panel {
 
-div#splash {
+}
+.panel-left {
+  width: 60%;
+  border-right: none;
+}
+.panel-right {
+  width: 40%;
+}
+/* SPECIFIC PANEL STYLES */
+/* GamePanel */
+#game-panel {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  max-width: 100%;
-  overflow: hidden;
-}
-img#imgSplash {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  display: flex;
+  padding: 0;
+  justify-content: center;
 }
 
-div#startGame {
-  text-align: center;
-  /* background-color: white; */
-  border-radius: 10px;
-  padding: 1em;
-  position: absolute;
-  top: 43%;
-  left: 53%;
-  transform: translate(-50%, -50%);
-}
-div#startGame .btn-primary {
-  background-color: #f57f17;
-  border: 3px solid white;
-  font: 24px Arial;
-}
-div#startGame .btn-primary:hover {
+/* HomePanel */
+#home-panel {
   background-color: black;
+  background-image: url('/img/splash.png');
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }
 
-/** screen2 gameboard table **/
-div#screen3 {
-  background-color: black;
-}
-table#gameboard td {
-  border: none;
-  width: 150px;
-  height: 150px;
-  text-align: center;
-  vertical-align: middle;
-}
-/* table#gameboard td.room {
-  background-color: yellow;
-} */
-table#gameboard td.passageway {
-  background-image: url('/img/hallway.png');
-}
-table#gameboard td.room {
-  padding: 0 5px;
+/* StartPanel */
+#start-panel {
+  background-color: lightgray;
   border: 5px solid black;
-  background-size: contain;
-}
-table#gameboard td.room .name {
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-}
-table#gameboard td#study {
-  background-image: url('/img/rooms/study.png');
-  text-align: right;
-  vertical-align: bottom;
-}
-table#gameboard td#lounge {
-  background-image: url('/img/rooms/lounge.png');
-  text-align: left;
-  vertical-align: bottom;
-}
-table#gameboard td#library {
-  background-image: url('/img/rooms/library.png');
-  text-align: right;
-  vertical-align: bottom;
-}
-table#gameboard td#conservatory {
-  background-image: url('/img/rooms/conservatory.png');
-  text-align: right;
-  vertical-align: bottom;
-}
-table#gameboard td#hall {
-  background-image: url('/img/rooms/hall.jpeg');
   text-align: center;
-  vertical-align: bottom;
 }
-table#gameboard td#ballroom {
-  background-image: url('/img/rooms/ballroom.jpeg');
-  text-align: center;
-  vertical-align: bottom;
-}
-table#gameboard td#billiard_room {
-  background-image: url('/img/rooms/billiard_room.jpeg');
-  text-align: center;
-  vertical-align: bottom;
-}
-table#gameboard td#kitchen {
-  background-image: url('/img/rooms/kitchen.jpeg');
-  text-align: left;
-  vertical-align: bottom;
-}
-table#gameboard td#dining_room {
-  background-image: url('/img/rooms/dining_room.jpeg');
-  text-align: left;
-  vertical-align: bottom;
+#start-panel button, #start-panel input {
+  font-size: 1.5rem;
 }
 
-/** gameboard **/
-div#txtMessages {
-  height: 100px;
+#start-panel #btnCreateGame {
+  margin-top: 30%;
+}
+
+#start-panel input {
+  margin-bottom: 3px;
+}
+
+#start-panel button {
+  margin-bottom: 20px;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+}
+
+/* WaitingRoomPanel */
+#waitingroom-panel {
+  text-align: center;
+  background-color: black;
+  color: white;
+  padding: 25px 0;
+  position: relative;
+}
+
+#waitingroom-panel h2 {
+  margin-bottom: 0;
+}
+
+#waitingroom-panel button {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+#waitingroom-panel #listOfPlayers {
+  margin-top: 20px;
+}
+
+#waitingroom-panel #lstOfPlayers .character {
+
+}
+
+/* RegistrationPanel */
+#registration-panel {
+  text-align: center;
+  background-color: lightgray;
+  border: 5px solid black;
+  position: relative;
+}
+
+#registration-panel h2#chooseIcon {
+  font-size: 21px;
+  margin-top: 30px;
+}
+
+#registration-panel h2#chooseDisplay {
+  font-size: 15px;
+  margin-bottom: 0;
+
+}
+
+#registration-panel button.icon {
+  margin-right: 5px;
+  margin-bottom: 15px;
+  border: 0;
+  padding: 0;
+  outline: none;
+  background-color: white;
+}
+
+#registration-panel button.icon.clicked img {
+  border: 3px solid black;
+}
+
+#registration-panel button.icon img {
+  width: 70px;
+  height: 70px;
+  border: 1px solid black;
+}
+
+#registration-panel button.icon.taken img {
+  opacity: 0.5;
+}
+
+#registration-panel #btnRegister {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  bottom: 5%;
+}
+
+/* Gameboard Panel */
+#gameboard-panel {
+  display: flex;
+  flex-direction: column;
+}
+#gameboard-panel .icon {
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#gameboard-panel .icon img {
+  width: 5em;
+  height: 5em;
+}
+#gameboard-panel .row {
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: row;
+}
+#gameboard-panel .col {
+  flex-grow: 1;
+  position: relative;
+  border: 1px solid darkgray;
+}
+#gameboard-panel .col.room {
+  /* border: 1px solid white; */
+}
+#gameboard-panel .room-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+#gameboard-panel .room-label {
+  z-index: 2;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: white;
+}
+
+/* InteractionPanel */
+#interaction-panel {
+  display: flex;
+  flex-direction: column;
+}
+#interaction-panel #top-panel {
+  flex-grow: 2;
+}
+#interaction-panel #bottom-panel {
+  flex-grow: 1;
+}
+/* InteractionPanel Sub-panels */
+.tabbed-panel {
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+.tabbed-panel .selectors {
+  display: flex;
+  flex-direction: row;
+}
+.tabbed-panel .selectors .tab-selector {
+  border: 1px solid black;
+  text-align: center;
+  flex-grow: 1;
+  background-color: darkgray;
+  font-weight: bold;
+  color: black;
+  padding: 0.5em;
+  cursor: pointer;
+  user-select: none;
+}
+.tabbed-panel .selectors .tab-selector.active {
+  background-color: lightgray;
+}
+.tabbed-panel .tab {
+  flex-grow: 1;
+  display: block;
+}
+#accuse-panel {
+
+}
+#suggest-panel {
+
+}
+#move-panel {
+
+}
+#chat-panel {
+  height: 87%;
+}
+#chat-panel .inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+#chat-panel #chatlog {
+  flex-grow: 15;
+}
+#chat-panel #sendgroup {
+  flex-grow: 1;
+  background-color:green;
+  display: flex;
+  flex-direction: row;
+}
+#chat-panel #sendgroup #txtChat {
+  flex-grow: 9;
+}
+#chat-panel #sendgroup #btnSend {
+  flex-grow: 1;
+
+}
+#notepad-panel {
   overflow-y: scroll;
-  border: 1px solid gray;
+}
+#notepad-panel table {
+  width: 100%;
+  height: 100%;
+  table-layout: fixed;
+  /* border: 1px solid white; */
+}
+#notepad-panel table, #notepad-panel th, #notepad-panel td {
+  border: 1px solid white;
+}
+#notepad-panel table th {
+  text-align: left;
+  font-size: 2rem;
+  vertical-align: bottom;
+}
+#notepad-panel table td.check {
+  /* border: 1px solid white; */
+  width: 1em;
+  height: 1em;
+  cursor: pointer;
+}
+#notepad-panel table td.check.yes {
+  background-color: green;
+}
+#notepad-panel table td.check.no {
+  background-color: red;
+}
+
+/* ModalPanel */
+#modal-panel {
+  /* take over the whole screen */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,.6);
+  z-index: 100;
+}
+
+#modal-panel .inner {
+  background-color: white;
+  width: 60%;
+  height: 40%;
+  top: 50%;
+  position: relative;
+  transform: translate(0%, -50%);
+  margin-top: 10em;
+  margin: auto;
+  border-radius: 20px;
+  padding: 1em;
+}
+
+#modal-panel .inner #btnOkay {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  border-radius: 10px;
+  margin: .5em;
 }
