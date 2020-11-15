@@ -350,7 +350,6 @@ class MovePanel extends Panel {
     if (this.selected == null) {
       gameHub.gamePanel.showModal('Validation Error', 'You must select a direction to move.');
     } else {
-      console.log(new Position(gameHub.gameState.localPlayer.character.position))
       var new_pos = new Position(gameHub.gameState.localPlayer.character.position).getRelativePosition(this.selected);
       if (new_pos == null) {
         gameHub.gamePanel.showModal('Validation Error', 'Invalid move.')

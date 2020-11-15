@@ -34,13 +34,14 @@ class GameHub {
   }
 
   receiveMessage(message) {
+    console.log('Received message.', message);
     if (message.message == 'Joined') {
       this.handleMsgJoined(message);
     } else if (message.message == 'Registration') {
       this.handleMsgRegistration(message);
     } else if (message.message == 'WitnessItems') {
       this.handleMsgWitnessItems(message);
-    } else if (message.message == 'HandlePosition') {
+    } else if (message.message == 'Position') {
       this.handleMsgPosition(message);
     }
     this.updateDisplay();
@@ -76,7 +77,8 @@ class GameHub {
     var message = {
       message: 'Move',
       position: position,
-    }
+    };
+    this.sendMessage(message);
   }
   // Individual message handlers
   handleMsgJoined(message) {
