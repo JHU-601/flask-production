@@ -43,6 +43,18 @@ class GameHub {
       this.handleMsgWitnessItems(message);
     } else if (message.message == 'Position') {
       this.handleMsgPosition(message);
+    } else if (message.message == 'SuggestionWitness') {
+      this.handleMsgSuggestionWitness(message);
+    } else if (message.message == 'SuggestionStatus') {
+      this.handleMsgSuggestionStatus(message);
+    } else if (message.message == 'Accusation') {
+      this.handleMsgAccusation(message);
+    } else if (message.message == 'Winner') {
+      this.handleMsgWinner(message);
+    } else if (message.message = 'Disqualified') {
+      this.handleMsgDisqualified(message);
+    } else if (message.message == 'ServerChat') {
+      this.handleMsgServerChat(message);
     }
     this.updateDisplay();
   }
@@ -140,5 +152,23 @@ class GameHub {
         this.gameState.players[i].character.position = message.location;
       }
     }
+  }
+  handleMsgSuggestionWitness(message) {
+    this.gamePanel.showModal('Suggestion Witness', message);
+  }
+  handleMsgSuggestionStatus(message) {
+    this.gamePanel.showModal('Suggestion Status', message);
+  }
+  handleMsgAccusation(message) {
+    this.gamePanel.showModal('Accusation', message);
+  }
+  handleMsgWinner(message) {
+    this.gamePanel.showModal('Winner', message);
+  }
+  handleMsgDisqualified(message) {
+    this.gamePanel.showModal('Disqualified', message);
+  }
+  handleMsgServerChat(message) {
+    this.gamePanel.showModal('Server Chat', message);
   }
 }
