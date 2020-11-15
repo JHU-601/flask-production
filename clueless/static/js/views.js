@@ -142,7 +142,7 @@ class WaitingRoomPanel extends Panel {
       this.lstOfPlayers.innerHTML = "";
       for (var i = 0; i < gameState.players.length; i++) {
         var curPlayer = gameState.players[i];
-        this.lstOfPlayers.innerHTML += '<div class="character">' + curPlayer.character + ' - ' + curPlayer.display_name + '</div>';
+        this.lstOfPlayers.innerHTML += '<div class="character">' + curPlayer.character.name + ' - ' + curPlayer.display_name + '</div>';
       }
     }
     // Disable start button until everyone joins
@@ -350,7 +350,12 @@ class MovePanel extends Panel {
     if (this.selected == null) {
       gameHub.gamePanel.showModal('Validation Error', 'You must select a direction to move.');
     } else {
-      gameHub.sendMove(this.selected);
+      var new_pos = new Position(gameHub.gameState.localPlayer.character.position).getRelativePosition(this.selected);
+      if (new_pos == null) {
+        gameHub.gamePanel.showModal('Validation Error', 'Invalid move.')
+      } else {
+        gameHub.sendMove(new_pos.id);
+      }
     }
   }
 }

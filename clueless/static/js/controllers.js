@@ -67,8 +67,14 @@ class GameHub {
       character: character,
       display_name: display_name,
     };
-    this.gameState.chosenPlayer = character;
+    this.gameState.chosenPlayer = parseInt(character);
     this.sendMessage(message);
+  }
+  sendMove(position) {
+    var message = {
+      message: 'Position',
+      position: position,
+    }
   }
   // Individual message handlers
   handleMsgJoined(message) {
@@ -77,23 +83,19 @@ class GameHub {
   }
   handleMsgRegistration(message) {
     var p = new Player(message.character, message.display_name);
-    if (p.character == this.gameState.chosenPlayer) {
+    if (p.character.id == this.gameState.chosenPlayer) {
       this.gameState.localPlayer = p;
     }
     this.gameState.players.push(p);
-    // Check if game is ready to start
-    // if (this.gameState.players.length == 6) {
-    //   gameHub.gamePanel.showScreen3();
-    // }
   }
   handleMsgWitnessItems(message) {
     this.gameState.witnessCharacter = message.character;
     this.gameState.witnessRoom = message.room;
     this.gameState.witnessWeapon = message.weapon;
     // Put all players in starting positions
-    for (var i = 0; i < this.gameState.players; i++) {
+    for (var i = 0; i < this.gameState.players.length; i++) {
       var curPlayer = this.gameState.players[i];
-
+      // console.log(this.gameState);
     }
     this.gamePanel.showScreen3();
   }
