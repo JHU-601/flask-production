@@ -350,7 +350,7 @@ class MovePanel extends Panel {
     if (this.selected == null) {
       gameHub.gamePanel.showModal('Validation Error', 'You must select a direction to move.');
     } else {
-      alert('btnmoveclick')
+      gameHub.sendMove(this.selected);
     }
   }
 }
