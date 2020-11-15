@@ -182,7 +182,7 @@ class RegistrationPanel extends Panel {
   display(gameState) {
     for (var i = 0; i < gameState.players.length; i++) {
       var currPlayer = gameState.players[i];
-      this.characters[currPlayer.character].classList.add("taken");
+      this.characters[currPlayer.character.id].classList.add("taken");
     }
     // Disable all buttons if we already have a character
     for (var i = 0; i < this.characters.length; i++) {
@@ -197,7 +197,7 @@ class RegistrationPanel extends Panel {
       return;
     }
     // Ignore this click if the character is already taken
-    var clickedCharacter = e.target.dataset.character - 1;
+    var clickedCharacter = e.target.dataset.character;
     for (var i = 0; i < gameHub.gameState.players.length; i++) {
       if (gameHub.gameState.players[i].character == clickedCharacter) {
         return;
@@ -221,8 +221,24 @@ class RegistrationPanel extends Panel {
 }
 
 class GameboardPanel extends Panel {
+  constructor(id) {
+    super(id);
+    this.players = [
+      this.element.querySelector('#player0'),
+      this.element.querySelector('#player1'),
+      this.element.querySelector('#player2'),
+      this.element.querySelector('#player3'),
+      this.element.querySelector('#player4'),
+      this.element.querySelector('#player5'),
+    ];
+  }
   display(gameState) {
-
+    for (var i = 0; i < gameState.players.length; i++) {
+      var curPlayer = gameState.players[i];
+      var playerElem = this.element.querySelector('#player' + curPlayer.character.id);
+      var roomElem = this.element.querySelector('#room' + curPlayer.character.position);
+      roomElem.appendChild(playerElem);
+    }
   }
 }
 
@@ -305,8 +321,37 @@ class SuggestPanel extends Panel {
 }
 
 class MovePanel extends Panel {
+  constructor(id) {
+    super(id);
+    this.buttons = this.element.querySelectorAll('.direction');
+    this.btnMove = this.element.querySelector('#btnMove');
+    this.selected = null;
+    // Listeners
+    for (var i = 0; i < this.buttons.length; i++) {
+      this.buttons[i].onclick = this.handleButtonClick.bind(this);
+    }
+    this.btnMove.onclick = this.handleBtnMoveClick.bind(this);
+  }
   display(gameState) {
-
+    for (var i = 0; i < this.buttons.length; i++) {
+      var curButton = this.buttons[i];
+      if (curButton.dataset.direction == this.selected) {
+        curButton.disabled = true;
+      } else {
+        curButton.disabled = false;
+      }
+    }
+  }
+  handleButtonClick(e) {
+    this.selected = e.target.dataset.direction;
+    this.display(null);
+  }
+  handleBtnMoveClick() {
+    if (this.selected == null) {
+      gameHub.gamePanel.showModal('Validation Error', 'You must select a direction to move.');
+    } else {
+      alert('btnmoveclick')
+    }
   }
 }
 

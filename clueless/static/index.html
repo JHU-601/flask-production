@@ -41,16 +41,16 @@
       <h2 id="chooseIcon">Choose Your Icon</h2>
       <div>
         <div>
-          <button class="icon" id="character1"><img data-character=1 src="/img/characterIcons/EdS.png" alt="Ed S."></button>
-          <button class="icon" id="character2"><img data-character=2 src="/img/characterIcons/JeffG.png" alt="Jeff G."></button>
+          <button class="icon" id="character1"><img data-character=0 src="/img/characterIcons/EdS.png" alt="Ed S."></button>
+          <button class="icon" id="character2"><img data-character=1 src="/img/characterIcons/JeffG.png" alt="Jeff G."></button>
         </div>
         <div>
-          <button class="icon" id="character3"><img data-character=3 src="/img/characterIcons/JoeD.png" alt="Joe D."></button>
-          <button class="icon" id="character4"><img data-character=4 src="/img/characterIcons/RalphS.png" alt="Ralph S."></button>
+          <button class="icon" id="character3"><img data-character=2 src="/img/characterIcons/JoeD.png" alt="Joe D."></button>
+          <button class="icon" id="character4"><img data-character=3 src="/img/characterIcons/RalphS.png" alt="Ralph S."></button>
         </div>
         <div>
-          <button class="icon" id="character5"><img data-character=5 src="/img/characterIcons/RonaldD.png" alt="Roanld D."></button>
-          <button class="icon" id="character6"><img data-character=6 src="/img/characterIcons/SamS.png" alt="Sam S."></button>
+          <button class="icon" id="character5"><img data-character=4 src="/img/characterIcons/RonaldD.png" alt="Roanld D."></button>
+          <button class="icon" id="character6"><img data-character=5 src="/img/characterIcons/SamS.png" alt="Sam S."></button>
         </div>
       </div>
       <h2 id="chooseDisplay">Choose Your Display Name</h2>
@@ -59,29 +59,29 @@
     </div>
     <div id="gameboard-panel" class="panel panel-left">
       <div class="row">
-        <div class="col">
+        <div id="room0" class="col">
           <img class="room-image" src="/img/rooms/study.png" alt="Study">
           <span class="room-label">Dining Hall</span>
         </div>
-        <div class="col">
+        <div id="room10" class="col">
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
-        <div class="col">
+        <div id="room1" class="col">
           <img class="room-image" src="/img/rooms/hall.jpeg" alt="Hall">
           <span class="room-label">Peabody Institute</span>
         </div>
-        <div class="col">
+        <div id="room11" class="col">
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
-        <div class="col">
+        <div id="room2" class="col">
           <img class="room-image" src="/img/rooms/lounge.png" alt="Lounge">
           <span class="room-label">Gilman Hall</span>
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div id="room12" class="col">
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
@@ -89,7 +89,7 @@
           <img class="room-image" src="/img/blank.png" alt="blank">
           <span class="room-label">blank</span>
         </div>
-        <div class="col">
+        <div id="room13" class="col">
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
@@ -97,35 +97,35 @@
           <img class="room-image" src="/img/blank.png" alt="blank">
           <span class="room-label">blank</span>
         </div>
-        <div class="col">
+        <div id="room14" class="col">
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div id="room3" class="col">
           <img class="room-image" src="/img/rooms/library.png" alt="Library">
           <span class="room-label">Library</span>
         </div>
-        <div class="col">
+        <div id="room15" class="col">
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
-        <div class="col">
+        <div id="room4" class="col">
           <img class="room-image" src="/img/rooms/billiard_room.jpeg" alt="Billiard Room">
           <span class="room-label">The Hospital</span>
         </div>
-        <div class="col">
+        <div id="room16" class="col">
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
-        <div class="col">
+        <div id="room5" class="col">
           <img class="room-image" src="/img/rooms/dining_room.jpeg" alt="Dining Room">
           <span class="room-label">The Lounge</span>
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div id="room17" class="col">
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
@@ -133,7 +133,7 @@
           <img class="room-image" src="/img/blank.png" alt="blank">
           <span class="room-label">blank</span>
         </div>
-        <div class="col">
+        <div id="room18" class="col">
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
@@ -141,32 +141,40 @@
           <img class="room-image" src="/img/blank.png" alt="blank">
           <span class="room-label">blank</span>
         </div>
-        <div class="col">
+        <div id="room19" class="col">
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div id="room6" class="col">
           <img class="room-image" src="/img/rooms/conservatory.png" alt="Conservatory">
           <span class="room-label">Hutzler Reading Room</span>
         </div>
-        <div class="col">
+        <div id="room20" class="col">
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
-        <div class="col">
+        <div id="room7" class="col">
           <img class="room-image" src="/img/rooms/ballroom.jpeg" alt="Ballroom">
           <span class="room-label">Stacks</span>
         </div>
-        <div class="col">
+        <div id="room21" class="col">
           <img class="room-image" src="/img/hallway.png" alt="hallway">
           <span class="room-label">hallway</span>
         </div>
-        <div class="col">
+        <div id="room8" class="col">
           <img class="room-image" src="/img/rooms/kitchen.jpeg" alt="Kitchen">
           <span class="room-label">Shriver Hall</span>
         </div>
+      </div>
+      <div class="characters">
+        <div class="icon" id="player0"><img data-character=0 src="/img/characterIcons/EdS.png" alt="Ed S."></div>
+        <div class="icon" id="player1"><img data-character=1 src="/img/characterIcons/JeffG.png" alt="Jeff G."></div>
+        <div class="icon" id="player2"><img data-character=2 src="/img/characterIcons/JoeD.png" alt="Joe D."></div>
+        <div class="icon" id="player3"><img data-character=3 src="/img/characterIcons/RalphS.png" alt="Ralph S."></div>
+        <div class="icon" id="player4"><img data-character=4 src="/img/characterIcons/RonaldD.png" alt="Roanld D."></div>
+        <div class="icon" id="player5"><img data-character=5 src="/img/characterIcons/SamS.png" alt="Sam S."></div>
       </div>
     </div>
     <div id="interaction-panel" class="panel panel-right">
@@ -482,19 +490,19 @@
         <div class="tab" id="move-panel">
           <div>
             <div>
-              <button id="move-upleft">.</button>
-              <button id="move-up">^</button>
-              <button id="move-upright">.</button>
+              <button class="direction" data-direction="upleft">.</button>
+              <button class="direction" data-direction="up">^</button>
+              <button class="direction" data-direction="upright">.</button>
             </div>
             <div>
-              <button id="move-left">&lt;</button>
+              <button class="direction" data-direction="left">&lt;</button>
               <button id="move-middle" disabled>.</button>
-              <button id="move-right">&gt;</button>
+              <button class="direction" data-direction="right">&gt;</button>
             </div>
             <div>
-              <button id="move-downleft">.</button>
-              <button id="move-down">v</button>
-              <button id="move-downright">.</button>
+              <button class="direction" data-direction="downleft">.</button>
+              <button class="direction" data-direction="down">v</button>
+              <button class="direction" data-direction="downright">.</button>
             </div>
           </div>
           <button id="btnMove">Move</button>

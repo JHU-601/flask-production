@@ -38,6 +38,8 @@ class GameHub {
       this.handleMsgJoined(message);
     } else if (message.message == 'Registration') {
       this.handleMsgRegistration(message);
+    } else if (message.message == 'WitnessItems') {
+      this.handleMsgWitnessItems(message);
     }
     this.updateDisplay();
   }
@@ -80,8 +82,19 @@ class GameHub {
     }
     this.gameState.players.push(p);
     // Check if game is ready to start
-    if (this.gameState.players.length == 6) {
-      gameHub.gamePanel.showScreen3();
+    // if (this.gameState.players.length == 6) {
+    //   gameHub.gamePanel.showScreen3();
+    // }
+  }
+  handleMsgWitnessItems(message) {
+    this.gameState.witnessCharacter = message.character;
+    this.gameState.witnessRoom = message.room;
+    this.gameState.witnessWeapon = message.weapon;
+    // Put all players in starting positions
+    for (var i = 0; i < this.gameState.players; i++) {
+      var curPlayer = this.gameState.players[i];
+
     }
+    this.gamePanel.showScreen3();
   }
 }
