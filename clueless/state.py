@@ -465,7 +465,7 @@ class GameState:
         except StateError as e:
             return await player.send_message(Status(e.msg))
 
-        new_player = self.next_player
+        new_player = self.next_player()
         try:
             new_player.state.start_turn()
         except StateError as e:
