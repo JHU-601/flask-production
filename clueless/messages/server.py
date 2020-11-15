@@ -9,8 +9,8 @@ from clueless.messages.weapon import Weapon
 from clueless.messages.witness import WitnessType
 
 class Status:
-    def __init__(self, message=None):
-        self.message = message
+    def __init__(self, error=None):
+        self.error = error
 
     def message_name(self) -> str:
         return "status"
