@@ -253,8 +253,9 @@ class InteractionPanel extends Panel {
     this.movePanel = new MovePanel('move-panel');
     this.suggestPanel = new SuggestPanel('suggest-panel');
     this.accusePanel = new AccusePanel('accuse-panel');
+    this.turnPanel = new TurnPanel('turn-panel');
 
-    this.bottomPanel = new TabbedPanel('bottom-panel', [this.movePanel, this.suggestPanel, this.accusePanel]);
+    this.bottomPanel = new TabbedPanel('bottom-panel', [this.movePanel, this.suggestPanel, this.accusePanel, this.turnPanel]);
   }
   display(gameState) {
     this.notepadPanel.display(gameState);
@@ -379,6 +380,20 @@ class MovePanel extends Panel {
         gameHub.sendMove(new_pos.id);
       }
     }
+  }
+}
+
+class TurnPanel extends Panel {
+  constructor(id) {
+    super(id);
+    this.btnEndTurn = this.element.querySelector('#btnEndTurn');
+    this.btnEndTurn.onclick = this.handleBtnEndTurnClick.bind(this);
+  }
+  display(gameState) {
+
+  }
+  handleBtnEndTurnClick() {
+    gameHub.sendComplete();
   }
 }
 
