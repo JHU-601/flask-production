@@ -11,33 +11,11 @@
     <div id="qunit-fixture"></div>
     <script src="vendor/qunit-2.11.3.js"></script>
     <!-- Module under test: -->
-    <script src="../../clueless/static/js/main.js"></script>
+    <script src="../../clueless/static/js/models.js"></script>
+    <!-- <script src="../../clueless/static/js/views.js"></script> -->
+    <!-- <script src="../../clueless/static/js/controllers.js"></script> -->
+    <!-- <script src="../../clueless/static/js/main.js"></script> -->
     <!-- Tests -->
-    <script>
-      QUnit.module('Character', function() {
-        QUnit.test('exists and can be instantiated', function(assert) {
-          assert.true(Character !== undefined);
-          assert.true(Character.DEFAULT !== undefined)
-          let c = new Character(Character.DEFAULT);
-          assert.equal(c.type, Character.DEFAULT);
-        });
-      });
-      QUnit.module('Weapon', function() {
-        QUnit.test('exists and can be instantiated', function(assert) {
-          assert.true(Weapon !== undefined);
-          assert.true(Weapon.DEFAULT !== undefined)
-          let w = new Weapon(Weapon.DEFAULT);
-          assert.equal(w.type, Weapon.DEFAULT);
-        });
-      });
-      QUnit.module('Room', function() {
-        QUnit.test('exists and can be instantiated', function(assert) {
-          assert.true(Room !== undefined);
-          assert.true(Room.DEFAULT !== undefined)
-          let r = new Room(Room.DEFAULT);
-          assert.equal(r.type, Room.DEFAULT);
-        });
-      });
-    </script>
+    <script src="./test_models.js"></script>
 </body>
 </html>
