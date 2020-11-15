@@ -308,13 +308,23 @@ class TabbedPanel extends Panel {
   }
 }
 
-class AccusePanel extends Panel {
+class SuggestPanel extends Panel {
+  constructor(id) {
+    super(id);
+    this.txtRoom = this.element.querySelector('#txtRoom');
+    this.txtSuspect = this.element.querySelector('#txtSuspect');
+    this.txtWeapon = this.element.querySelector('#txtWeapon');
+    this.btnSuggest = this.element.querySelector('#btnSuggest')
+  }
   display(gameState) {
 
   }
+  handleBtnSuggestClick() {
+    gameHub.sendSuggest(this.txtRoom.value, this.txtSuspect.value, this.txtWeapon.value);
+  }
 }
 
-class SuggestPanel extends Panel {
+class AccusePanel extends Panel {
   display(gameState) {
 
   }

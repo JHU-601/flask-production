@@ -53,8 +53,16 @@ async def handleMove(socket, msg):
 
 async def handleSuggest(socket, msg):
     await socket.send(json.dumps({
-        'message': 'temp',
-        'body': 'Received suggest command to room %s' % msg['room'],
+        'message': 'SuggestionWitness',
+        'character': 0,
+        'witness': 0,
+        'type': 0,
+    }))
+    await asyncio.sleep(1)
+    await socket.send(json.dumps({
+        'message': 'SuggestionStatus',
+        'character': 0,
+        'witnessed': False,
     }))
 
 async def handleSuggestionResponse(socket, msg):

@@ -30,6 +30,21 @@ var Room = {
   BALLROOM_TO_KITCHEN: 21,
 };
 
+var Weapon = {
+  ROPE: 0,
+  PIPE: 1,
+  KNIFE: 2,
+  WRENCH: 3,
+  CANDLESTICK: 4,
+  REVOLVER: 5,
+};
+
+var WitnessType = {
+  ROOM: 0,
+  CHARACTER: 1,
+  WEAPON: 2,
+};
+
 class Position {
   constructor(id) {
     this.id = parseInt(id);
