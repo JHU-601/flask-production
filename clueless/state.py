@@ -302,6 +302,8 @@ class GameState:
             self.witness_items[player.character.value] = player_items
             i1, i2, i3 = player_items
             await player.send_message(Witness(i1, i2, i3))
+        self.next_player()
+        await self.broadcast(PlayerTurn(self.current_player.character))
 
 
     async def move_player(self, player: Player, location: Location):
@@ -468,4 +470,4 @@ class GameState:
             self.logger.error(f'Something went horribly wrong, multiple players in turn. Resetting')
             new_player.state.end_turn()
             new_player.state.start_turn()
-        self.broadcast(PlayerTurn(self.current_player.character))
+        await self.broadcast(PlayerTurn(self.current_player.character))
