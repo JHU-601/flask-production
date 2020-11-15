@@ -52,6 +52,13 @@ class GameHub {
     };
     this.sendMessage(message);
   }
+  sendJoinGame(id) {
+    var message = {
+      message: 'JoinGame',
+      id: id,
+    }
+    this.sendMessage(message);
+  }
   sendRegister(character, display_name) {
     var message = {
       message: 'Register',

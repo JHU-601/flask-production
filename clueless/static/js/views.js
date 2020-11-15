@@ -108,11 +108,15 @@ class StartPanel extends Panel {
 
   }
   handleBtnCreateGameClick() {
-    // gameHub.gamePanel.showModal('Create Game', 'Not implemented.');
     gameHub.sendCreateGame();
   }
   handleBtnJoinGameClick() {
-    alert('btnJoinGame clicked with gameid=' + this.txtGameId.value);
+    if (this.txtGameId.value.length < 1) {
+      gameHub.gamePanel.showModal('Validation Error', 'You must enter a game ID.');
+    } else {
+      var gameId = this.txtGameId.value;
+      gameHub.sendJoinGame(gameId);
+    }
   }
   handleBtnAboutClick() {
     gameHub.gamePanel.showModal('About Clue-Less', 'Clue-Less was developed by Iron Board Games.');
@@ -258,7 +262,7 @@ class TabbedPanel extends Panel {
     this.selectedPanel = 0;
     // Ensure block for child panels
     for (var i = 0; i < this.childPanels.length; i++) {
-      
+
     }
     // Set up listeners
     for (var i = 0; i < this.selectors.length; i++) {

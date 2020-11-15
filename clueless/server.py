@@ -23,8 +23,8 @@ async def handleCreateGame(socket, msg):
 
 async def handleJoinGame(socket, msg):
     await socket.send(json.dumps({
-        'message': 'temp',
-        'body': 'Received JoinGame command',
+        'message': 'Joined',
+        'id': 'fakeid2',
     }))
 
 async def handleRegister(socket, msg):
