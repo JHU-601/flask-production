@@ -6,6 +6,7 @@ class GameState {
     this.players = [];
     this.localPlayer = null;
     this.chosenPlayer = null;
+    this.playerTurn = null;
     this.witnessCharacter = null;
     this.witnessRoom = null;
     this.witnessWeapon = null;
@@ -60,6 +61,8 @@ class GameHub {
       this.handleMsgServerChat(message);
     } else if (message.message == 'Status') {
       this.handleMsgStatus(message);
+    } else if (message.message == 'PlayerTurn') {
+      this.handleMsgPlayerTurn(message);
     }
     this.updateDisplay();
   }
@@ -123,6 +126,12 @@ class GameHub {
     };
     this.sendMessage(message);
   }
+  sendComplete() {
+    var message = {
+      message: 'Complete',
+    };
+    this.sendMessage(message);
+  }
   // Individual message handlers
   handleMsgJoined(message) {
     this.gamePanel.showScreen2();
@@ -181,5 +190,8 @@ class GameHub {
   }
   handleMsgStatus(message) {
     this.gamePanel.showModal('Status', 'An error occurred');
+  }
+  handleMsgPlayerTurn(message) {
+    this.gameState.playerTurn = message.player;
   }
 }
