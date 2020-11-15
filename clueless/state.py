@@ -304,6 +304,7 @@ class GameState:
             await player.send_message(Witness(i1, i2, i3))
 
         self.current_player = self.players[0]
+        self.current_player.state.start_turn()
         await self.broadcast(PlayerTurn(self.current_player.character))
 
 
