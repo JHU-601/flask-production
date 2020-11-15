@@ -302,7 +302,8 @@ class GameState:
             self.witness_items[player.character.value] = player_items
             i1, i2, i3 = player_items
             await player.send_message(Witness(i1, i2, i3))
-        self.next_player()
+
+        self.current_player = self.players[0]
         await self.broadcast(PlayerTurn(self.current_player.character))
 
 
