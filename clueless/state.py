@@ -73,6 +73,8 @@ class PlayerState:
 Server Representation of Player state, instances of this class are created upon client entrance into
 Web App
 '''
+
+
 class Player:
     def __init__(self, socket):
         self.socket = socket
@@ -96,12 +98,12 @@ class Player:
     async def dispatch_message(self, message):
         self.logger.debug("Dispatch_message function:")
         if isinstance(message, CreateGame):
-            if self.game is None:                       # If this player instance is not in a game
-                self.game = GameState()                 # Create an instance of GameState class, associate it with Player instance
-                id = self.game.id                            
+            if self.game is None:  # If this player instance is not in a game
+                self.game = GameState()  # Create an instance of GameState class, associate it with Player instance
+                id = self.game.id
                 self.logger.debug(f'Created game {id}')
-                GAMES[id] = self.game                   # Place in a dictionary of games
-                await GAMES[id].add_user(self)          # Add user into recently created class
+                GAMES[id] = self.game  # Place in a dictionary of games
+                await GAMES[id].add_user(self)  # Add user into recently created class
             else:
                 self.logger.debug(f'Create Game: Player is in a game')
                 await self.send_message(Status("Player is already in a game"))
@@ -110,10 +112,10 @@ class Player:
             self.logger.debug("JoinGame instance")
             if self.game is None:                           # Check whether this player instance is assocaited with a game
 
-                self.logger.debug(f'Player Validated')      
-                self.game = GAMES[message.id]               # Instance of player gets its own game association
+                self.logger.debug(f'Player Validated')
+                self.game = GAMES[message.id]  # Instance of player gets its own game association
 
-                if self.game.id in GAMES:                   # Check whether the game.id exists in dictionary
+                if self.game.id in GAMES:  # Check whether the game.id exists in dictionary
                     self.logger.debug(f'Game {message.id} Validated')
                     await GAMES[message.id].add_user(self)
                 else:
@@ -149,13 +151,16 @@ class Player:
                 await self.game.suggestion(self.character, message)
             else:
                 await self.send_message(Status("Player is not in this game"))
-            
         elif isinstance(message, SuggestionResponse):
             self.logger.debug(f'Suggestion response witness: {message.witness} type: {message.type}')
             pass
         elif isinstance(message, Accuse):
             self.logger.debug(f'Accusation: {message.room} {message.weapon} {message.suspect}')
-            await self.game.accuse(self.character, message)
+
+            if self.game.characters[self.character] is self.display_name: # validate if player is in game
+                await self.game.accuse(self.character, message)
+            else:
+                await self.send_message(Status("Player is not in this game."))
         else:
             raise ApiError(f"received invalid message from client: {message}")
 
@@ -186,6 +191,7 @@ class Player:
             except ApiError as e:
                 self.logger.error(f'message error {e}')
                 await self.socket.send(Status(f'error handling message: {e}'))
+
 
 class GameState:
     def __init__(self):
@@ -222,7 +228,7 @@ class GameState:
             [c for c in list(Character) if c != self.crime_character],
             [w for w in list(Weapon) if w != self.crime_weapon],
             [r for r in list(Room) if r != self.crime_room],
-            )]
+        )]
         random.shuffle(items)
         items_iter = iter(items)
         for player in self.players:
@@ -261,7 +267,7 @@ class GameState:
         self.logger.debug(f'BROADCAST: {message}')
         players = [player for player in self.players if player != skip]
         if players:
-            await asyncio.wait([player.send_message(message) for player in self.players if player != skip ])
+            await asyncio.wait([player.send_message(message) for player in self.players if player != skip])
 
     async def suggestion(self, player: Character, suggest: Suggest):
         self.logger.debug("suggestion - GameState")
@@ -277,7 +283,7 @@ class GameState:
         await self.broadcast(suggestion)
 
         # iterate through other players to assume suggestion query
-        for other in itertools.chain(self.players[player.value+1:], self.players[:player.value]):
+        for other in itertools.chain(self.players[player.value + 1:], self.players[:player.value]):
             if other.character in self.disqualified:
                 continue
             response = await other.suggestion_query()
@@ -323,10 +329,10 @@ class GameState:
             player.character = None
             await player.send_message(Status("Character selection not available"))
 
-        registered = all([player.is_registered for player in self.players]) 
-        if len(self.players) == 6 and registered:       # If we have 6 registered players, start the game
+        registered = all([player.is_registered for player in self.players])
+        if len(self.players) == 6 and registered:  # If we have 6 registered players, start the game
             self.logger.debug(f'Game is full, starting Clue-Less')
-            await self.start_game()                     # Did not go into this yet
+            await self.start_game()  # Did not go into this yet
 
     async def add_user(self, player: Player):
         player.game = self
@@ -337,16 +343,22 @@ class GameState:
 
     async def accuse(self, player: Character, accuse: Accuse):
         accusation = accuse.into_accusation(player)
-        await self.broadcast(accusation, skip=player)
-        if accusation.suspect == self.crime_character and accusation.room == self.crime_room and accusation.weapon == self.crime_weapon:
-            await self.broadcast(Winner(player))
+
+        # validate accusation objects are within dictionary of available objects
+        if 0 <= accusation.suspect <= 5 and 0 <= accusation.weapon <= 5 and 0 <= accusation.room <= 9:
+            await self.broadcast(accusation, skip=player)
+            if accusation.suspect == self.crime_character and accusation.room == self.crime_room and accusation.weapon == self.crime_weapon:
+                await self.broadcast(Winner(player))
+            else:
+                self.disqualified.add(player)
+                await self.broadcast(Disqualified(player))
         else:
-            self.disqualified.add(player)
-            await self.broadcast(Disqualified(player))
+            self.logger.error(f'Invalid witness items given for accusation')
+            await self.players[player].send_message(f'Invalid witness items given for accusation')
 
     async def complete_turn(self, player: Character):
         try:
-            self.current_player = Character(player.value+1)
+            self.current_player = Character(player.value + 1)
         except ValueError:
             self.current_player = Character(0)
         self.broadcast(PlayerTurn(self.current_player))
