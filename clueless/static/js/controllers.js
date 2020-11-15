@@ -77,11 +77,13 @@ class GameHub {
     var message = {
       message: 'Move',
       position: position,
+      player: this.gameState.localPlayer.character.id,
     };
     this.sendMessage(message);
   }
   sendSuggest(room, suspect, weapon) {
     var message = {
+      message: 'Suggest',
       room: room,
       suspect: suspect,
       weapon: weapon,
@@ -90,9 +92,17 @@ class GameHub {
   }
   sendAccuse(room, suspect, weapon) {
     var message = {
+      message: 'Accuse',
       room: room,
       suspect: suspect,
       weapon: weapon,
+    };
+    this.sendMessage(message);
+  }
+  sendChat(message) {
+    var message = {
+      message: 'Chat',
+      body: message,
     };
     this.sendMessage(message);
   }

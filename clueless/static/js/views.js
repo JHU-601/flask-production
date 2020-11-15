@@ -383,8 +383,18 @@ class MovePanel extends Panel {
 }
 
 class ChatPanel extends Panel {
+  constructor(id) {
+    super(id);
+    this.chatlog = this.element.querySelector('#chatlog');
+    this.txtChat = this.element.querySelector('#txtChat');
+    this.btnSend = this.element.querySelector('#btnSend');
+    this.btnSend.onclick = this.handleBtnSendClick.bind(this);
+  }
   display(gameState) {
 
+  }
+  handleBtnSendClick() {
+    gameHub.sendChat(this.txtChat.value);
   }
 }
 

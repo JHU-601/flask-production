@@ -47,8 +47,8 @@ async def handleRegister(socket, msg):
 async def handleMove(socket, msg):
     await socket.send(json.dumps({
         'message': 'Position',
-        'player': 0,
-        'location': 0,
+        'player': msg['player'],
+        'location': msg['position'],
     }))
 
 async def handleSuggest(socket, msg):
@@ -75,6 +75,12 @@ async def handleAccuse(socket, msg):
     await socket.send(json.dumps({
         'message': 'temp',
         'body': 'Received accuse, room is %s' % msg['room'],
+    }))
+
+async def handleChat(socket, msg):
+    await socket.send(json.dumps({
+        'message': 'ServerChat',
+        'body': '1: %s' % msg['body'],
     }))
 
 async def periodic_test_messages(socket):
@@ -216,6 +222,8 @@ async def websockopen(socket, path):
             await handleSuggestionResponse(socket, msg)
         elif msg['message'] == 'Accuse':
             await handleAccuse(socket, msg)
+        elif msg['message'] == 'Chat':
+            await handleChat(socket, msg)
         else:
             await socket.send('Unrecognized message')
 
