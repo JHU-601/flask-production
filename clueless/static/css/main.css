@@ -114,6 +114,7 @@ body {
   border: 0;
   padding: 0;
   outline: none;
+  background-color: white;
 }
 
 #registration-panel button.icon.clicked img {
