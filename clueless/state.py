@@ -24,7 +24,7 @@ class UserState(IntEnum):
 
 # Dictionary to store all game IDs
 '''
-{Game ID: [Player, Player, Player]}
+{Game ID: GameState()}
 '''
 GAMES = {}
 
@@ -54,7 +54,7 @@ class Player:
         return self.state is UserState.REGISTERED
 
     async def dispatch_message(self, message):
-        print("Dispatch_message function:")
+        self.logger.debug("Dispatch_message function:")
         if isinstance(message, CreateGame):
             if self.game is None:                       # If this player instance is not in a game
                 self.game = GameState()                 # Create an instance of GameState class, associate it with Player instance
@@ -63,10 +63,11 @@ class Player:
                 GAMES[id] = self.game                   # Place in a dictionary of games
                 await GAMES[id].add_user(self)          # Add user into recently created class
             else:
-                self.send_message(Status("Player is already in a game")) # RuntimeWarning: coroutine 'Player.send_message' was never awaited
+                self.logger.debug(f'Create Game: Player is in a game')
+                await self.send_message(Status("Player is already in a game")) # RuntimeWarning: coroutine 'Player.send_message' was never awaited
         
         elif isinstance(message, JoinGame):
-            print("JoinGame instance")
+            self.logger.debug("JoinGame instance")
             if self.game is None:                           # Check whether this player instance is assocaited with a game
 
                 self.logger.debug(f'Player Validated')      
@@ -77,21 +78,19 @@ class Player:
                     await GAMES[message.id].add_user(self)
                 else:
                     self.logger.debug(f'Game ID {message.id} DOES NOT exist') # RuntimeWarning: coroutine 'Player.send_message' was never awaited
-                    self.send_message(Status("Game ID does NOT exist"))
+                    await self.send_message(Status("Game ID does NOT exist"))
             else:
                 self.logger.debug(f'Player is in a game')
-                self.send_message(Status("Player is already in a game"))
+                await self.send_message(Status("Player is already in a game"))
                 
         elif isinstance(message, Register):
-            print("Register instance")
-            if self.game.id in GAMES and not self.is_registered:    # Not quite sure if this is enough validation to say a player is in a certain game
-                self.logger.debug(f'Registering as {message.display_name} with {message.character}')
-                self.character = message.character                  # Setting the instance character
-                self.display_name = message.display_name            # Setting the instance display_name
+            self.logger.debug("Register instance")
+            if not self.is_registered:    # Not quite sure if this is enough validation to say a player is in a certain game
+                self.logger.debug(f'Requesting registration as {message.display_name} with {message.character}')
                 await self.game.register_user(self, message)        # Communicate with GameState to validate
             else:
-                self.logger.debug(f'Player is either not in the game or already registered')
-                self.send_message(Status("Player is either not in the game or already registered"))
+                self.logger.debug(f'Player is already registered')
+                await self.send_message(Status("Player is already registered"))
 
         elif isinstance(message, Complete):
             self.logger.debug(f'Turn completed')
@@ -101,12 +100,12 @@ class Player:
             await self.game.move_player(self.character, message.position)
 
         elif isinstance(message, Suggest):
-            self.logger.debug(f'Suggestion: {message.room} {message.weapon} {message.suspect}')
-           
-            if self.game.characters[self.character] is self.display_name:    # Validate Player is in this game
+            self.logger.debug("Suggest instance")
+            if self.game is not None:    # Validate Player is in this game
+                self.logger.debug(f'Suggestion: {message.room} {message.weapon} {message.suspect}')
                 await self.game.suggestion(self.character, message)
             else:
-                self.send_message(Status("Player is not in this game"))
+                await self.send_message(Status("Player is not in this game"))
             
         elif isinstance(message, SuggestionResponse):
             self.logger.debug(f'Suggestion response witness: {message.witness} type: {message.type}')
@@ -132,12 +131,11 @@ class Player:
 
     async def user_loop(self):
         while True:
-            print("AWAITING")
+            self.logger.debug("AWAITING")
             msg_str = await self.socket.recv()              # Waiting to receive something from Client
             self.logger.debug(f'received {msg_str}')
             try:
                 msg = deserialize_message(msg_str)
-                print("deserialized: ", msg_str)
             except ApiError as e:
                 self.logger.error(f'message error {e}')
                 await self.socket.send(Status(f'error deserializing message: {e}'))
@@ -204,7 +202,7 @@ class GameState:
             await asyncio.wait([player.send_message(message) for player in self.players if player != skip ])
 
     async def suggestion(self, player: Character, suggest: Suggest):
-        print("suggestion - GameState")
+        self.logger.debug("suggestion - GameState")
         suggestion = suggest.into_suggestion(player)    # conversion | note: suggestion has player parameter, suggest does not
 
         self.locations[suggestion.room] = suggestion.suspect    # Suspect into suggestion room
@@ -228,14 +226,17 @@ class GameState:
 
         registration = msg.into_registration()      # Convert from Register to Registration class
         
-        if self.characters[player.character] is None:   # If character selection is still available
-            print(f"character is available -- server confirming {player.display_name} as {player.character}")
-            self.characters[player.character] = player.display_name
-            player.state = UserState.REGISTERED         # officially set player as registered
-            await self.broadcast(registration, player.character)    # Broadcast to other clients
+        if self.characters[registration.character] is None:   # If character selection is still available
+            self.logger.debug(f"character is available -- server confirming {registration.display_name} as {registration.character}")
+            player.character = registration.character                   # Setting the instance character
+            player.display_name = registration.display_name             # Setting the instance display_name
+            self.characters[player.character] = player.display_name     # Updating characters dictionary
+            player.state = UserState.REGISTERED                         # officially set player as registered
+            await self.broadcast(registration, player.character)        # Broadcast to other clients
         else:
             self.logger.debug(f'Character selection not available')
-            player.send_message(Status("Character selection not available"))
+            player.character = None
+            await player.send_message(Status("Character selection not available"))
 
         registered = all([player.is_registered for player in self.players]) 
         if len(self.players) == 6 and registered:       # If we have 6 registered players, start the game
