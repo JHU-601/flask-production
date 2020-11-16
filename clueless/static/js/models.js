@@ -228,7 +228,7 @@ class Character {
         this.name = "Mr. Green";
         this.color = "green";
         this.position = null;
-        this.first_mvoe = 19;
+        this.first_move = 19;
         break;
       case 4:
         this.name = "Mrs. White";
