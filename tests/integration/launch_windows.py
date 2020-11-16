@@ -12,6 +12,9 @@ SERVER_URL = "http://localhost:8080"
 TMP_DIR = "tmp"
 IS_OSX = (platform.system() == 'Darwin') # just in case we need this :)
 
+# Choices: chrome, firefox
+USE_BROWSER = 'chrome'
+
 driver = None
 
 def cleanup():
@@ -20,12 +23,18 @@ def cleanup():
     #     driver.close()
 
 if __name__ == '__main__':
-    options = webdriver.firefox.options.Options()
-    options.headless = False
+    if USE_BROWSER == 'firefox':
+        options = webdriver.firefox.options.Options()
+        options.headless = False
+    else:
+        options = None
     if not os.path.exists(TMP_DIR):
         os.makedirs(TMP_DIR, exist_ok=True)
     atexit.register(cleanup)
-    driver = webdriver.Firefox(service_log_path='%s/geckodriver.log' % TMP_DIR, options=options)
+    if USE_BROWSER == "firefox":
+        driver = webdriver.Firefox(service_log_path='%s/geckodriver.log' % TMP_DIR, options=options)
+    else:
+        driver = webdriver.Chrome(service_log_path='%s/geckodriver.log' % TMP_DIR, options=options)
     driver.get(SERVER_URL)
     # Launch 5 additional tabs
     windows_before  = driver.current_window_handle
