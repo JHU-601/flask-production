@@ -65,6 +65,8 @@ class GameHub {
       this.handleMsgStatus(message);
     } else if (message.message == 'PlayerTurn') {
       this.handleMsgPlayerTurn(message);
+    } else if (message.message == 'SuggestionQuery') {
+      this.handleMsgSuggestionQuery(message);
     }
     this.updateDisplay();
   }
@@ -197,5 +199,8 @@ class GameHub {
   }
   handleMsgPlayerTurn(message) {
     this.gameState.playerTurn = message.player;
+  }
+  handleMsgSuggestionQuery(message) {
+    this.gamePanel.showModal('SuggestionQuery', JSON.stringify(message));
   }
 }
