@@ -276,6 +276,7 @@ class InteractionPanel extends Panel {
     this.movePanel.display(gameState);
     this.suggestPanel.display(gameState);
     this.accusePanel.display(gameState);
+    this.turnPanel.display(gameState);
 
     this.bottomPanel.display(gameState);
   }
@@ -329,7 +330,11 @@ class SuggestPanel extends Panel {
     this.btnSuggest.onclick = this.handleBtnSuggestClick.bind(this);
   }
   display(gameState) {
-
+    if (gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+      this.btnSuggest.disabled = false;
+    } else {
+      this.btnSuggest.disabled = true;
+    }
   }
   handleBtnSuggestClick() {
     gameHub.sendSuggest(this.txtRoom.value, this.txtSuspect.value, this.txtWeapon.value);
@@ -346,7 +351,11 @@ class AccusePanel extends Panel {
     this.btnAccuse.onclick = this.handleBtnAccuseClick.bind(this);
   }
   display(gameState) {
-
+    if (gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+      this.btnAccuse.disabled = false;
+    } else {
+      this.btnAccuse.disabled = true;
+    }
   }
   handleBtnAccuseClick() {
     gameHub.sendAccuse(this.txtRoom.value, this.txtSuspect.value, this.txtWeapon.value);
@@ -374,6 +383,11 @@ class MovePanel extends Panel {
         curButton.disabled = false;
       }
     }
+    if (gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+      this.btnMove.disabled = false;
+    } else {
+      this.btnMove.disabled = true;
+    }
   }
   handleButtonClick(e) {
     this.selected = e.target.dataset.direction;
@@ -400,7 +414,11 @@ class TurnPanel extends Panel {
     this.btnEndTurn.onclick = this.handleBtnEndTurnClick.bind(this);
   }
   display(gameState) {
-
+    if (gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+      this.btnEndTurn.disabled = false;
+    } else {
+      this.btnEndTurn.disabled = true;
+    }
   }
   handleBtnEndTurnClick() {
     gameHub.sendComplete();
