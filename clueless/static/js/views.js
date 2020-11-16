@@ -170,12 +170,12 @@ class RegistrationPanel extends Panel {
     this.clickedCharacter = null;
     // Set up refs
     this.characters = [
+      this.element.querySelector('#character0'),
       this.element.querySelector('#character1'),
       this.element.querySelector('#character2'),
       this.element.querySelector('#character3'),
       this.element.querySelector('#character4'),
       this.element.querySelector('#character5'),
-      this.element.querySelector('#character6'),
     ];
     this.txtDisplayName = this.element.querySelector('#txtDisplayName');
     this.btnRegister = this.element.querySelector('#btnRegister');
