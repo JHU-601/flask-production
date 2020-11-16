@@ -13,26 +13,6 @@ from .state import Player
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_DIR = os.path.join(REPO_ROOT, 'clueless', 'static')
 
-async def run_app():
-    logging.basicConfig(level=logging.DEBUG)
-    [logging.getLogger(logger).setLevel(logging.ERROR) for logger in ("websockets.server", "websockets.protocol", "aiohttp.access")]
-    logger = logging.getLogger('server')
-    logger.setLevel(logging.DEBUG)
-
-    print('Serving on localhost:8080 (web) and localhost:8081 (ws)')
-    start_server = websockets.serve(websockopen, "localhost", 8081)
-
-    app = web.Application()
-    app.router.add_route('GET', '/', index)
-    app.router.add_route('GET', '/gameroom', gameroom)
-    app.router.add_route('GET', '/{tail:.*}', other)
-
-    loop = asyncio.get_event_loop()
-    f = loop.create_server(app.make_handler(), '0.0.0.0', 8080)
-    loop.run_until_complete(start_server)
-    loop.run_until_complete(f)
-    asyncio.get_event_loop().run_forever()
-
 
 async def websockopen(socket, path):
     # Listen for messages
@@ -70,3 +50,30 @@ async def other(request):
         raise web.HTTPNotFound()
 
 
+def run_app():
+    logging.basicConfig(level=logging.DEBUG)
+    [logging.getLogger(logger).setLevel(logging.ERROR) for logger in ("websockets.server", "websockets.protocol", "aiohttp.access")]
+    logger = logging.getLogger('server')
+    logger.setLevel(logging.DEBUG)
+
+    #loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
+    print('Serving on localhost:8080 (web) and localhost:8081 (ws)')
+    start_server = websockets.serve(websockopen, "localhost", 8081)
+
+    app = web.Application()
+    app.router.add_route('GET', '/', index)
+    app.router.add_route('GET', '/gameroom', gameroom)
+    app.router.add_route('GET', '/{tail:.*}', other)
+
+    runner = web.AppRunner(app)
+    loop.run_until_complete(runner.setup())
+    site = web.TCPSite(runner, 'localhost', 8080)
+
+    loop.run_until_complete(site.start())
+    loop.create_task(site.start())
+    loop.create_task(start_server.__await__())
+    asyncio.get_event_loop().run_forever()
+    #loop.create_task(site.start())
+    #loop.create_task(start_server)
+    #loop.run_forever()
