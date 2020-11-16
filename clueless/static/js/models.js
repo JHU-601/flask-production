@@ -209,32 +209,38 @@ class Character {
       case 0:
         this.name = "Colonel Mustard";
         this.color = "yellow";
-        this.position = 14;
+        this.position = null;
+        this.first_move = 14;
         break;
       case 1:
         this.name = "Miss Scarlet";
         this.color = "red";
-        this.position = 11;
+        this.position = null;
+        this.first_move = 11;
         break;
       case 2:
         this.name = "Professor Plum";
         this.color = "purple";
-        this.position = 12;
+        this.position = null;
+        this.first_move = 12;
         break;
       case 3:
         this.name = "Mr. Green";
         this.color = "green";
-        this.position = 19;
+        this.position = null;
+        this.first_mvoe = 19;
         break;
       case 4:
         this.name = "Mrs. White";
         this.color = "white";
-        this.position = 20;
+        this.position = null;
+        this.first_move = 20;
         break;
       case 5:
         this.name = "Mrs. Peacock";
         this.color = "blue";
-        this.position = 17;
+        this.position = null;
+        this.first_move = 17;
         break;
       default:
         throw "Character id is not valid: " + this.id;

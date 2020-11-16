@@ -97,7 +97,6 @@ class GameHub {
     var message = {
       message: 'Move',
       position: position,
-      player: this.gameState.localPlayer.character.id,
     };
     this.sendMessage(message);
   }

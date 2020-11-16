@@ -241,6 +241,7 @@ class GameboardPanel extends Panel {
   display(gameState) {
     for (var i = 0; i < gameState.players.length; i++) {
       var curPlayer = gameState.players[i];
+      if (curPlayer.character.position == null) continue;
       var playerElem = this.element.querySelector('#player' + curPlayer.character.id);
       var roomElem = this.element.querySelector('#room' + curPlayer.character.position);
       roomElem.appendChild(playerElem);
@@ -403,11 +404,15 @@ class MovePanel extends Panel {
     if (this.selected == null) {
       gameHub.gamePanel.showModal('Validation Error', 'You must select a direction to move.');
     } else {
-      var new_pos = new Position(gameHub.gameState.localPlayer.character.position).getRelativePosition(this.selected);
-      if (new_pos == null) {
-        gameHub.gamePanel.showModal('Validation Error', 'Invalid move.')
+      if (gameHub.gameState.localPlayer.character.position == null) {
+        gameHub.sendMove(gameHub.gameState.localPlayer.character.first_move);
       } else {
-        gameHub.sendMove(new_pos.id);
+        var new_pos = new Position(gameHub.gameState.localPlayer.character.position).getRelativePosition(this.selected);
+        if (new_pos == null) {
+          gameHub.gamePanel.showModal('Validation Error', 'Invalid move.')
+        } else {
+          gameHub.sendMove(new_pos.id);
+        }
       }
     }
   }
