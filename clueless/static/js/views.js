@@ -43,6 +43,7 @@ class GamePanel extends Panel {
     this.gameboardPanel = new GameboardPanel('gameboard-panel');
     this.interactionPanel = new InteractionPanel('interaction-panel');
     this.modalPanel = new ModalPanel('modal-panel');
+    this.toastPanel = new ToastPanel('toast-panel');
 
     this.showScreen1();
   }
@@ -84,6 +85,9 @@ class GamePanel extends Panel {
   }
   showModal(title, message) {
     this.modalPanel.show(title, message);
+  }
+  showToast(message) {
+    this.toastPanel.show(message);
   }
 }
 
@@ -139,7 +143,7 @@ class WaitingRoomPanel extends Panel {
     this.lblGameId.innerHTML = gameState.gameid;
     // Display lstOfPlayers
     if (gameState.players.length < 1) {
-      this.lstOfPlayers.innerHTML = "No one has joined yet.";
+      this.lstOfPlayers.innerHTML = "No one has registered yet.";
     } else {
       this.lstOfPlayers.innerHTML = "";
       for (var i = 0; i < gameState.players.length; i++) {
@@ -166,12 +170,12 @@ class RegistrationPanel extends Panel {
     this.clickedCharacter = null;
     // Set up refs
     this.characters = [
+      this.element.querySelector('#character0'),
       this.element.querySelector('#character1'),
       this.element.querySelector('#character2'),
       this.element.querySelector('#character3'),
       this.element.querySelector('#character4'),
       this.element.querySelector('#character5'),
-      this.element.querySelector('#character6'),
     ];
     this.txtDisplayName = this.element.querySelector('#txtDisplayName');
     this.btnRegister = this.element.querySelector('#btnRegister');
@@ -241,6 +245,10 @@ class GameboardPanel extends Panel {
       var roomElem = this.element.querySelector('#room' + curPlayer.character.position);
       roomElem.appendChild(playerElem);
     }
+    // Show localPlayer
+    if (gameState.localPlayer != null) {
+      this.element.querySelector('#player' + gameState.localPlayer.character.id).classList.add('localPlayer');
+    }
   }
 }
 
@@ -268,6 +276,7 @@ class InteractionPanel extends Panel {
     this.movePanel.display(gameState);
     this.suggestPanel.display(gameState);
     this.accusePanel.display(gameState);
+    this.turnPanel.display(gameState);
 
     this.bottomPanel.display(gameState);
   }
@@ -321,7 +330,11 @@ class SuggestPanel extends Panel {
     this.btnSuggest.onclick = this.handleBtnSuggestClick.bind(this);
   }
   display(gameState) {
-
+    if (gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+      this.btnSuggest.disabled = false;
+    } else {
+      this.btnSuggest.disabled = true;
+    }
   }
   handleBtnSuggestClick() {
     gameHub.sendSuggest(this.txtRoom.value, this.txtSuspect.value, this.txtWeapon.value);
@@ -338,7 +351,11 @@ class AccusePanel extends Panel {
     this.btnAccuse.onclick = this.handleBtnAccuseClick.bind(this);
   }
   display(gameState) {
-
+    if (gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+      this.btnAccuse.disabled = false;
+    } else {
+      this.btnAccuse.disabled = true;
+    }
   }
   handleBtnAccuseClick() {
     gameHub.sendAccuse(this.txtRoom.value, this.txtSuspect.value, this.txtWeapon.value);
@@ -366,6 +383,11 @@ class MovePanel extends Panel {
         curButton.disabled = false;
       }
     }
+    if (gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+      this.btnMove.disabled = false;
+    } else {
+      this.btnMove.disabled = true;
+    }
   }
   handleButtonClick(e) {
     this.selected = e.target.dataset.direction;
@@ -392,7 +414,11 @@ class TurnPanel extends Panel {
     this.btnEndTurn.onclick = this.handleBtnEndTurnClick.bind(this);
   }
   display(gameState) {
-
+    if (gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+      this.btnEndTurn.disabled = false;
+    } else {
+      this.btnEndTurn.disabled = true;
+    }
   }
   handleBtnEndTurnClick() {
     gameHub.sendComplete();
@@ -457,5 +483,22 @@ class ModalPanel extends Panel {
   }
   handleBtnOkayClick() {
     this.hide();
+  }
+}
+
+class ToastPanel extends Panel {
+  FADEOUT_TIME = 2000;
+
+  constructor(id) {
+    super(id);
+    this.lblMessage = this.element.querySelector('#lblMessage');
+  }
+  display(gameState) {
+
+  }
+  show(message) {
+    this.lblMessage.innerHTML = message;
+    super.show();
+    $(this.element).fadeOut(this.FADEOUT_TIME);
   }
 }

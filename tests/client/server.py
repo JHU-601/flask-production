@@ -36,9 +36,10 @@ async def handleRegister(socket, msg):
     for i in range(6):
         if i != int(msg['character']):
             await asyncio.sleep(.1)
+            await socket.send(json.dumps({'message': 'UserJoined'}))
             await socket.send(json.dumps({'message': 'Registration','character': i,'display_name': 'rando' + str(i),}))
     await socket.send(json.dumps({
-        'message': 'WitnessItems',
+        'message': 'Witness',
         'character': 0,
         'room': 0,
         'weapon': 0

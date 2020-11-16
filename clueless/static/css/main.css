@@ -149,6 +149,9 @@ body {
   top: 0;
   left: 0;
 }
+#gameboard-panel .icon.localPlayer {
+  border: 5px solid lightgreen;
+}
 #gameboard-panel .icon img {
   width: 5em;
   height: 5em;
@@ -185,14 +188,13 @@ body {
 
 /* InteractionPanel */
 #interaction-panel {
-  display: flex;
-  flex-direction: column;
+  display: relative;
 }
 #interaction-panel #top-panel {
-  flex-grow: 2;
+  height: 70%;
 }
 #interaction-panel #bottom-panel {
-  flex-grow: 1;
+  height: 30%;
 }
 /* InteractionPanel Sub-panels */
 .tabbed-panel {
@@ -222,6 +224,7 @@ body {
 .tabbed-panel .tab {
   flex-grow: 1;
   display: block;
+  overflow-y: scroll;
 }
 #accuse-panel {
 
@@ -257,7 +260,7 @@ body {
 
 }
 #notepad-panel {
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 #notepad-panel table {
   width: 100%;
@@ -317,4 +320,18 @@ body {
   bottom: 0;
   border-radius: 10px;
   margin: .5em;
+}
+
+#toast-panel {
+  display: none;
+  position: absolute;
+  top: 5%;
+  right: 10%;
+  background-color: rgba(1,1,1,0.5);
+  color: white;
+  padding: 1em;
+  min-width: 10%;
+  border-radius: 1em;
+  /* border: 1px solid black; */
+  text-align: center;
 }

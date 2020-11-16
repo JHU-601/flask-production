@@ -43,3 +43,11 @@ if __name__ == '__main__':
         driver.switch_to_window(driver.window_handles[i])
         driver.find_element_by_css_selector('#txtGameId').send_keys(game_id)
         driver.find_element_by_css_selector('#btnJoinGame').click()
+    # Register each player
+    for i in range(6):
+        driver.switch_to_window(driver.window_handles[i])
+        driver.find_element_by_css_selector('#character' + str(i)).click()
+        driver.find_element_by_css_selector('#txtDisplayName').send_keys('player' + str(i))
+        driver.find_element_by_css_selector('#btnRegister').click()
+    # Go back to tab 0
+    driver.switch_to_window(driver.window_handles[0])
