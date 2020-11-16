@@ -11,23 +11,25 @@ class Panel {
     throw 'Error: display not overrided for ' + this.constructor.name;
   }
   hide() {
-    if (this.element.style.display != 'hidden') {
-      this.orig_display = this.element.style.display;
-    }
-    this.element.style.display = "none";
+    $(this.element).hide();
+    // if (this.element.style.display != 'hidden') {
+    //   this.orig_display = this.element.style.display;
+    // }
+    // this.element.style.display = "none";
   }
   show() {
+    $(this.element).show();
     // Only attempt to show if already hidden
-    if (this.element.style.display == "none") {
-      // If we saved the display value, restore it
-      if (this.orig_display != 'none') {
-        this.element.style.display = this.orig_display;
-      }
-      // otherwise, just set it to inherit to get it to show up
-      else {
-        this.element.style.display = "inherit";
-      }
-    }
+    // if (this.element.style.display == "none") {
+    //   // If we saved the display value, restore it
+    //   if (this.orig_display != 'none') {
+    //     this.element.style.display = this.orig_display;
+    //   }
+    //   // otherwise, just set it to inherit to get it to show up
+    //   else {
+    //     this.element.style.display = "inherit";
+    //   }
+    // }
   }
 }
 
