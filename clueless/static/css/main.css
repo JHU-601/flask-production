@@ -149,6 +149,9 @@ body {
   top: 0;
   left: 0;
 }
+#gameboard-panel .icon .label {
+  background-color: white;
+}
 #gameboard-panel .icon.localPlayer {
   border: 5px solid lightgreen;
 }
