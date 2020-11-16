@@ -185,14 +185,13 @@ body {
 
 /* InteractionPanel */
 #interaction-panel {
-  display: flex;
-  flex-direction: column;
+  display: relative;
 }
 #interaction-panel #top-panel {
-  flex-grow: 2;
+  height: 80%;
 }
 #interaction-panel #bottom-panel {
-  flex-grow: 1;
+  height: 30%;
 }
 /* InteractionPanel Sub-panels */
 .tabbed-panel {
@@ -222,6 +221,7 @@ body {
 .tabbed-panel .tab {
   flex-grow: 1;
   display: block;
+  overflow-y: scroll;
 }
 #accuse-panel {
 
@@ -257,7 +257,7 @@ body {
 
 }
 #notepad-panel {
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 #notepad-panel table {
   width: 100%;
