@@ -47,6 +47,8 @@ class GameHub {
       this.handleMsgWitness(message);
     } else if (message.message == 'Position') {
       this.handleMsgPosition(message);
+    } else if (message.message == 'Suggestion') {
+        this.handleMsgSuggestion(message);
     } else if (message.message == 'SuggestionWitness') {
       this.handleMsgSuggestionWitness(message);
     } else if (message.message == 'SuggestionStatus') {
@@ -168,6 +170,9 @@ class GameHub {
         this.gameState.players[i].character.position = message.location;
       }
     }
+  }
+  handleMsgSuggestion(message) {
+    this.gamePanel.showToast('Suggestion: ' + JSON.stringify(message));
   }
   handleMsgSuggestionWitness(message) {
     this.gamePanel.showToast('SuggestionWitness: ' + JSON.stringify(message));

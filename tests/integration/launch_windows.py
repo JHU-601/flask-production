@@ -22,6 +22,51 @@ def cleanup():
     # if driver is not None:
     #     driver.close()
 
+def move(driver, direction):
+    if direction == 'up':
+        row, col = 1,  2
+    elif direction == 'left':
+        row, col = 2, 1
+    elif direction == 'right':
+        row, col = 2, 3
+    elif direction == 'down':
+        row, col = 3, 2
+    elif direction == 'upleft':
+        row, col = 1, 1
+    elif direction == 'upright':
+        row, col = 1, 3
+    elif direction == 'downleft':
+        row, col = 3, 1
+    elif direction == 'downright':
+        row, col = 3, 3
+
+    driver.find_elements_by_css_selector('#bottom-panel .tab-selector')[0].click()
+    driver.find_element_by_css_selector(f'#move-panel > div > div:nth-child({row}) > button:nth-child({col})').click()
+    driver.find_element_by_css_selector('#btnMove').click()
+
+def complete(driver):
+    driver.find_elements_by_css_selector('#bottom-panel .tab-selector')[-1].click()
+    driver.find_element_by_css_selector('#btnEndTurn').click()
+
+def suggest(driver, room, suspect, weapon):
+    driver.find_element_by_css_selector('#bottom-panel > div.selectors > div:nth-child(2)').click()
+    driver.find_element_by_xpath(f'//*[@id="txtRoom"]/option[{room}]').click()
+    driver.find_element_by_xpath(f'//*[@id="txtSuspect"]/option[{suspect}]').click()
+    driver.find_element_by_xpath(f'//*[@id="txtWeapon"]/option[{weapon}]').click()
+    driver.find_element_by_css_selector('#btnSuggest').click()
+
+
+def accuse(driver, room, suspect, weapon):
+
+    driver.find_element_by_xpath('//*[@id="bottom-panel"]/div[1]/div[3]').click()
+    driver.find_element_by_xpath(f'/html/body/div[1]/div[6]/div[2]/div[4]/div[2]/select/option[{room}]').click()
+    driver.find_element_by_xpath(f'/html/body/div[1]/div[6]/div[2]/div[4]/div[4]/select/option[{suspect}]').click()
+    driver.find_element_by_xpath(f'/html/body/div[1]/div[6]/div[2]/div[4]/div[6]/select/option[{weapon}]').click()
+    driver.find_element_by_css_selector('#btnAccuse').click()
+
+def set_player(driver, player):
+    driver.switch_to.window(driver.window_handles[player])
+
 if __name__ == '__main__':
     if USE_BROWSER == 'firefox':
         options = webdriver.firefox.options.Options()
@@ -60,3 +105,34 @@ if __name__ == '__main__':
         driver.find_element_by_css_selector('#btnRegister').click()
     # Go back to tab 0
     driver.switch_to_window(driver.window_handles[0])
+    for i in range(6):
+        driver.switch_to_window(driver.window_handles[i])
+        move(driver, 'up')
+        complete(driver)
+    # move first to lounge
+    driver.switch_to_window(driver.window_handles[0])
+    move(driver, 'up')
+    accuse(driver, 3, 1, 1)
+    complete(driver)
+
+    set_player(driver, 1)
+    #print(driver.execute_script('gameHub.sendMessage({"message": "SuggestionResponse"})'))
+    move(driver, 'right')
+    complete(driver)
+
+    set_player(driver, 2)
+    move(driver, 'down')
+    complete(driver)
+
+    set_player(driver, 3)
+    move(driver, 'left')
+    complete(driver)
+
+    set_player(driver, 4)
+    move(driver, 'right')
+    complete(driver)
+
+    set_player(driver, 5)
+    move(driver, 'up')
+    complete(driver)
+

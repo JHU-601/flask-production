@@ -45,19 +45,22 @@ class Suggest:
         return Suggestion(player, self.room, self.weapon, self.suspect)
 
 class SuggestionResponse:
-    def __init__(self, witness: Optional[Union[Character, Room, Weapon]], type: Union[WitnessType, int] ):
-        self.type = type if isinstance(type, WitnessType) else WitnessType.deserialize(type)
-        if isinstance(witness, Character) or isinstance(witness, Room) or isinstance(witness, Weapon):
-            self.witness = witness
-        elif witness is not None:
-            if self.type == WitnessType.ROOM:
-                self.witness = Room.deserialize(witness)
-            elif self.type == WitnessType.CHARACTER:
-                self.witness = Character.deserialize(witness)
-            else:
-                self.witness = Weapon.deserialize(witness)
-        else:
+    def __init__(self, witness: Optional[Union[Character, Room, Weapon]]=None, type: Union[WitnessType, int]=None ):
+        if type is None:
             self.witness = None
+        else:
+            self.type = type if isinstance(type, WitnessType) else WitnessType.deserialize(type)
+            if isinstance(witness, Character) or isinstance(witness, Room) or isinstance(witness, Weapon):
+                self.witness = witness
+            elif witness is not None:
+                if self.type == WitnessType.ROOM:
+                    self.witness = Room.deserialize(witness)
+                elif self.type == WitnessType.CHARACTER:
+                    self.witness = Character.deserialize(witness)
+                else:
+                    self.witness = Weapon.deserialize(witness)
+            else:
+                self.witness = None
 
     def into_status(self, player: Character) -> SuggestionStatus:
         return SuggestionStatus(player, self.witness is not None)

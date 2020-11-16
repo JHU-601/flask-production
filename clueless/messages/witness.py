@@ -35,3 +35,11 @@ class WitnessType(IntEnum):
         else:
             raise ApiError(f'invalid witness item {item}')
 
+    def create_item(self, item_int):
+        if self == WitnessType.ROOM:
+            return Room(item_int)
+        elif self == WitnessType.CHARACTER:
+            return Character(item_int)
+        elif self == WitnessType.WEAPON:
+            return Weapon(item_int)
+

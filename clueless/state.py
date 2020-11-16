@@ -35,14 +35,17 @@ class PlayerState:
     suggestion_completed = False
     accused = False
 
+
+    def __str__(self):
+        return f'in_turn: {self.in_turn}; moved: {self.moved}; suggest: {self.suggest}; suggest_comp: {self.suggestion_completed}; accused: {self.accused}'
     # Reset all values at the end of a players turn
     def end_turn(self):
         self._check_turn()
-        in_turn = False
-        moved = False
-        suggest = False
-        suggestion_completed = False
-        accused = False
+        self.in_turn = False
+        self.moved = False
+        self.suggest = False
+        self.suggestion_completed = False
+        self.accused = False
 
     # state to turn on or off certain player actions
     def start_turn(self):
@@ -62,16 +65,16 @@ class PlayerState:
         setattr(self, value, True)
 
 
-    def move(self):
-        self.set_turn_value('move', 'Player already moved.')
+    def set_move(self):
+        self.set_turn_value('moved', 'Player already moved.')
 
-    def suggest (self):
+    def set_suggest (self):
         self.set_turn_value('suggest', 'Player has already made a suggesiton.')
 
-    def suggestion_completed (self):
+    def set_suggestion_completed (self):
         self.set_turn_value('suggestion_completed', "Suggestion already completed.")
 
-    def accused (self):
+    def set_accused (self):
         self.set_turn_value('accused', 'Player already made an accusation.')
 
 
@@ -154,7 +157,7 @@ class Player:
             self.logger.debug(f'Suggestion: {message.room} {message.weapon} {message.suspect}')
             await self.game_action(lambda game: game.suggestion(self, message), "make a suggestion")
         elif isinstance(message, SuggestionResponse):
-            self.logger.debug(f'Suggestion response witness: {message.witness} type: {message.type}')
+            self.logger.debug(f'Suggestion response witness: {message.witness}')
             await self.game_action(lambda game: game.suggestion_response(self, message), "respond to suggestion")
         elif isinstance(message, Accuse):
             self.logger.debug(f'Accusation: {message.room} {message.weapon} {message.suspect}')
@@ -202,13 +205,29 @@ class Locations:
         for hallway in list(Hallway):
             self.locations[hallway] = None
 
+    def __str__(self):
+        val = ''
+        '''
+        for room in list(Room):
+            val = val + f'{room} :'
+            val = val + (','.join([str(player) for player in self.locations[room]]) if self.locations[room] else 'empty')
+            val = val + '\n'
+        for hallway in list(Hallway):
+            val = val + f'{hallway} :'
+            val = val + (str(self.locations[hallway]) if self.locations[hallway] is not None else 'empty')
+            val = val + '\n'
+        '''
+        for player, location in self.positions.items():
+            val += f'{player}: ' +  (str(location) if location is not None else 'start')
+        return val
+
     def is_called(self, player: Player):
         return player.character in self.called
 
-    def call_player(self, player: Player, room: Room):
-        self.called.add(player.character)
-        self.positions[player.character] = Location(room)
-        self.locations[room].add(player.character)
+    def call_player(self, character: Character, room: Room):
+        self.called.add(character)
+        self.positions[character] = Location(room)
+        self.locations[room].add(character)
 
     def _remove_player(self, player: Player, location: Location):
         if location.is_room:
@@ -217,11 +236,11 @@ class Locations:
             self.locations[location.as_hallway()] = None
 
     def move_player(self, player: Player, location: Location):
-        player.state.move()
+        player.state.set_move()
         if location.is_room:
-            self.move_to_room(player, location.as_room())
+            return self.move_to_room(player, location.as_room())
         elif location.is_hallway:
-            self.move_to_hallway(player, location.as_hallway())
+            return self.move_to_hallway(player, location.as_hallway())
 
         # should be impossible to reach this point
         assert False
@@ -247,14 +266,16 @@ class Locations:
         except KeyError:
             # Only an error if the player ins't moving to the
             # hallway adjacent to their starting position
-            if hallway != player.first_location:
+            if hallway != player.character.first_location:
                 raise LocationError("Cannot move to this location on first turn.")
         if self.locations[hallway] is not None:
             raise LocationError("Hallway is blocked.")
 
         self.locations[hallway] = player.character
+        self.positions[player.character] = Location(hallway)
         if player.character in self.called:
             self.called.remove(player.character)
+
 
 class GameState:
     def __init__(self):
@@ -309,14 +330,16 @@ class GameState:
 
 
     async def move_player(self, player: Player, location: Location):
-        self.logger.debug(player.state.moved)
+        self.logger.debug(f'player moved: {player.state.moved}')
 
         self.logger.debug(f'Before {self.locations}')
         self.logger.debug(f'Before {player.location}')
 
         try:
             self.locations.move_player(player, location)
+            self.logger.debug(f'moved {player.character} to {location}')
         except LocationError as e:
+            player.state.moved = False
             return await player.send_message(Status(e.msg))
         except StateError as e:
             return await player.send_message(Status(e.msg))
@@ -368,13 +391,13 @@ class GameState:
     async def suggestion(self, player: Player, suggest: Suggest):
         self.logger.debug("suggestion - GameState")
         # conversion | note: suggestion has player parameter, suggest does not
-        suggestion = suggest.into_suggestion(player)
+        suggestion = suggest.into_suggestion(player.character)
 
         if not player.state.moved and not self.locations.is_called(player):
             return await player.send_message(Status("Player must move before making a suggestion."))
 
         try:
-            player.state.suggest()
+            player.state.set_suggest()
         except StateError as e:
             return await player.send_message(Status(e.msg))
 
@@ -384,7 +407,7 @@ class GameState:
         await self.broadcast(suggestion, skip=player)
 
         # Set things up for the querying process
-        players = itertools.chain(self.players[player.value + 1:], self.players[:player.value])
+        players = itertools.chain(self.players[player.character + 1:], self.players[:player.character])
         # iterator over qualified players, in the order they should be queried
         self.suggestion_query = filter(lambda p: p not in self.disqualified, players)
         self.suggestion_player = player
@@ -434,7 +457,7 @@ class GameState:
         self.players.append(player)
 
     async def accuse(self, player: Player, accuse: Accuse):
-        accusation = accuse.into_accusation(player)
+        accusation = accuse.into_accusation(player.character)
 
         # validate player's turn who's making accusation
         if self.current_player == player:
@@ -461,11 +484,14 @@ class GameState:
 
     async def complete_turn(self, player: Player):
         try:
+            self.logger.debug(f'ending turn for {player.character}: {player.state}')
             player.state.end_turn()
+            self.logger.debug(f'ended turn for {player.character}: {player.state}')
         except StateError as e:
             return await player.send_message(Status(e.msg))
 
         new_player = self.next_player()
+        self.logger.debug(f'starting turn for {new_player.character}: {new_player.state}')
         try:
             new_player.state.start_turn()
         except StateError as e:
