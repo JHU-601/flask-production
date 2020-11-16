@@ -1,4 +1,4 @@
-WEBSOCKET_URL = 'ws://localhost:8081'; // TODO update to server / something dynamic
+WEBSOCKET_URL = 'ws://' + window.location.hostname + ':8081';
 
 class GameState {
   constructor() {
