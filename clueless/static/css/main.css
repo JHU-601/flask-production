@@ -153,8 +153,8 @@ body {
   border: 5px solid lightgreen;
 }
 #gameboard-panel .icon img {
-  width: 5em;
-  height: 5em;
+  width: 3em;
+  height: 3em;
 }
 #gameboard-panel .row {
   flex-grow: 1;
