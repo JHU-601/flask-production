@@ -228,13 +228,13 @@ class Character {
         this.name = "Mr. Green";
         this.color = "green";
         this.position = null;
-        this.first_move = 19;
+        this.first_move = 20;
         break;
       case 4:
         this.name = "Mrs. White";
         this.color = "white";
         this.position = null;
-        this.first_move = 20;
+        this.first_move = 21;
         break;
       case 5:
         this.name = "Mrs. Peacock";
