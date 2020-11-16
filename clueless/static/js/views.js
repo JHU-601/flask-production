@@ -43,6 +43,7 @@ class GamePanel extends Panel {
     this.gameboardPanel = new GameboardPanel('gameboard-panel');
     this.interactionPanel = new InteractionPanel('interaction-panel');
     this.modalPanel = new ModalPanel('modal-panel');
+    this.toastPanel = new ToastPanel('toast-panel');
 
     this.showScreen1();
   }
@@ -84,6 +85,9 @@ class GamePanel extends Panel {
   }
   showModal(title, message) {
     this.modalPanel.show(title, message);
+  }
+  showToast(message) {
+    this.toastPanel.show(message);
   }
 }
 
@@ -139,7 +143,7 @@ class WaitingRoomPanel extends Panel {
     this.lblGameId.innerHTML = gameState.gameid;
     // Display lstOfPlayers
     if (gameState.players.length < 1) {
-      this.lstOfPlayers.innerHTML = "No one has joined yet.";
+      this.lstOfPlayers.innerHTML = "No one has registered yet.";
     } else {
       this.lstOfPlayers.innerHTML = "";
       for (var i = 0; i < gameState.players.length; i++) {
@@ -240,6 +244,10 @@ class GameboardPanel extends Panel {
       var playerElem = this.element.querySelector('#player' + curPlayer.character.id);
       var roomElem = this.element.querySelector('#room' + curPlayer.character.position);
       roomElem.appendChild(playerElem);
+    }
+    // Show localPlayer
+    if (gameState.localPlayer != null) {
+      this.element.querySelector('#player' + gameState.localPlayer.character.id).classList.add('localPlayer');
     }
   }
 }
@@ -457,5 +465,22 @@ class ModalPanel extends Panel {
   }
   handleBtnOkayClick() {
     this.hide();
+  }
+}
+
+class ToastPanel extends Panel {
+  FADEOUT_TIME = 2000;
+
+  constructor(id) {
+    super(id);
+    this.lblMessage = this.element.querySelector('#lblMessage');
+  }
+  display(gameState) {
+
+  }
+  show(message) {
+    this.lblMessage.innerHTML = message;
+    super.show();
+    $(this.element).fadeOut(this.FADEOUT_TIME);
   }
 }

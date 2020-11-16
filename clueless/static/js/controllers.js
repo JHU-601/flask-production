@@ -138,7 +138,7 @@ class GameHub {
     this.gameState.gameid = message.id;
   }
   handleMsgUserJoined(message) {
-    this.gamePanel.showModal('User Joined', 'New user has entered the lobby.');
+    this.gamePanel.showToast('A new user has entered the lobby.');
   }
   handleMsgRegistration(message) {
     var p = new Player(message.character, message.display_name);
@@ -171,22 +171,22 @@ class GameHub {
     }
   }
   handleMsgSuggestionWitness(message) {
-    this.gamePanel.showModal('Suggestion Witness', message);
+    this.gamePanel.showToast('SuggestionWitness: ' + JSON.stringify(message));
   }
   handleMsgSuggestionStatus(message) {
-    this.gamePanel.showModal('Suggestion Status', message);
+    this.gamePanel.showToast('SuggestionStatus: ' + JSON.stringify(message));
   }
   handleMsgAccusation(message) {
-    this.gamePanel.showModal('Accusation', message);
+    this.gamePanel.showToast('Accusation: ' + JSON.stringify(message));
   }
   handleMsgWinner(message) {
-    this.gamePanel.showModal('Winner', message);
+    this.gamePanel.showToast('Winner: ' + JSON.stringify(message));
   }
   handleMsgDisqualified(message) {
-    this.gamePanel.showModal('Disqualified', message);
+    this.gamePanel.showToast('Disqualified: ' + JSON.stringify(message));
   }
   handleMsgServerChat(message) {
-    this.gamePanel.showModal('Server Chat', message);
+    this.gamePanel.showToast('ServerChat: ' + JSON.stringify(message));
   }
   handleMsgStatus(message) {
     this.gamePanel.showModal('Error', message.error);
