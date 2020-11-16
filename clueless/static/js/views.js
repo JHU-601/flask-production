@@ -330,6 +330,8 @@ class SuggestPanel extends Panel {
     this.btnSuggest.onclick = this.handleBtnSuggestClick.bind(this);
   }
   display(gameState) {
+    // Disable when it's not your turn
+    if (!gameState) return;
     if (gameState && gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
       this.btnSuggest.disabled = false;
     } else {
@@ -351,6 +353,8 @@ class AccusePanel extends Panel {
     this.btnAccuse.onclick = this.handleBtnAccuseClick.bind(this);
   }
   display(gameState) {
+    // Disable when it's not your turn
+    if (!gameState) return;
     if (gameState && gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
       this.btnAccuse.disabled = false;
     } else {
@@ -383,6 +387,8 @@ class MovePanel extends Panel {
         curButton.disabled = false;
       }
     }
+    // Disable when it's not your turn
+    if (!gameState) return;
     if (gameState && gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
       this.btnMove.disabled = false;
     } else {
@@ -414,7 +420,9 @@ class TurnPanel extends Panel {
     this.btnEndTurn.onclick = this.handleBtnEndTurnClick.bind(this);
   }
   display(gameState) {
-    if (gameState && gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+    // Disable when it's not your turn
+    if (!gameState) return;
+    if (gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
       this.btnEndTurn.disabled = false;
     } else {
       this.btnEndTurn.disabled = true;
