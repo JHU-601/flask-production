@@ -189,7 +189,7 @@ class GameHub {
     this.gamePanel.showModal('Server Chat', message);
   }
   handleMsgStatus(message) {
-    this.gamePanel.showModal('Status', 'An error occurred');
+    this.gamePanel.showModal('Error', message.error);
   }
   handleMsgPlayerTurn(message) {
     this.gameState.playerTurn = message.player;
