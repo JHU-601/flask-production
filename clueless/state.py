@@ -440,13 +440,13 @@ class GameState:
         if self.current_player == player:
             await self.broadcast(accusation, skip=player)
             if self.is_accusation_correct(accusation):
-                await self.broadcast(Winner(player))
+                await self.broadcast(Winner(player.character))
             else:
                 self.disqualified.add(player)
-                await self.broadcast(Disqualified(player))
+                await self.broadcast(Disqualified(player.character))
         else:
             self.logger.debug(f'Invalid move, not currently turn of accuser')
-            await self.players[player].send_message(f'Invalid move, not currently turn of accuser')
+            await self.players[player].send_message(Status(f'Invalid move, not currently turn of accuser'))
 
     def next_player(self):
         try:
