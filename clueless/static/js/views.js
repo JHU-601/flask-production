@@ -330,7 +330,7 @@ class SuggestPanel extends Panel {
     this.btnSuggest.onclick = this.handleBtnSuggestClick.bind(this);
   }
   display(gameState) {
-    if (gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+    if (gameState && gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
       this.btnSuggest.disabled = false;
     } else {
       this.btnSuggest.disabled = true;
@@ -351,7 +351,7 @@ class AccusePanel extends Panel {
     this.btnAccuse.onclick = this.handleBtnAccuseClick.bind(this);
   }
   display(gameState) {
-    if (gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+    if (gameState && gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
       this.btnAccuse.disabled = false;
     } else {
       this.btnAccuse.disabled = true;
@@ -383,7 +383,7 @@ class MovePanel extends Panel {
         curButton.disabled = false;
       }
     }
-    if (gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+    if (gameState && gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
       this.btnMove.disabled = false;
     } else {
       this.btnMove.disabled = true;
@@ -414,7 +414,7 @@ class TurnPanel extends Panel {
     this.btnEndTurn.onclick = this.handleBtnEndTurnClick.bind(this);
   }
   display(gameState) {
-    if (gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+    if (gameState && gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
       this.btnEndTurn.disabled = false;
     } else {
       this.btnEndTurn.disabled = true;
