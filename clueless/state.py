@@ -450,9 +450,9 @@ class GameState:
 
     def next_player(self):
         try:
-            self.current_player = Character(self.current_player.value + 1)
-        except ValueError:
-            self.current_player = Character(0)
+            self.current_player = self.players[self.current_player.character.value + 1]
+        except IndexError:
+            self.current_player = self.players[0]
 
         if self.current_player in self.disqualified:
             return self.next_player()
