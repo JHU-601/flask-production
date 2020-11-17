@@ -16,8 +16,9 @@ class Status:
         return "status"
 
 class Joined:
-    def __init__(self, id: str):
+    def __init__(self, id: str, available: List[Character]):
         self.id = id
+        self.available = available
 
 class UserJoined:
     def __init__(self):
