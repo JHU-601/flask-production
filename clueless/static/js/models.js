@@ -130,31 +130,31 @@ class Position {
     }
     switch(this.id) {
       case Room.STUDY:
-        this.name = "Study";
+        this.name = "Dining Hall";
         break;
       case 1:
-        this.name = "Hall";
+        this.name = "Peabody Institute";
         break;
       case 2:
-        this.name = "Lounge";
+        this.name = "Gilman Hall";
         break;
       case 3:
         this.name = "Library";
         break;
       case 4:
-        this.name = "Billiard Room";
+        this.name = "The Hospital";
         break;
       case 5:
-        this.name = "Dining Room";
+        this.name = "The Lounge";
         break;
       case 6:
-        this.name = "Conservatory";
+        this.name = "Hutzler Reading Room";
         break;
       case 7:
-        this.name = "Ballroom";
+        this.name = "Stacks";
         break;
       case 8:
-        this.name = "Kitchen";
+        this.name = "Shriver Hall";
         break;
       case 10:
         this.name = "Study to Hall";

@@ -227,6 +227,7 @@ class GameHub {
   }
   handleMsgStatus(message) {
     this.gamePanel.showModal('Error', message.error);
+    this.gamePanel.suggestionPanel.hide();
   }
   handleMsgPlayerTurn(message) {
     this.gameState.playerTurn = message.player;
