@@ -432,6 +432,9 @@ class TurnPanel extends Panel {
   }
   handleBtnEndTurnClick() {
     gameHub.sendComplete();
+    // Select move panel
+    gameHub.gamePanel.interactionPanel.bottomPanel.selectedPanel = 0;
+    gameHub.gamePanel.display(gameHub.gameState);
   }
 }
 
