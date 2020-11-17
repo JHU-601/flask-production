@@ -337,6 +337,7 @@ class SuggestPanel extends Panel {
   }
   handleBtnSuggestClick() {
     gameHub.sendSuggest(this.txtRoom.value, this.txtSuspect.value, this.txtWeapon.value);
+    gameHub.gamePanel.suggestionPanel.show();
   }
 }
 
@@ -584,8 +585,23 @@ class SuggestionQueryPanel extends Panel {
 }
 
 class SuggestionPanel extends Panel {
+  constructor(id) {
+    super(id);
+    this.element.querySelector('#btnOkay').onclick = this.handleBtnOkayClick.bind(this);
+  }
   display(gameState) {
 
+  }
+  show() {
+    super.show();
+    this.element.querySelector('#btnOkay').disabled = true;
+  }
+  update(player, item) {
+    this.element.querySelector('#lblStatus').innerHTML = player.display_name + ' has confirmed that they have ' + item.name;
+    this.element.querySelector('#btnOkay').disabled = false;
+  }
+  handleBtnOkayClick() {
+    this.hide();
   }
 }
 

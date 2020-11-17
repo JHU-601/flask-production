@@ -70,6 +70,7 @@ class GameHub {
     this.updateDisplay();
   }
   sendMessage(message) {
+    console.log('Sent message.', message);
     this.socket.send(JSON.stringify(message));
   }
 
@@ -180,7 +181,6 @@ class GameHub {
     // Put all players in starting positions
     for (var i = 0; i < this.gameState.players.length; i++) {
       var curPlayer = this.gameState.players[i];
-      // console.log(this.gameState);
     }
     this.gamePanel.showScreen3();
   }
@@ -206,7 +206,9 @@ class GameHub {
     };
   }
   handleMsgSuggestionWitness(message) {
-    this.gamePanel.showToast('SuggestionWitness: ' + JSON.stringify(message));
+    var player = this.gameState.players[message.character];
+    var item = WitnessItem_fromType(message.witness, message.type);
+    this.gamePanel.suggestionPanel.update(player, item);
   }
   handleMsgSuggestionStatus(message) {
     this.gamePanel.suggestionQueryPanel.hide();
