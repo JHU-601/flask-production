@@ -395,6 +395,8 @@ class GameState:
 
         if not player.state.moved and not self.locations.is_called(player):
             return await player.send_message(Status("Player must move before making a suggestion."))
+        if player.location != Location(suggest.room):
+            return await player.send_message(Status("Player must be in the room specified in their suggestion"))
 
         try:
             player.state.set_suggest()
