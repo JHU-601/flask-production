@@ -659,7 +659,7 @@
     </div>
   </div>
 
-  <div id="modal-panel">
+  <div id="modal-panel" class="modal">
     <div class="inner">
       <h1 id = "txtNotifTitle"></h1>
       <p id = "txtNotifContent"></p>
@@ -669,6 +669,40 @@
 
   <div id="toast-panel">
     <span id="lblMessage">Message</span>
+  </div>
+
+  <div id="suggestion-query-panel" class="modal">
+    <div class="inner">
+      <h1>Suggestion Query</h1>
+      <p>
+        <span id="lblPlayer"></span> has suggested the following witness items:
+      </p>
+      <ul>
+        <li id="suggest1"></li>
+        <li id="suggest2"></li>
+        <li id="suggest3"></li>
+      </ul>
+      <p>You have the following Witness Items:</p>
+      <ul>
+        <li>
+          <input type="radio" name="reply" id="witness1"> <label id="lblWitness1" for="witness1"></label>
+        </li>
+        <li>
+          <input type="radio" name="reply" id="witness2"> <label id="lblWitness2" for="witness2"></label>
+        </li>
+        <li>
+          <input type="radio" name="reply" id="witness3"> <label id="lblWitness3" for="witness3"></label>
+        </li>
+      </ul>
+      <p><span id="lblInstructions"></span></p>
+      <button id="btnReply">Reply</button>
+    </div>
+  </div>
+
+  <div id="suggestion-panel" class="modal">
+    <div class="inner">
+      Suggestion panel
+    </div>
   </div>
 
   <script src="/vendor/js/jquery-3.5.1.min.js"></script>

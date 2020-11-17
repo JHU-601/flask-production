@@ -293,7 +293,7 @@ body {
 }
 
 /* ModalPanel */
-#modal-panel {
+.modal {
   /* take over the whole screen */
   position: fixed;
   top: 0;
@@ -303,11 +303,14 @@ body {
   background-color: rgba(0,0,0,.6);
   z-index: 100;
 }
+#modal-panel {
+  z-index: 101;
+}
 
-#modal-panel .inner {
+.modal .inner {
   background-color: white;
   width: 60%;
-  height: 40%;
+  min-height: 40%;
   top: 50%;
   position: relative;
   transform: translate(0%, -50%);

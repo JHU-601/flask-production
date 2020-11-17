@@ -7,10 +7,9 @@ class GameState {
     this.localPlayer = null;
     this.chosenPlayer = null;
     this.playerTurn = null;
-    this.witnessCharacter = null;
-    this.witnessRoom = null;
-    this.witnessWeapon = null;
+    this.witnessItems = [null, null, null];
     this.gameid = null;
+    this.lastSuggestion = null;
   }
 }
 
@@ -135,6 +134,21 @@ class GameHub {
     };
     this.sendMessage(message);
   }
+  sendSuggestionResponse(id, type) {
+    var message;
+    if (id == null || type == null) {
+      message = {
+        message: 'SuggestionResponse',
+      };
+    } else {
+      message = {
+        message: 'SuggestionResponse',
+        witness: id,
+        type: type,
+      };
+    }
+    this.sendMessage(message);
+  }
   // Individual message handlers
   handleMsgJoined(message) {
     this.gamePanel.showScreen2();
@@ -151,9 +165,18 @@ class GameHub {
     this.gameState.players.push(p);
   }
   handleMsgWitness(message) {
-    this.gameState.witnessCharacter = message.character;
-    this.gameState.witnessRoom = message.room;
-    this.gameState.witnessWeapon = message.weapon;
+    this.gameState.witnessItems[0] = {
+      id: message.item1,
+      type: message.type1,
+    };
+    this.gameState.witnessItems[1] = {
+      id: message.item2,
+      type: message.type2,
+    };
+    this.gameState.witnessItems[2] = {
+      id: message.item3,
+      type: message.type3,
+    };
     // Put all players in starting positions
     for (var i = 0; i < this.gameState.players.length; i++) {
       var curPlayer = this.gameState.players[i];
@@ -175,12 +198,18 @@ class GameHub {
   }
   handleMsgSuggestion(message) {
     this.gamePanel.showToast('Suggestion: ' + JSON.stringify(message));
+    this.gameState.lastSuggestion = {
+      player: message.player,
+      room: message.room,
+      weapon: message.weapon,
+      suspect: message.suspect,
+    };
   }
   handleMsgSuggestionWitness(message) {
     this.gamePanel.showToast('SuggestionWitness: ' + JSON.stringify(message));
   }
   handleMsgSuggestionStatus(message) {
-    this.gamePanel.showToast('SuggestionStatus: ' + JSON.stringify(message));
+    this.gamePanel.suggestionQueryPanel.hide();
   }
   handleMsgAccusation(message) {
     this.gamePanel.showToast('Accusation: ' + JSON.stringify(message));
@@ -201,6 +230,6 @@ class GameHub {
     this.gameState.playerTurn = message.player;
   }
   handleMsgSuggestionQuery(message) {
-    this.gamePanel.showModal('SuggestionQuery', JSON.stringify(message));
+    this.gamePanel.suggestionQueryPanel.show(message.player, message.room, message.weapon, message.suspect);
   }
 }

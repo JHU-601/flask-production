@@ -12,24 +12,9 @@ class Panel {
   }
   hide() {
     $(this.element).hide();
-    // if (this.element.style.display != 'hidden') {
-    //   this.orig_display = this.element.style.display;
-    // }
-    // this.element.style.display = "none";
   }
   show() {
     $(this.element).show();
-    // Only attempt to show if already hidden
-    // if (this.element.style.display == "none") {
-    //   // If we saved the display value, restore it
-    //   if (this.orig_display != 'none') {
-    //     this.element.style.display = this.orig_display;
-    //   }
-    //   // otherwise, just set it to inherit to get it to show up
-    //   else {
-    //     this.element.style.display = "inherit";
-    //   }
-    // }
   }
 }
 
@@ -43,6 +28,8 @@ class GamePanel extends Panel {
     this.gameboardPanel = new GameboardPanel('gameboard-panel');
     this.interactionPanel = new InteractionPanel('interaction-panel');
     this.modalPanel = new ModalPanel('modal-panel');
+    this.suggestionQueryPanel = new SuggestionQueryPanel('suggestion-query-panel');
+    this.suggestionPanel = new SuggestionPanel('suggestion-panel');
     this.toastPanel = new ToastPanel('toast-panel');
 
     this.showScreen1();
@@ -55,6 +42,9 @@ class GamePanel extends Panel {
     this.gameboardPanel.display(gameState);
     this.interactionPanel.display(gameState);
     this.modalPanel.display(gameState);
+    this.suggestionQueryPanel.display(gameState);
+    this.suggestionPanel.display(gameState);
+    this.toastPanel.display(gameState);
   }
   showScreen1() {
     this.homePanel.show();
@@ -64,6 +54,8 @@ class GamePanel extends Panel {
     this.gameboardPanel.hide();
     this.interactionPanel.hide();
     this.modalPanel.hide();
+    this.suggestionQueryPanel.hide();
+    this.suggestionPanel.hide();
   }
   showScreen2() {
     this.homePanel.hide();
@@ -73,6 +65,8 @@ class GamePanel extends Panel {
     this.gameboardPanel.hide();
     this.interactionPanel.hide();
     this.modalPanel.hide();
+    this.suggestionQueryPanel.hide();
+    this.suggestionPanel.hide();
   }
   showScreen3() {
     this.homePanel.hide();
@@ -82,6 +76,8 @@ class GamePanel extends Panel {
     this.gameboardPanel.show();
     this.interactionPanel.show();
     this.modalPanel.hide();
+    this.suggestionQueryPanel.hide();
+    this.suggestionPanel.hide();
   }
   showModal(title, message) {
     this.modalPanel.show(title, message);
@@ -496,6 +492,100 @@ class ModalPanel extends Panel {
   }
   handleBtnOkayClick() {
     this.hide();
+  }
+}
+
+class SuggestionQueryPanel extends Panel {
+  constructor(id) {
+    super(id);
+    this.element.querySelector('#btnReply').onclick = this.handleBtnReplyClick.bind(this);
+  }
+  display(gameState) {
+
+  }
+  show(player, room, weapon, suspect) {
+    super.show();
+    var suggestedItems = [
+      WitnessItem_fromType(gameHub.gameState.lastSuggestion.room, WitnessType.ROOM),
+      WitnessItem_fromType(gameHub.gameState.lastSuggestion.weapon, WitnessType.WEAPON),
+      WitnessItem_fromType(gameHub.gameState.lastSuggestion.suspect, WitnessType.CHARACTER),
+    ];
+    var playerItems = [
+      WitnessItem_fromType(gameHub.gameState.witnessItems[0].id, gameHub.gameState.witnessItems[0].type),
+      WitnessItem_fromType(gameHub.gameState.witnessItems[1].id, gameHub.gameState.witnessItems[1].type),
+      WitnessItem_fromType(gameHub.gameState.witnessItems[2].id, gameHub.gameState.witnessItems[2].type),
+    ];
+    var numChoices = 0;
+    this.element.querySelector('#lblPlayer').innerHTML = gameHub.gameState.players[gameHub.gameState.lastSuggestion.player].display_name;
+    this.element.querySelector('#suggest1').innerHTML = suggestedItems[0].name;
+    this.element.querySelector('#suggest2').innerHTML = suggestedItems[1].name;
+    this.element.querySelector('#suggest3').innerHTML = suggestedItems[2].name;
+    this.element.querySelector('#lblWitness1').innerHTML = playerItems[0].name;
+    this.element.querySelector('#witness1').disabled = true;
+    // Check if in
+    for (var i = 0; i < suggestedItems.length; i++) {
+      if (suggestedItems[i].equals(playerItems[0])) {
+        this.element.querySelector('#witness1').disabled = false;
+        numChoices++;
+      }
+    }
+    this.element.querySelector('#lblWitness2').innerHTML = playerItems[1].name;
+    this.element.querySelector('#witness2').disabled = true;
+    // Check if in
+    for (var i = 0; i < suggestedItems.length; i++) {
+      if (suggestedItems[i].equals(playerItems[1])) {
+        this.element.querySelector('#witness2').disabled = false;
+        numChoices++;
+      }
+    }
+    this.element.querySelector('#lblWitness3').innerHTML = playerItems[2].name;
+    this.element.querySelector('#witness3').disabled = true;
+    // Check if in
+    for (var i = 0; i < suggestedItems.length; i++) {
+      if (suggestedItems[i].equals(playerItems[2])) {
+        this.element.querySelector('#witness3').disabled = false;
+        numChoices++;
+      }
+    }
+    if (numChoices > 0) {
+      this.element.querySelector('#lblInstructions').innerHTML = 'Choose one item to send back.';
+    } else {
+      this.element.querySelector('#lblInstructions').innerHTML = 'You have no items to suggest. Click reply to let everyone know.';
+    }
+  }
+  handleBtnReplyClick() {
+    var playerItems = [
+      WitnessItem_fromType(gameHub.gameState.witnessItems[0].id, gameHub.gameState.witnessItems[0].type),
+      WitnessItem_fromType(gameHub.gameState.witnessItems[1].id, gameHub.gameState.witnessItems[1].type),
+      WitnessItem_fromType(gameHub.gameState.witnessItems[2].id, gameHub.gameState.witnessItems[2].type),
+    ];
+    var radios = this.element.querySelectorAll('input[type=radio]');
+    var selected = null;
+    var mustAnswer = false;
+    for (var i = 0; i < radios.length; i++) {
+      if (radios[i].disabled == false) {
+        mustAnswer = true;
+      }
+      if (radios[i].checked) {
+        selected = i;
+      }
+    }
+    if (!mustAnswer) {
+      // send empty reply
+      gameHub.sendSuggestionResponse(null, null);
+    } else if (selected == null) {
+      // validation error
+      gameHub.gamePanel.showModal('Validation Error', "You must choose an item to suggest.")
+    } else {
+      // send actual reply
+      gameHub.sendSuggestionResponse(playerItems[selected].id, playerItems[selected].type);
+    }
+  }
+}
+
+class SuggestionPanel extends Panel {
+  display(gameState) {
+
   }
 }
 

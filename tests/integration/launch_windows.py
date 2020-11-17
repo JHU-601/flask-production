@@ -118,21 +118,24 @@ if __name__ == '__main__':
     set_player(driver, 1)
     #print(driver.execute_script('gameHub.sendMessage({"message": "SuggestionResponse"})'))
     move(driver, 'right')
-    complete(driver)
+    suggest(driver, 1, 1, 1)
+    # complete(driver)
 
     set_player(driver, 2)
-    move(driver, 'down')
-    complete(driver)
-
-    set_player(driver, 3)
-    move(driver, 'left')
-    complete(driver)
-
-    set_player(driver, 4)
-    move(driver, 'right')
-    complete(driver)
-
-    set_player(driver, 5)
-    move(driver, 'up')
-    complete(driver)
-
+    # Answer the suggestion
+    
+    # Continue
+    # move(driver, 'down')
+    # complete(driver)
+    #
+    # set_player(driver, 3)
+    # move(driver, 'left')
+    # complete(driver)
+    #
+    # set_player(driver, 4)
+    # move(driver, 'right')
+    # complete(driver)
+    #
+    # set_player(driver, 5)
+    # move(driver, 'up')
+    # complete(driver)
