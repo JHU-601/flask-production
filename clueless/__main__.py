@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+"""
+from clueless.app import run_app
+import asyncio
+
+run_app()
+"""
 import os
 import random
 import logging
@@ -24,22 +30,6 @@ async def websockopen(socket, path):
     logger.debug(f"User connected from {socket.remote_address}")
     player = Player(socket)
     await player.user_loop()
-    """
-    logger = logging.getLogger('game_logger')
-    while True:
-        msg_str = await player.socket.recv()
-        logger.debug(f'got message {msg_str}')
-        try:
-            msg = deserialize_message(msg_str)
-        except ApiError as e:
-            logger.error(f'message error {e}')
-            await player.send_message(Status(f'error deserializing message: {e}'))
-        try:
-            await player.dispatch_message(msg)
-        except ApiError as e:
-            logger.error(f'message error {e}')
-            await player.send_message(Status(f'error handling message: {e}'))
-    """
 
 async def index(request):
     return web.FileResponse(os.path.join(REPO_ROOT, 'clueless', 'static', 'index.html'))
@@ -68,3 +58,4 @@ f = loop.create_server(app.make_handler(), '0.0.0.0', 8080)
 loop.run_until_complete(start_server)
 loop.run_until_complete(f)
 asyncio.get_event_loop().run_forever()
+

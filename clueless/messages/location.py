@@ -179,11 +179,24 @@ class Location:
     def __init__(self, inner: Union[Room, Hallway]):
         self.inner = inner
 
+
+    @property
+    def adjacent(self) -> Set[Location]:
+        return self.inner.adjacent
+
+    @property
+    def is_room(self) -> bool:
+        return isinstance(self.inner, Room)
+
     def as_room(self) -> Optional[Room]:
         if isinstance(self.inner, Room):
             return self.inner
         else:
             return None
+
+    @property
+    def is_hallway(self) -> bool:
+        return isinstance(self.inner, Hallway)
 
     def as_hallway(self) -> Optional[Hallway]:
         if isinstance(self.inner, Hallway):

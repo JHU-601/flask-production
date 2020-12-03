@@ -9,15 +9,16 @@ from clueless.messages.weapon import Weapon
 from clueless.messages.witness import WitnessType
 
 class Status:
-    def __init__(self, message=None):
-        self.message = message
+    def __init__(self, error=None):
+        self.error = error
 
     def message_name(self) -> str:
         return "status"
 
 class Joined:
-    def __init__(self, id: str):
+    def __init__(self, id: str, available: List[Character]):
         self.id = id
+        self.available = available
 
 class UserJoined:
     def __init__(self):
@@ -31,6 +32,15 @@ class Registration:
     def __init__(self, character: Character, display_name: str):
         self.character = character
         self.display_name = display_name
+
+def decode_witness(msg):
+    type1 = WitnessType.deserialize(msg['type1'])
+    item1 = type1.create_item(msg['item1'])
+    type2 = WitnessType.deserialize(msg['type2'])
+    item2 = type2.create_item(msg['item2'])
+    type3 = WitnessType.deserialize(msg['type3'])
+    item3 = type3.create_item(msg['item3'])
+    return Witness(item1, item2, item3)
 
 class Witness:
     def __init__(self, item1: Union[Character, Room, Weapon], item2: Union[Character, Room, Weapon], item3: Union[Character, Room, Weapon]):
@@ -70,6 +80,7 @@ class SuggestionWitness:
     def __init__(self, character: Character, witness: Optional[Union[Character, Room, Weapon]]):
         self.character = character
         self.witness = witness
+        self.type = WitnessType.for_item(self.witness)
 
 class Accusation:
     def __init__(self, player: Character, room: Room, weapon: Weapon, suspect: Character):

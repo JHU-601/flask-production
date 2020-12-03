@@ -6,6 +6,7 @@ from __future__ import annotations
 from enum import IntEnum
 from typing import Union
 from clueless.error import ApiError
+from clueless.messages.location import Hallway
 
 _CHARACTER_NAMES = [
   "Colonel Mustard",
@@ -63,3 +64,18 @@ class Character(IntEnum):
             return Character._from_ordinal(intval)
         except ValueError:
             return Character._from_name(val)
+
+    @property
+    def first_location(self) -> Hallway:
+        if self == Character.YELLOW:
+            return Hallway.LOUNGE_DINING
+        elif self == Character.RED:
+            return Hallway.HALL_LOUNGE
+        elif self == Character.PURPLE:
+            return Hallway.STUDY_LIBRARY
+        elif self == Character.GREEN:
+            return Hallway.CONSERVATORY_BALLROOM
+        elif self == Character.WHITE:
+            return Hallway.BALLROOM_KITCHEN
+        elif self == Character.BLUE:
+            return Hallway.LIBRARY_CONSERVATORY

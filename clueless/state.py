@@ -20,7 +20,11 @@ from enum import IntEnum, auto
 {Game ID: GameState()}
 '''
 GAMES = {}
+
 class StateError(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+class LocationError(Exception):
     def __init__(self, msg):
         self.msg = msg
 
@@ -31,14 +35,18 @@ class PlayerState:
     suggestion_completed = False
     accused = False
 
+
+    def __str__(self):
+        return f'in_turn: {self.in_turn}; moved: {self.moved}; suggest: {self.suggest}; suggest_comp: {self.suggestion_completed}; accused: {self.accused}'
     # Reset all values at the end of a players turn
     def end_turn(self):
-        in_turn = False
-        moved = False
-        suggest = False
-        suggestion_completed = False
-        accused = False 
-    
+        self._check_turn()
+        self.in_turn = False
+        self.moved = False
+        self.suggest = False
+        self.suggestion_completed = False
+        self.accused = False
+
     # state to turn on or off certain player actions
     def start_turn(self):
         if self.in_turn:
@@ -46,36 +54,35 @@ class PlayerState:
         else:
             self.in_turn = True
 
-    def move(self):
-        if self.moved:
-            raise StateError("Player already moved")
-        self.moved = True
+    def _check_turn(self):
+        if not self.in_turn:
+            raise StateError("It is not your turn.")
 
-    def suggest (self):
-        if self.suggest:
-            raise StateError("Player has already suggested")
-        self.suggest = True
+    def set_turn_value(self, value, msg):
+        self._check_turn()
+        if getattr(self, value):
+            raise StateError(msg)
+        setattr(self, value, True)
 
-    def suggestion_completed (self):
-        if self.suggestion_completed:
-            raise StateError("Suggestion already completed")
-        else:
-            self.suggestion_compeleted = True
 
-    # If this state is active, move player to new position
-    def accused (self):
-        if self.accused:
-            raise StateError("")
-        else:
-            self.accused = True
+    def set_move(self):
+        self.set_turn_value('moved', 'Player already moved.')
 
-'''
-Server Representation of Player state, instances of this class are created upon client entrance into
-Web App
-'''
+    def set_suggest (self):
+        self.set_turn_value('suggest', 'Player has already made a suggesiton.')
+
+    def set_suggestion_completed (self):
+        self.set_turn_value('suggestion_completed', "Suggestion already completed.")
+
+    def set_accused (self):
+        self.set_turn_value('accused', 'Player already made an accusation.')
 
 
 class Player:
+    '''
+    Server Representation of Player state, instances of this class are created upon client entrance into
+    Web App
+    '''
     def __init__(self, socket):
         self.socket = socket
         self.game = None
@@ -95,6 +102,12 @@ class Player:
     def is_registered(self) -> bool:
         return self.character is not None
 
+    async def game_action(self, action, action_description):
+        if self.game is not None:
+            await action(self.game)
+        else:
+            await self.send_message(Status(f'Cannot {action_description}. Player has not joined a game.'))
+
     async def dispatch_message(self, message):
         self.logger.debug("Dispatch_message function:")
         if isinstance(message, CreateGame):
@@ -107,29 +120,26 @@ class Player:
             else:
                 self.logger.debug(f'Create Game: Player is in a game')
                 await self.send_message(Status("Player is already in a game"))
-        
+
         elif isinstance(message, JoinGame):
             self.logger.debug("JoinGame instance")
             if self.game is None:                           # Check whether this player instance is assocaited with a game
 
                 self.logger.debug(f'Player Validated')
-                self.game = GAMES[message.id]  # Instance of player gets its own game association
-
-                if self.game.id in GAMES:  # Check whether the game.id exists in dictionary
-                    self.logger.debug(f'Game {message.id} Validated')
-                    await GAMES[message.id].add_user(self)
-                else:
-                    self.logger.debug(f'Game ID {message.id} DOES NOT exist')
-                    await self.send_message(Status("Game ID does NOT exist"))
+                try:
+                    game = GAMES[message.id]
+                    await game.add_user(self)
+                except KeyError:
+                    await self.send_message(Status("Could not find game."))
             else:
                 self.logger.debug(f'Player is in a game')
                 await self.send_message(Status("Player is already in a game"))
-                
+
         elif isinstance(message, Register):
             self.logger.debug("Register instance")
-            if not self.is_registered:    # If the player is not yet registered 
+            if not self.is_registered:    # If the player is not yet registered
                 self.logger.debug(f'Requesting registration as {message.display_name} with {message.character}')
-                await self.game.register_user(self, message)        # Communicate with GameState to validate
+                await self.game_action(lambda game: game.register_user(self, message), "register")
 
             else:
                 self.logger.debug(f'Player is already registered')
@@ -137,44 +147,33 @@ class Player:
 
         elif isinstance(message, Complete):
             self.logger.debug(f'Turn completed')
-            self.state.end_turn()
-            await self.game.complete_turn(self.character)
+            await self.game_action(lambda game: game.complete_turn(self), "end turn")
 
         elif isinstance(message, Move):
             self.logger.debug(f'Move to {message.position}')
-            await self.game.move_player(self, message.position)
+            await self.game_action(lambda game: game.move_player(self, message.position), "move")
 
         elif isinstance(message, Suggest):
-            self.logger.debug("Suggest instance")
-            if self.game is not None:    # Validate Player is in this game
-                self.logger.debug(f'Suggestion: {message.room} {message.weapon} {message.suspect}')
-                await self.game.suggestion(self.character, message)
-            else:
-                await self.send_message(Status("Player is not in this game"))
+            self.logger.debug(f'Suggestion: {message.room} {message.weapon} {message.suspect}')
+            await self.game_action(lambda game: game.suggestion(self, message), "make a suggestion")
         elif isinstance(message, SuggestionResponse):
-            self.logger.debug(f'Suggestion response witness: {message.witness} type: {message.type}')
-            pass
+            self.logger.debug(f'Suggestion response witness: {message.witness}')
+            await self.game_action(lambda game: game.suggestion_response(self, message), "respond to suggestion")
         elif isinstance(message, Accuse):
             self.logger.debug(f'Accusation: {message.room} {message.weapon} {message.suspect}')
 
-            if self.game.characters[self.character] is self.display_name: # validate if player is in game
-                await self.game.accuse(self.character, message)
-            else:
-                await self.send_message(Status("Player is not in this game."))
+            await self.game_action(lambda game: game.accuse(self, message), "make an accusation")
         else:
             raise ApiError(f"received invalid message from client: {message}")
 
     async def send_message(self, message):
-        print("Player - Server Send:", serialize_message(message))
+        self.logger.debug(f"Player - Server Send: {serialize_message(message)}")
         await self.socket.send(serialize_message(message))
 
     async def notify_move(self, player: Character, location: Location):
         # if player.character == self.character:
         #     self.location = location
         await self.send_message(Position(player, location))
-
-    async def suggestion_query(self):
-        return SuggestionResponse(None, 0)
 
     async def user_loop(self):
         while True:
@@ -192,6 +191,91 @@ class Player:
                 self.logger.error(f'message error {e}')
                 await self.socket.send(Status(f'error handling message: {e}'))
 
+class Locations:
+    def __init__(self):
+        # Dict mapping location to players
+        self.locations = {}
+        # Dict with the reverse, mapping players to locations
+        self.positions = {}
+
+        self.called = set([])
+
+        for room in list(Room):
+            self.locations[room] = set([])
+        for hallway in list(Hallway):
+            self.locations[hallway] = None
+
+    def __str__(self):
+        val = ''
+        '''
+        for room in list(Room):
+            val = val + f'{room} :'
+            val = val + (','.join([str(player) for player in self.locations[room]]) if self.locations[room] else 'empty')
+            val = val + '\n'
+        for hallway in list(Hallway):
+            val = val + f'{hallway} :'
+            val = val + (str(self.locations[hallway]) if self.locations[hallway] is not None else 'empty')
+            val = val + '\n'
+        '''
+        for player, location in self.positions.items():
+            val += f'{player}: ' +  (str(location) if location is not None else 'start')
+        return val
+
+    def is_called(self, player: Player):
+        return player.character in self.called
+
+    def call_player(self, character: Character, room: Room):
+        self.called.add(character)
+        self.positions[character] = Location(room)
+        self.locations[room].add(character)
+
+    def _remove_player(self, player: Player, location: Location):
+        if location.is_room:
+            self.locations[location.as_room()].remove(player.character)
+        else:
+            self.locations[location.as_hallway()] = None
+
+    def move_player(self, player: Player, location: Location):
+        player.state.set_move()
+        if location.is_room:
+            return self.move_to_room(player, location.as_room())
+        elif location.is_hallway:
+            return self.move_to_hallway(player, location.as_hallway())
+
+        # should be impossible to reach this point
+        assert False
+
+    def move_to_room(self, player: Player, room: Room):
+        try:
+            current_location = self.positions[player.character]
+            self._remove_player(player, current_location)
+            if Location(room) not in current_location.adjacent:
+                raise LocationError("Player cannot move to this location.")
+        except KeyError:
+            raise LocationError("Cannot move to this location on first turn.")
+
+        self.positions[player.character] = Location(room)
+        self.locations[room].add(player.character)
+        if player.character in self.called:
+            self.called.remove(player.character)
+
+    def move_to_hallway(self, player: Player, hallway: Hallway):
+        try:
+            current_location = self.positions[player.character]
+            self._remove_player(player, current_location)
+        except KeyError:
+            # Only an error if the player ins't moving to the
+            # hallway adjacent to their starting position
+            if hallway != player.character.first_location:
+                raise LocationError("Cannot move to this location on first turn.")
+        if self.locations[hallway] is not None:
+            raise LocationError("Hallway is blocked.")
+
+        self.locations[hallway] = player.character
+        self.positions[player.character] = Location(hallway)
+        if player.character in self.called:
+            self.called.remove(player.character)
+
 
 class GameState:
     def __init__(self):
@@ -202,25 +286,28 @@ class GameState:
 
         self.players = []
         self.characters = dict([(character, None) for character in list(Character)])
-        self.locations = dict([(location, None) for location in itertools.chain(list(Room), list(Hallway))])    # Can we make this a nested dictionary
-        
+        self.locations = Locations()
+
         self.current_player = None
-        self.witness_items = [None, None, None, None, None]
+        self.witness_items = [None, None, None, None, None, None]
         self.disqualified = set([])
+
+        # iterator over players to query for suggestion responses
+        self.suggestion_query = None
+        # the player who is making a suggestion
+        self.suggestion_player = None
+        # the player currently being queried
+        self.queried_player = None
 
         self.logger = logging.getLogger(f'game-{self.id}')
         self.logger.setLevel(logging.DEBUG)
 
-    async def start_game(self):
-        ## START: skeletal setup
-        registered = set([player.character for player in self.players])
-        available = filter(lambda x: x not in registered, list(Character))
-        await asyncio.wait([self.add_user(FakePlayer(i, self)) for i in range(3)])
-        for player in self.players[2:]:
-            player.character = next(available)
-            await self.register_user(player, Register(player.character, player.display_name))
-        ## END: skeletal setup
+    def is_accusation_correct(self, accusation):
+        return accusation.suspect == self.crime_character and \
+            accusation.room == self.crime_room and \
+            accusation.weapon == self.crime_weapon
 
+    async def start_game(self):
         # sort the players by character so that they can be indexed by player id
         self.players.sort(key=lambda player: player.character.value)
 
@@ -237,30 +324,33 @@ class GameState:
             i1, i2, i3 = player_items
             await player.send_message(Witness(i1, i2, i3))
 
+        self.current_player = self.players[0]
+        self.current_player.state.start_turn()
+        await self.broadcast(PlayerTurn(self.current_player.character))
+
 
     async def move_player(self, player: Player, location: Location):
-        self.logger.debug(player.state.moved)
+        self.logger.debug(f'player moved: {player.state.moved}')
+
+        self.logger.debug(f'Before {self.locations}')
+        self.logger.debug(f'Before {player.location}')
 
         try:
-            self.logger.debug(f'Before {self.locations}')
-            self.logger.debug(f'Before {player.location}')
-            
-            if location in player.location.adjacent:            # if the requested location is adjacent to player 
-                player.state.move()                                 # Update Player State
-                self.locations[player.location] = None              # Clear previous location   - rework upon changing self.locations
-                player.location = location                          # Update Player Location
-                self.locations[location] = (player.character)       # Update Game State         - rework upon changing self.locations
-            
-                for other in self.players:
-                    await other.notify_move(player.character, location)
-
-                self.logger.debug(f'After {self.locations}')
-                self.logger.debug(f'After {player.location}')
-            
-            else:
-                player.send_message(Status("The request room is not valid"))
+            self.locations.move_player(player, location)
+            self.logger.debug(f'moved {player.character} to {location}')
+        except LocationError as e:
+            player.state.moved = False
+            return await player.send_message(Status(e.msg))
         except StateError as e:
-            await player.send_message(Status(e.msg))
+            return await player.send_message(Status(e.msg))
+
+        player.location = location
+
+        for other in self.players:
+            await other.notify_move(player.character, location)
+
+        self.logger.debug(f'After {self.locations}')
+        self.logger.debug(f'After {player.location}')
 
 
     async def broadcast(self, message, skip=None):
@@ -269,59 +359,80 @@ class GameState:
         if players:
             await asyncio.wait([player.send_message(message) for player in self.players if player != skip])
 
-    async def suggestion(self, player: Character, suggest: Suggest):
+    async def suggestion_response(self, response_player: Player, response: SuggestionResponse):
+        if self.suggestion_player is None:
+            return await response_player.send_message(Status("Cannot respond to suggestion, no suggestion was made."))
+        if self.queried_player != response_player:
+            return await response_player.send_message(Status("Wait your turn to respond."))
+
+        status = response.into_status(response_player.character)
+
+        # TODO: check response for cheating
+        if response.witness is not None:
+            witness = response.into_witness(response_player.character)
+            await self.suggestion_player.send_message(witness)
+            await self.broadcast(status, skip=self.suggestion_player)
+            self.suggestion_player = None
+            self.suggestion_query = None
+            self.queried_player = None
+        else:
+            await self.broadcast(status)
+            try:
+                self.queried_player = next(self.suggestion_query)
+            except StopIteration:
+                # Nobody else to query, we're done
+                self.suggestion_player = None
+                self.suggestion_query = None
+                self.queried_player = None
+                return
+            await self.queried_player.send_message(SuggestionQuery())
+
+
+    async def suggestion(self, player: Player, suggest: Suggest):
         self.logger.debug("suggestion - GameState")
-        suggestion = suggest.into_suggestion(player)    # conversion | note: suggestion has player parameter, suggest does not
+        # conversion | note: suggestion has player parameter, suggest does not
+        suggestion = suggest.into_suggestion(player.character)
+
+        if not player.state.moved and not self.locations.is_called(player):
+            return await player.send_message(Status("Player must move before making a suggestion."))
+        if player.location != Location(suggest.room):
+            return await player.send_message(Status("Player must be in the room specified in their suggestion"))
 
         try:
-            player.state.suggest()
-            self.locations[suggestion.room] = suggestion.suspect    # Suspect into suggestion room - Need to be able to append to location
-            self.players[suggestion.suspect.value].location = suggestion.room   # Update Player instance to match
+            player.state.set_suggest()
         except StateError as e:
-            await player.send_message(Status(e.msg))
+            return await player.send_message(Status(e.msg))
 
-        await self.broadcast(suggestion)
+        # Update the player location and mark them as called
+        self.locations.call_player(suggestion.suspect, suggestion.room)
 
-        # iterate through other players to assume suggestion query
-        for other in itertools.chain(self.players[player.value + 1:], self.players[:player.value]):
-            if other.character in self.disqualified:
-                continue
-            response = await other.suggestion_query()
-            status = response.into_status(other.character)
-            if status.witnessed:
-                await self.broadcast(status, skip=player)
-                await self.players[player].send_message(response.into_witness(other.character))
-            else:
-                await self.broadcast(status)
+        await self.broadcast(suggestion, skip=player)
+
+        # Set things up for the querying process
+        players = itertools.chain(self.players[player.character + 1:], self.players[:player.character])
+        # iterator over qualified players, in the order they should be queried
+        self.suggestion_query = filter(lambda p: p not in self.disqualified, players)
+        self.suggestion_player = player
+        self.queried_player = next(self.suggestion_query)
+
+        await self.queried_player.send_message(SuggestionQuery())
 
     async def register_user(self, player: Player, msg: Register):
 
-        registration = msg.into_registration()                          # Convert from Register to Registration class
-        if self.characters[registration.character] is None:             # If character selection is still available
+        # Convert from Register to Registration class
+        registration = msg.into_registration()
+        if self.characters[registration.character] is None:
+            # If character selection is still available
             self.logger.debug(f"Server confirming {registration.display_name} as {registration.character}")
-            player.character = registration.character                   # Setting the instance character - changed is_registered
-            player.display_name = registration.display_name             # Setting the instance display_name
-            self.characters[player.character] = player.display_name     # Updating characters dictionary
+            # Setting the instance character - changed is_registered
+            player.character = registration.character
+            # Setting the instance display_name
+            player.display_name = registration.display_name
+            # Updating characters dictionary
+            self.characters[player.character] = player.display_name
 
-            # Setting default locations baed on character choice
-           
-            if player.character == 0:        # Col Mustard in Lounge/Dining
-                player.location = Hallway.LOUNGE_DINING
-            elif player.character == 1:     # Miss Scarlet in Library/Conservatory
-                player.location = Hallway.LIBRARY_CONSERVATORY
-            elif player.character == 2:     # Professor Plum in the Study/Library
-                player.location = Hallway.STUDY_LIBRARY
-            elif player.character == 3:     # Mr. Green in the Conservatory/Ballroom
-                player.location = Hallway.CONSERVATORY_BALLROOM
-            elif player.character == 4:     # Mrs. White in the Ballroom/Kitchen
-                player.location = Hallway.BALLROOM_KITCHEN
-            elif player.character == 5:     # Mrs. Peacock in the Library/Conservatory
-                player.location = Hallway.LIBRARY_CONSERVATORY
-            
-        
-            self.locations[player.location] = player.character  # Update Game State location
-
-            self.logger.debug(self.locations)   # Checking all locations
+            # Note: Removed default Player locations, as they don't technically
+            # start out in these locations, they start adjacent to them off the board
 
             await self.broadcast(registration, player.character)        # Broadcast to other clients
         else:
@@ -330,79 +441,64 @@ class GameState:
             await player.send_message(Status("Character selection not available"))
 
         registered = all([player.is_registered for player in self.players])
-        if len(self.players) == 6 and registered:  # If we have 6 registered players, start the game
+        # If we have 6 registered players, start the game
+        if len(self.players) == 6 and registered:
             self.logger.debug(f'Game is full, starting Clue-Less')
-            await self.start_game()  # Did not go into this yet
+            # Did not go into this yet
+            await self.start_game()
 
     async def add_user(self, player: Player):
+
+        if len(self.players) == 6:
+            return await player.send_message(Status("Game is full"))
+
         player.game = self
         self.logger.debug(f'adding player from {player.sock_addr}')
         await self.broadcast(UserJoined())
-        await player.send_message(Joined(self.id))
+        available = [character for character in list(Character) if self.characters[character] is None]
+        await player.send_message(Joined(self.id, available))
         self.players.append(player)
 
-    async def accuse(self, player: Character, accuse: Accuse):
-        accusation = accuse.into_accusation(player)
+    async def accuse(self, player: Player, accuse: Accuse):
+        accusation = accuse.into_accusation(player.character)
 
         # validate player's turn who's making accusation
         if self.current_player == player:
             await self.broadcast(accusation, skip=player)
-            if accusation.suspect == self.crime_character and accusation.room == self.crime_room and accusation.weapon == self.crime_weapon:
-                await self.broadcast(Winner(player))
+            if self.is_accusation_correct(accusation):
+                await self.broadcast(Winner(player.character))
             else:
                 self.disqualified.add(player)
-                await self.broadcast(Disqualified(player))
+                await self.broadcast(Disqualified(player.character))
         else:
             self.logger.debug(f'Invalid move, not currently turn of accuser')
-            await self.players[player].send_message(f'Invalid move, not currently turn of accuser')
+            await self.players[player].send_message(Status(f'Invalid move, not currently turn of accuser'))
 
-    async def complete_turn(self, player: Character):
+    def next_player(self):
         try:
-            self.current_player = Character(player.value + 1)
-        except ValueError:
-            self.current_player = Character(0)
-        self.broadcast(PlayerTurn(self.current_player))
+            self.current_player = self.players[self.current_player.character.value + 1]
+        except IndexError:
+            self.current_player = self.players[0]
 
+        if self.current_player in self.disqualified:
+            return self.next_player()
+        else:
+            return self.current_player
 
-class FakePlayer(Player):
-    def __init__(self, num, game):
-        self.num = num
-        self.game = game
-        self.character = None
-        self.display_name = f"fake player {num}"
-        self.state = UserState.UNREGISTERED
-        self.called = False
-        self.logger = logging.getLogger(f'server.{self.display_name}')
-        self.logger.setLevel(logging.DEBUG)
+    async def complete_turn(self, player: Player):
+        try:
+            self.logger.debug(f'ending turn for {player.character}: {player.state}')
+            player.state.end_turn()
+            self.logger.debug(f'ended turn for {player.character}: {player.state}')
+        except StateError as e:
+            return await player.send_message(Status(e.msg))
 
-    @property
-    def sock_addr(self) -> str:
-        return self.display_name
-
-    async def dispatch_message(self, message):
-        pass
-
-    async def send_message(self, message):
-        self.logger.debug(f'skip sending {serialize_message(message)}')
-
-    async def notify_move(self, player: Character, location: Location):
-        if player == self.character:
-            self.location = location
-        await self.send_message(Position(player, location))
-
-    async def suggestion_query(self):
-        return SuggestionResponse(None, 0)
-
-    async def user_loop(self):
-        while True:
-            msg_str = await self.socket.recv()
-            try:
-                msg = deserialize_message(msg_str)
-            except ApiError as e:
-                self.logger.error(f'message error {e}')
-                await self.socket.send(Status(f'error deserializing message: {e}'))
-            try:
-                await self.dispatch_message(msg)
-            except ApiError as e:
-                self.logger.error(f'message error {e}')
-                await self.socket.send(Status(f'error handling message: {e}'))
+        new_player = self.next_player()
+        self.logger.debug(f'starting turn for {new_player.character}: {new_player.state}')
+        try:
+            new_player.state.start_turn()
+        except StateError as e:
+            self.logger.error(f'Something went horribly wrong, multiple players in turn. Resetting')
+            new_player.state.end_turn()
+            new_player.state.start_turn()
+        await self.broadcast(PlayerTurn(self.current_player.character))
