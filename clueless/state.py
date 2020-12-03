@@ -316,6 +316,8 @@ class GameState:
             [w for w in list(Weapon) if w != self.crime_weapon],
             [r for r in list(Room) if r != self.crime_room],
         )]
+        self.logger.debug(f'crime character: {self.crime_character}; crime weapon: {self.crime_weapon}; '
+                          f'crime room: {self.crime_room}')
         random.shuffle(items)
         items_iter = iter(items)
         for player in self.players:
