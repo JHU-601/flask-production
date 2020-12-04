@@ -42,6 +42,7 @@ async def websockopen(socket, path):
     await player.user_loop()
 
 async def index(request):
+    logger.debug(f"Serving index")
     return web.FileResponse(os.path.join(REPO_ROOT, 'clueless', 'static', 'index.html'))
 
 async def gameroom(request):
@@ -55,7 +56,7 @@ async def other(request):
         raise web.HTTPNotFound()
 
 
-print('Serving on localhost:8080 (web) and localhost:8081 (ws)')
+logger.debug(f'Serving on localhost:{PORT} (web) and localhost:{PORT_WS} (ws)')
 start_server = websockets.serve(websockopen, "localhost", PORT_WS)
 
 app = web.Application()
