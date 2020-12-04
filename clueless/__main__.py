@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 
 from .state import Player
 
-load_dotenv # load environment vars from .env
+load_dotenv() # load environment vars from .env
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_DIR = os.path.join(REPO_ROOT, 'clueless', 'static')
