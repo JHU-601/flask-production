@@ -14,7 +14,7 @@ import websockets
 import json
 
 from aiohttp import web
-from dotenv import load-dotenv
+from dotenv import load_dotenv
 
 from .state import Player
 
