@@ -1,0 +1,12 @@
+[Unit]
+Description=Clueless JHU game web server
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/wkdir/clueless
+ExecStart=/home/ubuntu/venv/clueless/bin/python3 -m clueless
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

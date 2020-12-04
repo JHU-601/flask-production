@@ -14,11 +14,21 @@ import websockets
 import json
 
 from aiohttp import web
+from dotenv import load_dotenv
 
 from .state import Player
 
+load_dotenv() # load environment vars from .env
+
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_DIR = os.path.join(REPO_ROOT, 'clueless', 'static')
+
+if os.environ.get('CLUELESS_ENVIRONMENT') == 'production':
+    PORT = os.environ.get('CLUELESS_PORT')
+    PORT_WS = os.environ.get('CLUELESS_PORT_WS')
+else:
+    PORT = 8080
+    PORT_WS = 8081
 
 logging.basicConfig(level=logging.DEBUG)
 [logging.getLogger(logger).setLevel(logging.ERROR) for logger in ("websockets.server", "websockets.protocol", "aiohttp.access")]
@@ -32,6 +42,7 @@ async def websockopen(socket, path):
     await player.user_loop()
 
 async def index(request):
+    logger.debug(f"Serving index")
     return web.FileResponse(os.path.join(REPO_ROOT, 'clueless', 'static', 'index.html'))
 
 async def gameroom(request):
@@ -45,8 +56,8 @@ async def other(request):
         raise web.HTTPNotFound()
 
 
-print('Serving on localhost:8080 (web) and localhost:8081 (ws)')
-start_server = websockets.serve(websockopen, "localhost", 8081)
+logger.debug(f'Serving on localhost:{PORT} (web) and localhost:{PORT_WS} (ws)')
+start_server = websockets.serve(websockopen, "localhost", PORT_WS)
 
 app = web.Application()
 app.router.add_route('GET', '/', index)
@@ -54,7 +65,7 @@ app.router.add_route('GET', '/gameroom', gameroom)
 app.router.add_route('GET', '/{tail:.*}', other)
 
 loop = asyncio.get_event_loop()
-f = loop.create_server(app.make_handler(), '0.0.0.0', 8080)
+f = loop.create_server(app.make_handler(), '0.0.0.0', PORT)
 loop.run_until_complete(start_server)
 loop.run_until_complete(f)
 asyncio.get_event_loop().run_forever()
