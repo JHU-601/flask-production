@@ -169,6 +169,10 @@ body {
   flex-grow: 1;
   position: relative;
   border: 1px solid darkgray;
+  background-color: black;
+}
+#gameboard-panel .col.col-outer {
+  border: none;
 }
 #gameboard-panel .col.room {
   /* border: 1px solid white; */
@@ -229,14 +233,32 @@ body {
   display: block;
   overflow-y: scroll;
 }
-#accuse-panel {
-
+#suggest-panel, #accuse-panel, #turn-panel {
+  display: flex;
+  flex-direction: column;
 }
-#suggest-panel {
-
+#suggest-panel > div, #accuse-panel > div, #turn-panel button {
+  flex-grow: 1;
+}
+#turn-panel button {
+  flex-grow: 0.5;
+  font-size: 1.5rem;
+  width: 50%;
+  margin: auto;
 }
 #move-panel {
-
+  display: flex;
+  flex-direction: column;
+}
+#move-panel .mrow, #move-panel button {
+  flex-grow: 1;
+}
+#move-panel .mrow {
+  display: flex;
+}
+#move-panel button.direction:disabled {
+  background-color: yellow;
+  color: black;
 }
 #chat-panel {
   height: 87%;
