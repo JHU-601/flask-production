@@ -149,6 +149,12 @@ body {
   top: 0;
   left: 0;
 }
+#gameboard-panel .icon:nth-child(4) {
+  top: inherit;
+  left: inherit;
+  right: 0px;
+  bottom: 0px;
+}
 #gameboard-panel .icon .label {
   background-color: white;
 }
