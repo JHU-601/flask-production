@@ -123,6 +123,10 @@ class GamePanel extends Panel {
     this.suggestionPanel.hide();
     $('#turn-indicator').show();
     $('#help-button').show();
+    // Update player names in the notepad
+    for (var i = 0; i < gameHub.gameState.players.length; i++) {
+      $('#player'+gameHub.gameState.players[i].character.id+'_displayname').html(gameHub.gameState.players[i].display_name);
+    }
   }
   showModal(title, message) {
     this.modalPanel.show(title, message);
