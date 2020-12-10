@@ -1,3 +1,42 @@
+var HELP_TEXT = `
+<p>Clueless was developed by Iron Board Games as part of the class project for
+Johns Hopkins University\'s Foundations of Software Engineering, Fall 2020.
+The course is part of the Whiting School of Engineering's Engineering for
+Professionals Computer Science program.</p>
+<p><b>Welcome to Clueless!</b></p>
+<p>This game is a simplified version of the popular board game, Clue®. The main
+simplification is in the navigation of the game board. In Clue-Less there are
+the same nine rooms, six weapons, and six people as in the board game. The rules
+are pretty much the same except for moving from room to room.</p>
+<p><b>Your Turn</b></p>
+<p>When it is your turn, the turn indicator in the top-left of your screen will
+turn yellow. This means that you can do one of the following:</p>
+<ul>
+<li>Move once</li>
+<li>Make a suggestion</li>
+<li>Make an accusation</li>
+</ul>
+<p>You can do any or none of the above. When finished, select the End Your Turn
+tab and press End Turn.</p>
+<p><b>Moving</b></p>
+<p>Your first move must be from your starting postion onto the gameboard.
+After that, you can move up, down, left, or right if there is enough space.
+Only one player may be in a hallway at a time. Two players may occupy a room.
+If you're in a corner room, you will have a diagonal move available to you -
+this is a shortcut to the other side of the board.</p>
+<p><b>Suggestions</b></p>
+<p>During your turn, you may make a suggestion. This will query each player,
+asking if they have the witness items you have suggested. The first player to
+have one or more of these items must choose one to disclose to you. You may
+want to use the Notepad tab to take note of their response. Click in any of the
+squares in the Notepad to change the color from blank, to red, to green, and
+back again.</p>
+<p><b>Accusation</b></p>
+<p>If you think you've solved it, you can make an accusation. This is your guess
+as to which witness items were selected as the true crime. If you are correct,
+you win! Otherwise, you will be disqualified.</p>
+`;
+
 class Panel {
   constructor(id) {
     this.element = document.getElementById(id);
@@ -56,6 +95,8 @@ class GamePanel extends Panel {
     this.modalPanel.hide();
     this.suggestionQueryPanel.hide();
     this.suggestionPanel.hide();
+    $('#turn-indicator').hide();
+    $('#help-button').hide();
   }
   showScreen2() {
     this.homePanel.hide();
@@ -67,6 +108,8 @@ class GamePanel extends Panel {
     this.modalPanel.hide();
     this.suggestionQueryPanel.hide();
     this.suggestionPanel.hide();
+    $('#turn-indicator').hide();
+    $('#help-button').hide();
   }
   showScreen3() {
     this.homePanel.hide();
@@ -79,6 +122,11 @@ class GamePanel extends Panel {
     this.suggestionQueryPanel.hide();
     this.suggestionPanel.hide();
     $('#turn-indicator').show();
+    $('#help-button').show();
+    // Update player names in the notepad
+    for (var i = 0; i < gameHub.gameState.players.length; i++) {
+      $('#player'+gameHub.gameState.players[i].character.id+'_displayname').html(gameHub.gameState.players[i].display_name);
+    }
   }
   showModal(title, message) {
     this.modalPanel.show(title, message);
@@ -122,7 +170,7 @@ class StartPanel extends Panel {
     }
   }
   handleBtnAboutClick() {
-    gameHub.gamePanel.showModal('About Clue-Less', 'Clue-Less was developed by Iron Board Games.');
+    gameHub.gamePanel.showModal('About Clue-Less', HELP_TEXT);
   }
 }
 
@@ -234,6 +282,11 @@ class GameboardPanel extends Panel {
       this.element.querySelector('#player4'),
       this.element.querySelector('#player5'),
     ];
+
+    // Help button click listener
+    $('#help-button').click(function() {
+      gameHub.gamePanel.showModal('Help', HELP_TEXT);
+    });
   }
   display(gameState) {
     for (var i = 0; i < gameState.players.length; i++) {
@@ -241,7 +294,17 @@ class GameboardPanel extends Panel {
       if (curPlayer.character.position == null) continue;
       var playerElem = this.element.querySelector('#player' + curPlayer.character.id);
       var roomElem = this.element.querySelector('#room' + curPlayer.character.position);
+      // TODO
+      // Pin Player Elem to a location on the screen
+        // use jquery offset(), width(), height()
+        // append to gameboardpanel
+      // Turn on transitions
+        // use css
+      // Move player to new location
+        // append to proper location
       roomElem.appendChild(playerElem);
+      // Turn off transitions
+        // Use css
     }
     // Show localPlayer
     if (gameState.localPlayer != null) {
