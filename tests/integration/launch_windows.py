@@ -41,7 +41,7 @@ def move(driver, direction):
         row, col = 3, 3
 
     driver.find_elements_by_css_selector('#bottom-panel .tab-selector')[0].click()
-    driver.find_element_by_css_selector(f'#move-panel > div > div:nth-child({row}) > button:nth-child({col})').click()
+    driver.find_element_by_css_selector(f'#move-panel > div:nth-child({row}) > button:nth-child({col})').click()
     driver.find_element_by_css_selector('#btnMove').click()
 
 def complete(driver):
@@ -123,7 +123,7 @@ if __name__ == '__main__':
 
     set_player(driver, 2)
     # Answer the suggestion
-    
+
     # Continue
     # move(driver, 'down')
     # complete(driver)
