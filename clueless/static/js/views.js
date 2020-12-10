@@ -78,6 +78,7 @@ class GamePanel extends Panel {
     this.modalPanel.hide();
     this.suggestionQueryPanel.hide();
     this.suggestionPanel.hide();
+    $('#turn-indicator').show();
   }
   showModal(title, message) {
     this.modalPanel.show(title, message);

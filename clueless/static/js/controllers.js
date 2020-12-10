@@ -231,6 +231,15 @@ class GameHub {
   }
   handleMsgPlayerTurn(message) {
     this.gameState.playerTurn = message.player;
+    var player = this.gameState.players[message.player];
+    if (player.character.id == this.gameState.localPlayer.character.id) {
+      $('#turn-indicator').html('Your turn!');
+      $('#turn-indicator').addClass('yourturn');
+    } else {
+      $('#turn-indicator').html(player.display_name + '\'s turn');
+      $('#turn-indicator').removeClass('yourturn');
+    }
+
   }
   handleMsgSuggestionQuery(message) {
     this.gamePanel.suggestionQueryPanel.show(message.player, message.room, message.weapon, message.suspect);
