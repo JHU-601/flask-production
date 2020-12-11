@@ -469,7 +469,15 @@ class GameState:
                 await self.broadcast(Winner(player.character))
             else:
                 self.disqualified.add(player)
-                await self.broadcast(Disqualified(player.character))
+                # check for number of disqualified players
+                if len(self.disqualified) < 5:
+                    await self.broadcast(Disqualified(player.character))
+                elif len(self.disqualified) == 5:
+                    for curPlayer in self.players:
+                        if curPlayer not in self.disqualified:
+                            self.logger.debug(f'Five players disqualified, ending game.')
+                            await self.broadcast(Winner(player.character));
+
         else:
             self.logger.debug(f'Invalid move, not currently turn of accuser')
             await self.players[player].send_message(Status(f'Invalid move, not currently turn of accuser'))
