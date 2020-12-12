@@ -10,7 +10,7 @@ class GameState {
     this.witnessItems = [null, null, null];
     this.gameid = null;
     this.lastSuggestion = null;
-    this.registered = [];
+    this.chat_log = [];
   }
 }
 

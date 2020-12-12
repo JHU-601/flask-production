@@ -133,6 +133,11 @@ class GamePanel extends Panel {
   }
   showToast(message) {
     this.toastPanel.show(message);
+    gameHub.gameState.chat_log.push({
+      'from': 'Game',
+      'message': message,
+    });
+    this.display(gameHub.gameState);
   }
 }
 
@@ -501,7 +506,11 @@ class ChatPanel extends Panel {
     this.btnSend.onclick = this.handleBtnSendClick.bind(this);
   }
   display(gameState) {
-
+    $(this.chatlog).html('');
+    for (var i = 0; i < gameState.chat_log.length; i++) {
+      var log = gameState.chat_log[i];
+      $(this.chatlog).append('<div><b>' + log.from + ':</b> ' + log.message + "</div>");
+    }
   }
   handleBtnSendClick() {
     gameHub.sendChat(this.txtChat.value);
@@ -663,7 +672,7 @@ class SuggestionPanel extends Panel {
 }
 
 class ToastPanel extends Panel {
-  FADEOUT_TIME = 2000;
+  FADEOUT_TIME = 5000;
 
   constructor(id) {
     super(id);
