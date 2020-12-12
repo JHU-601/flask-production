@@ -200,6 +200,9 @@ class Locations:
 
         self.called = set([])
 
+        self.logger = logging.getLogger(f'server.locations')
+        self.logger.setLevel(logging.DEBUG)
+
         for room in list(Room):
             self.locations[room] = set([])
         for hallway in list(Hallway):
@@ -248,10 +251,11 @@ class Locations:
     def move_to_room(self, player: Player, room: Room):
         try:
             current_location = self.positions[player.character]
-            self._remove_player(player, current_location)
+
             if Location(room) not in current_location.adjacent:
                 raise LocationError("Player cannot move to this location.")
-        except KeyError:
+        except KeyError: # Error occurs here
+            self.logger.debug(f'move_to_room error')
             raise LocationError("Cannot move to this location on first turn.")
 
         self.positions[player.character] = Location(room)
@@ -260,6 +264,12 @@ class Locations:
             self.called.remove(player.character)
 
     def move_to_hallway(self, player: Player, hallway: Hallway):
+        self.logger.debug(f'before move to hallway {player.location}')
+        self.logger.debug(f'after server positions {self.positions}')
+
+        if self.locations[hallway] is not None:
+            raise LocationError("Hallway is blocked.")
+
         try:
             current_location = self.positions[player.character]
             self._remove_player(player, current_location)
@@ -267,14 +277,18 @@ class Locations:
             # Only an error if the player ins't moving to the
             # hallway adjacent to their starting position
             if hallway != player.character.first_location:
+                self.logger.debug(f'hallway != player.character.first_location')
                 raise LocationError("Cannot move to this location on first turn.")
-        if self.locations[hallway] is not None:
-            raise LocationError("Hallway is blocked.")
+        
+
 
         self.locations[hallway] = player.character
         self.positions[player.character] = Location(hallway)
         if player.character in self.called:
             self.called.remove(player.character)
+
+        self.logger.debug(f'after move to hallway {player.location}')
+        self.logger.debug(f'after server positions {self.positions}')
 
 
 class GameState:
