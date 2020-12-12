@@ -141,9 +141,19 @@ class GameHub {
       message: 'Chat',
       text: message,
     };
-    if (to.length > 0) {
-      message.to = to;
+    if (to != -1) {
+      message.to = parseInt(to);
     }
+    if (message.to != null) {
+      gameHub.gameState.chat_log.push({
+        // 'from': gameHub.gameState.players[gameHub.gameState.localPlayerIndex].display_name,
+        'from': gameHub.gameState.localPlayer.display_name, // this will break when merged to develop. Use the line above in that case.
+        'message': message.text,
+        'private': true,
+        'date': new Date(),
+      });
+    }
+    this.updateDisplay();
     this.sendMessage(message);
   }
   sendComplete() {

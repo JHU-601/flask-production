@@ -337,6 +337,8 @@ class InteractionPanel extends Panel {
     this.topPanel.selectors[1].addEventListener('click', function() {
       gameHub.gameState.has_unread_chats = false;
       gameHub.updateDisplay();
+      // Focus on the txtChat
+      $('#txtChat').focus();
     });
   }
   display(gameState) {
@@ -550,14 +552,14 @@ class ChatPanel extends Panel {
     if (e.keyCode == 13) { // enter key
       e.preventDefault();
       if (this.txtChat.value.trim().length > 0) {
-        gameHub.sendChat(this.txtChat.value, parseInt($('#selectRecipient').val()));
+        gameHub.sendChat(this.txtChat.value, $('#selectRecipient').val());
         this.txtChat.value = "";
       }
     }
   }
   handleBtnSendClick() {
     if (this.txtChat.value.trim().length > 0) {
-      gameHub.sendChat(this.txtChat.value, parseInt($('#selectRecipient').val()));
+      gameHub.sendChat(this.txtChat.value, $('#selectRecipient').val());
       this.txtChat.value = "";
     }
   }
