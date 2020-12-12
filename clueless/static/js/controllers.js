@@ -59,8 +59,8 @@ class GameHub {
       this.handleMsgWinner(message);
     } else if (message.message == 'Disqualified') {
       this.handleMsgDisqualified(message);
-    } else if (message.message == 'ServerChat') {
-      this.handleMsgServerChat(message);
+    } else if (message.message == 'ChatMessage') {
+      this.handleMsgChatMessage(message);
     } else if (message.message == 'Status') {
       this.handleMsgStatus(message);
     } else if (message.message == 'PlayerTurn') {
@@ -132,7 +132,7 @@ class GameHub {
   sendChat(message) {
     var message = {
       message: 'Chat',
-      body: message,
+      text: message,
     };
     this.sendMessage(message);
   }
@@ -267,9 +267,13 @@ class GameHub {
       this.gamePanel.showToast(msg);
     }
   }
-  handleMsgServerChat(message) {
-    // TODO
-    this.gamePanel.showToast('ServerChat: ' + JSON.stringify(message));
+  handleMsgChatMessage(message) {
+    this.gameState.chat_log.push({
+      'from': this.gameState.players[message.from_player].display_name,
+      'message': message.text,
+      'private': message.private,
+      'date': new Date(),
+    });
   }
   handleMsgStatus(message) {
     this.gamePanel.showModal('Error', message.error);
