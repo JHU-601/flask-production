@@ -3,14 +3,14 @@ WEBSOCKET_URL = 'ws://' + window.location.hostname + ':8081';
 class GameState {
   constructor() {
     this.usersJoined = 0;
-    this.players = [];
+    this.players = [null, null, null, null, null, null];
     this.localPlayer = null;
     this.chosenPlayer = null;
     this.playerTurn = null;
     this.witnessItems = [null, null, null];
     this.gameid = null;
     this.lastSuggestion = null;
-    this.registered = [];
+    this.chat_log = [];
   }
 }
 
@@ -157,8 +157,9 @@ class GameHub {
     this.gameState.gameid = message.id;
     for (var i = 0; i < message.registered.length; i++) {
       var p = new Player(message.registered[i].character, message.registered[i].name);
-      this.gameState.players.push(p);
+      this.gameState.players[p.character.id] = p;
     }
+    this.gamePanel.showToast('Welcome!');
   }
   handleMsgUserJoined(message) {
     this.gamePanel.showToast('A new user has entered the lobby.');
@@ -167,8 +168,10 @@ class GameHub {
     var p = new Player(message.character, message.display_name);
     if (p.character.id == this.gameState.chosenPlayer) {
       this.gameState.localPlayer = p;
+      document.title += " (" + p.display_name + ")";
     }
-    this.gameState.players.push(p);
+    this.gameState.players[p.character.id] = p;
+    this.gamePanel.showToast(p.display_name + ' has registered.');
   }
   handleMsgWitness(message) {
     this.gameState.witnessItems[0] = {
@@ -183,11 +186,11 @@ class GameHub {
       id: message.item3,
       type: message.type3,
     };
-    // Put all players in starting positions
-    for (var i = 0; i < this.gameState.players.length; i++) {
-      var curPlayer = this.gameState.players[i];
-    }
+    var item1 = WitnessItem_fromType(message.item1, message.type1);
+    var item2 = WitnessItem_fromType(message.item2, message.type2);
+    var item3  = WitnessItem_fromType(message.item3, message.type3);
     this.gamePanel.showScreen3();
+    this.gamePanel.showToast('The game has started. Your witness items are: ' + item1.name + ', ' + item2.name + ', ' + item3.name);
   }
   handleMsgPosition(message) {
     // Update localPlayer if needed
@@ -195,14 +198,19 @@ class GameHub {
       this.gameState.localPlayer.character.position = message.location;
     }
     // Find and update the right player
-    for (var i = 0; i < this.gameState.players.length; i++) {
-      if (this.gameState.players[i].character.id == message.player) {
-        this.gameState.players[i].character.position = message.location;
-      }
-    }
+    this.gameState.players[message.player].character.position = message.location;
+    // I don't think a toast is needed for this since you can see the move happen, but we could always add one.
   }
   handleMsgSuggestion(message) {
-    this.gamePanel.showToast('Suggestion: ' + JSON.stringify(message));
+    // Get suggesting player by character id
+    var player = gameHub.gameState.players[message.player];
+    var room = WitnessItem_fromType(message.room, WitnessType.ROOM);
+    var suspect = WitnessItem_fromType(message.suspect, WitnessType.CHARACTER);
+    var weapon  = WitnessItem_fromType(message.weapon, WitnessType.WEAPON);
+
+    var msg = player.display_name + ' made a suggestion: ' + suspect.name + ' in ' + room.name + ' with the ' + weapon.name;
+
+    this.gamePanel.showToast(msg);
     this.gameState.lastSuggestion = {
       player: message.player,
       room: message.room,
@@ -219,19 +227,43 @@ class GameHub {
     this.gamePanel.suggestionQueryPanel.hide();
   }
   handleMsgAccusation(message) {
-    this.gamePanel.showToast('Accusation: ' + JSON.stringify(message));
+    // Get which player has won by character id
+    var player = gameHub.gameState.players[message.player];
+    var room = WitnessItem_fromType(message.room, WitnessType.ROOM);
+    var suspect = WitnessItem_fromType(message.suspect, WitnessType.CHARACTER);
+    var weapon  = WitnessItem_fromType(message.weapon, WitnessType.WEAPON);
+
+    var msg = player.display_name + ' made an accusation: ' + suspect.name + ' in ' + room.name + ' with the ' + weapon.name;
+    this.gamePanel.showToast(msg);
   }
   handleMsgWinner(message) {
-    this.gamePanel.showToast('Winner: ' + JSON.stringify(message));
+    // Get which player has won by character id
+    var player = gameHub.gameState.players[message.player];
+    var msg = player.display_name + " has won!";
+    this.gamePanel.showToast(msg);
+    this.gamePanel.showModal('Winner!', msg);
   }
   handleMsgDisqualified(message) {
-    this.gamePanel.showToast('Disqualified: ' + JSON.stringify(message));
+    // Get which player was disqualified by character id
+    var player = gameHub.gameState.players[message.player];
+    var isLocalPlayer = (player.character.id == gameHub.gameState.localPlayer.character.id);
+
+    if (isLocalPlayer) {
+      var msg = "You have been disqualified.";
+      this.gamePanel.showToast(msg);
+      this.gamePanel.showModal('Disqualified!', msg);
+    } else {
+      var msg = player.display_name + " has been disqualified.";
+      this.gamePanel.showToast(msg);
+    }
   }
   handleMsgServerChat(message) {
+    // TODO
     this.gamePanel.showToast('ServerChat: ' + JSON.stringify(message));
   }
   handleMsgStatus(message) {
     this.gamePanel.showModal('Error', message.error);
+    this.gamePanel.showToast(message.error);
     this.gamePanel.suggestionPanel.hide();
   }
   handleMsgPlayerTurn(message) {

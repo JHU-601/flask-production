@@ -133,6 +133,12 @@ class GamePanel extends Panel {
   }
   showToast(message) {
     this.toastPanel.show(message);
+    gameHub.gameState.chat_log.push({
+      'from': 'Game',
+      'message': message,
+      'date': new Date(),
+    });
+    this.display(gameHub.gameState);
   }
 }
 
@@ -193,6 +199,7 @@ class WaitingRoomPanel extends Panel {
       this.lstOfPlayers.innerHTML = "";
       for (var i = 0; i < gameState.players.length; i++) {
         var curPlayer = gameState.players[i];
+        if (curPlayer == null) continue;
         this.lstOfPlayers.innerHTML += '<div class="character">' + curPlayer.character.name + ' - ' + curPlayer.display_name + '</div>';
       }
     }
@@ -233,6 +240,7 @@ class RegistrationPanel extends Panel {
   display(gameState) {
     for (var i = 0; i < gameState.players.length; i++) {
       var currPlayer = gameState.players[i];
+      if (currPlayer == null) continue;
       this.characters[currPlayer.character.id].classList.add("taken");
     }
     // Disable all buttons if we already have a character
@@ -250,6 +258,7 @@ class RegistrationPanel extends Panel {
     // Ignore this click if the character is already taken
     var clickedCharacter = e.target.dataset.character;
     for (var i = 0; i < gameHub.gameState.players.length; i++) {
+      if (gameHub.gameState.players[i] == null || gameHub.gameState.players[i].character == null) continue;
       if (gameHub.gameState.players[i].character == clickedCharacter) {
         return;
       }
@@ -291,7 +300,7 @@ class GameboardPanel extends Panel {
   display(gameState) {
     for (var i = 0; i < gameState.players.length; i++) {
       var curPlayer = gameState.players[i];
-      if (curPlayer.character.position == null) continue;
+      if (curPlayer == null || curPlayer.character.position == null) continue;
       var playerElem = this.element.querySelector('#player' + curPlayer.character.id);
       var roomElem = this.element.querySelector('#room' + curPlayer.character.position);
       roomElem.appendChild(playerElem);
@@ -339,10 +348,6 @@ class TabbedPanel extends Panel {
     this.childPanels = childPanels;
     this.selectors = this.element.querySelectorAll('.tab-selector');
     this.selectedPanel = 0;
-    // Ensure block for child panels
-    for (var i = 0; i < this.childPanels.length; i++) {
-
-    }
     // Set up listeners
     for (var i = 0; i < this.selectors.length; i++) {
       this.selectors[i].onclick = this.handleSelectorClick.bind(this);
@@ -501,7 +506,11 @@ class ChatPanel extends Panel {
     this.btnSend.onclick = this.handleBtnSendClick.bind(this);
   }
   display(gameState) {
-
+    $(this.chatlog).html('');
+    for (var i = 0; i < gameState.chat_log.length; i++) {
+      var log = gameState.chat_log[i];
+      $(this.chatlog).append('<div class="chatentry">' + log.date.getHours() + ':' + log.date.getMinutes() +' <b>' + log.from + ':</b> ' + log.message + "</div>");
+    }
   }
   handleBtnSendClick() {
     gameHub.sendChat(this.txtChat.value);
@@ -663,7 +672,8 @@ class SuggestionPanel extends Panel {
 }
 
 class ToastPanel extends Panel {
-  FADEOUT_TIME = 2000;
+  STAY_ON_SCREEN_TIME = 1000;
+  FADEOUT_TIME = 4000;
 
   constructor(id) {
     super(id);
@@ -675,6 +685,10 @@ class ToastPanel extends Panel {
   show(message) {
     this.lblMessage.innerHTML = message;
     super.show();
-    $(this.element).fadeOut(this.FADEOUT_TIME);
+    $(this.element).stop(true, true).show();
+    var that = this;
+    setTimeout(function() {
+      $(that.element).fadeOut(that.FADEOUT_TIME);
+    }, this.STAY_ON_SCREEN_TIME);
   }
 }
