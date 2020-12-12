@@ -16,10 +16,11 @@ class Status:
         return "status"
 
 class Joined:
-    def __init__(self, id: str, available: List[Character], registered: List[(Character, str)]):
+    def __init__(self, id: str, available: List[Character], registered: List[(Character, str)], character: Optional[Character]=None):
         self.id = id
         self.available = available
         self.registered = [{ "character": c, "name": s} for c,s in registered]
+        self.character = character
 
 class UserJoined:
     def __init__(self):
