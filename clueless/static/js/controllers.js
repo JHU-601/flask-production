@@ -221,7 +221,7 @@ class GameHub {
     var suspect = WitnessItem_fromType(message.suspect, WitnessType.CHARACTER);
     var weapon  = WitnessItem_fromType(message.weapon, WitnessType.WEAPON);
 
-    var msg = player.display_name + ' made a suggestion: ' + room.name + ', ' + suspect.name + ', ' + weapon.name;
+    var msg = player.display_name + ' made a suggestion: ' + suspect.name + ' in ' + room.name + ' with the ' + weapon.name;
 
     this.gamePanel.showToast(msg);
     this.gameState.lastSuggestion = {
@@ -251,7 +251,7 @@ class GameHub {
     var suspect = WitnessItem_fromType(message.suspect, WitnessType.CHARACTER);
     var weapon  = WitnessItem_fromType(message.weapon, WitnessType.WEAPON);
 
-    var msg = player.display_name + ' made an accusation: ' + room.name + ', ' + suspect.name + ', ' + weapon.name;
+    var msg = player.display_name + ' made an accusation: ' + suspect.name + ' in ' + room.name + ' with the ' + weapon.name;
     this.gamePanel.showToast(msg);
   }
   handleMsgWinner(message) {
