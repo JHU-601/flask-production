@@ -136,6 +136,7 @@ class GamePanel extends Panel {
     gameHub.gameState.chat_log.push({
       'from': 'Game',
       'message': message,
+      'date': new Date(),
     });
     this.display(gameHub.gameState);
   }
@@ -509,7 +510,7 @@ class ChatPanel extends Panel {
     $(this.chatlog).html('');
     for (var i = 0; i < gameState.chat_log.length; i++) {
       var log = gameState.chat_log[i];
-      $(this.chatlog).append('<div><b>' + log.from + ':</b> ' + log.message + "</div>");
+      $(this.chatlog).append('<div class="chatentry">' + log.date.getHours() + ':' + log.date.getMinutes() +' <b>' + log.from + ':</b> ' + log.message + "</div>");
     }
   }
   handleBtnSendClick() {
@@ -672,7 +673,8 @@ class SuggestionPanel extends Panel {
 }
 
 class ToastPanel extends Panel {
-  FADEOUT_TIME = 5000;
+  STAY_ON_SCREEN_TIME = 1000;
+  FADEOUT_TIME = 4000;
 
   constructor(id) {
     super(id);
@@ -684,6 +686,10 @@ class ToastPanel extends Panel {
   show(message) {
     this.lblMessage.innerHTML = message;
     super.show();
-    $(this.element).fadeOut(this.FADEOUT_TIME);
+    $(this.element).stop(true, true).show();
+    var that = this;
+    setTimeout(function() {
+      $(that.element).fadeOut(that.FADEOUT_TIME);
+    }, this.STAY_ON_SCREEN_TIME);
   }
 }
