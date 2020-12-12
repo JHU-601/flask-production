@@ -149,10 +149,25 @@ body {
   top: 0;
   left: 0;
 }
+/* Second person in room goes in bottom right */
 #gameboard-panel .icon:nth-child(4) {
   top: inherit;
   left: inherit;
   right: 0px;
+  bottom: 0px;
+}
+/* The rare third person goes in the top right */
+#gameboard-panel .icon:nth-child(5) {
+  top: 0px;
+  left: inherit;
+  right: 0px;
+  bottom: inherit;
+}
+/* Okay, 4, but any more than 4 and you'll have to live with some layering :) */
+#gameboard-panel .icon:nth-child(6) {
+  top: inherit;
+  left: 0px;
+  right: inherit;
   bottom: 0px;
 }
 #gameboard-panel .icon .label {
