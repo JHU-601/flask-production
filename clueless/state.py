@@ -38,6 +38,7 @@ class PlayerState:
 
     def __str__(self):
         return f'in_turn: {self.in_turn}; moved: {self.moved}; suggest: {self.suggest}; suggest_comp: {self.suggestion_completed}; accused: {self.accused}'
+
     # Reset all values at the end of a players turn
     def end_turn(self):
         self._check_turn()
@@ -220,6 +221,16 @@ class Locations:
         for player, location in self.positions.items():
             val += f'{player}: ' +  (str(location) if location is not None else 'start')
         return val
+
+    def is_available(self, location: Location):
+        if location.is_room:
+            return True
+        try:
+            return self.positions[location] is not None
+        except KeyError:
+            return True
+
+
 
     def is_called(self, player: Player):
         return player.character in self.called
@@ -501,11 +512,17 @@ class GameState:
 
     async def complete_turn(self, player: Player):
         try:
+            has_moved = player.state.moved
+            can_move = any([self.locations.is_available(loc) for loc in player.location.adjacent])
+            if not has_moved and can_move and not self.locations.is_called(player):
+                return await player.send_message(Status("You must move before ending your turn."))
             self.logger.debug(f'ending turn for {player.character}: {player.state}')
             player.state.end_turn()
             self.logger.debug(f'ended turn for {player.character}: {player.state}')
         except StateError as e:
             return await player.send_message(Status(e.msg))
+        except AttributeError as e:
+            return await player.send_message(Status("You must make a move before ending your turn."))
 
         new_player = self.next_player()
         self.logger.debug(f'starting turn for {new_player.character}: {new_player.state}')
