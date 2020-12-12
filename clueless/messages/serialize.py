@@ -13,6 +13,10 @@ import json
 import sys
 import inspect
 
+from html_sanitizer import Sanitizer
+
+sanitizer = Sanitizer()
+
 DESERIALIZE = dict(inspect.getmembers(sys.modules[clueless.messages.client.__name__], inspect.isclass))
 
 SERIALIZE = set([name for (name, _) in inspect.getmembers(sys.modules[clueless.messages.server.__name__], inspect.isclass)])
@@ -32,12 +36,30 @@ class MessageEncoder(json.JSONEncoder):
         else:
             return super().default(item)
 
+def sanitize_msg(msg):
+    def sanitize_attr(attr):
+        unsan = getattr(msg, attr)
+        if isinstance(unsan, str):
+            print(f'sanitize {attr}')
+            san = sanitizer.sanitize(unsan)
+            print(f'as "{san}"')
+            setattr(msg, attr, san)
+        else:
+            print(f'skipping "{unsan}"')
+    if isinstance(msg, dict):
+        for key in msg.keys():
+            msg[key] = sanitizer.sanitize(msg[key])
+    else:
+        for attr in dir(msg):
+            sanitize_attr(attr)
+    return msg
+
 def decode_message(dct):
     if 'message' in dct and dct['message'] in DESERIALIZE:
         func = DESERIALIZE[dct['message']]
         del dct['message']
-        return func(**dct)
-    return dct
+        return sanitize_msg(func(**dct))
+    return sanitize_msg(dct)
 
 def deserialize_message(data):
     return json.loads(data, object_hook=decode_message)

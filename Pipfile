@@ -9,6 +9,7 @@ asyncio = "*"
 aiohttp = "*"
 websockets = "*"
 python-dotenv = "*"
+html-sanitizer = "*"
 
 [dev-packages]
 pytest = "*"
