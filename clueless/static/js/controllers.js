@@ -210,7 +210,7 @@ class GameHub {
     // I don't think a toast is needed for this since you can see the move happen, but we could always add one.
   }
   handleMsgSuggestion(message) {
-    // Get which player has won by character id
+    // Get suggesting player by character id
     var player;
     for (var i = 0; i < gameHub.gameState.players.length; i++) {
       if (gameHub.gameState.players[i].character.id == message.player) {
