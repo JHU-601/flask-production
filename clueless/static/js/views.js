@@ -390,12 +390,14 @@ class SuggestPanel extends Panel {
     // Fill the room label with the current room of localplayer
     if (gameState.localPlayerIndex != null && gameState.players[gameState.localPlayerIndex] != null && gameState.players[gameState.localPlayerIndex].character.position != null) {
       var room = gameState.players[gameState.localPlayerIndex].character.position;
-      if (room >= 10) {
-        // Hallways don't count
-        this.lblRoom.innerHTML = 'n/a';
-      } else {
+      // Taking this out - it may be kind of cool to still see the name of the hallway. Suggest button will be disabled.
+      // Can easily switch it back so that room is displayed as "n/a" in SuggestPanel when in a hallway
+      // if (room >= 10) {
+      //   // Hallways don't count
+      //   this.lblRoom.innerHTML = 'n/a';
+      // } else {
         this.lblRoom.innerHTML = WitnessItem_fromType(room, WitnessType.ROOM).name;
-      }
+      // }
     }
     // Disable when it's not your turn
     if (gameState && gameState.localPlayerIndex != null && gameState.playerTurn == gameState.players[gameState.localPlayerIndex].character.id && gameState.players[gameState.localPlayerIndex].character.position < 10) {
