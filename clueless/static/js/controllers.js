@@ -269,14 +269,21 @@ class GameHub {
   handleMsgDisqualified(message) {
     // Get which player was disqualified by character id
     var player;
+    var isLocalPlayer;
     for (var i = 0; i < gameHub.gameState.players.length; i++) {
       if (gameHub.gameState.players[i].character.id == message.player) {
         player = gameHub.gameState.players[i];
+        isLocalPlayer = (player.character.id == gameHub.gameState.localPlayer.character.id);
       }
     }
-    var msg = player.display_name + " has been disqualified.";
-    this.gamePanel.showToast(msg);
-    this.gamePanel.showModal('Disqualified!', msg);
+    if (isLocalPlayer) {
+      var msg = "You have been disqualified.";
+      this.gamePanel.showToast(msg);
+      this.gamePanel.showModal('Disqualified!', msg);
+    } else {
+      var msg = player.display_name + " has been disqualified.";
+      this.gamePanel.showToast(msg);
+    }
   }
   handleMsgServerChat(message) {
     // TODO
