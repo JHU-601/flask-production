@@ -37,6 +37,8 @@ as to which witness items were selected as the true crime. If you are correct,
 you win! Otherwise, you will be disqualified.</p>
 `;
 
+CHAT_NOTIF = '(!) ';
+
 class Panel {
   constructor(id) {
     this.element = document.getElementById(id);
@@ -326,6 +328,12 @@ class InteractionPanel extends Panel {
     this.turnPanel = new TurnPanel('turn-panel');
 
     this.bottomPanel = new TabbedPanel('bottom-panel', [this.movePanel, this.suggestPanel, this.accusePanel, this.turnPanel]);
+
+    // Special listener: clear the chats notification when we click the chat tab
+    this.topPanel.selectors[1].addEventListener('click', function() {
+      gameHub.gameState.has_unread_chats = false;
+      gameHub.updateDisplay();
+    });
   }
   display(gameState) {
     this.notepadPanel.display(gameState);
@@ -339,6 +347,26 @@ class InteractionPanel extends Panel {
     this.turnPanel.display(gameState);
 
     this.bottomPanel.display(gameState);
+
+    // Display chat notification
+    console.log('hey',this.topPanel.childPanels)
+    // if (this.topPanel.childPanels[1] == null) {
+    //   return;
+    // } else {
+      if (gameState.has_unread_chats == true && (this.topPanel.selectedPanel != 1 || !document.hasFocus())) {
+        // Show the tab as yellow
+        this.topPanel.selectors[1].classList.add('notification');
+        // Add chat emoji to page title
+        if (!document.title.includes(CHAT_NOTIF)) {
+          document.title = CHAT_NOTIF + document.title;
+        }
+      } else {
+        // Remove color
+        this.topPanel.selectors[1].classList.remove('notification');
+        // Remove title emoji
+        document.title = document.title.replace(CHAT_NOTIF, '');
+      }
+    // }
   }
 }
 
@@ -503,6 +531,7 @@ class ChatPanel extends Panel {
     this.chatlog = this.element.querySelector('#chatlog');
     this.txtChat = this.element.querySelector('#txtChat');
     this.btnSend = this.element.querySelector('#btnSend');
+    this.txtChat.onkeypress = this.handleTxtChatKeyPress.bind(this);
     this.btnSend.onclick = this.handleBtnSendClick.bind(this);
   }
   display(gameState) {
@@ -512,8 +541,20 @@ class ChatPanel extends Panel {
       $(this.chatlog).append('<div class="chatentry">' + log.date.getHours() + ':' + log.date.getMinutes() +' <b>' + log.from + ':</b> ' + log.message + "</div>");
     }
   }
+  handleTxtChatKeyPress(e) {
+    if (e.keyCode == 13) { // enter key
+      e.preventDefault();
+      if (this.txtChat.value.trim().length > 0) {
+        gameHub.sendChat(this.txtChat.value);
+        this.txtChat.value = "";
+      }
+    }
+  }
   handleBtnSendClick() {
-    gameHub.sendChat(this.txtChat.value);
+    if (this.txtChat.value.trim().length > 0) {
+      gameHub.sendChat(this.txtChat.value);
+      this.txtChat.value = "";
+    }
   }
 }
 

@@ -11,6 +11,7 @@ class GameState {
     this.gameid = null;
     this.lastSuggestion = null;
     this.chat_log = [];
+    this.has_unread_chats = false;
   }
 }
 
@@ -29,6 +30,12 @@ class GameHub {
     }.bind(this);
     // do initial display update
     this.updateDisplay();
+
+    // Update when we re-focus to clear chat notiications
+    var that = this;
+    window.onfocus = function() {
+      that.updateDisplay();
+    }
   }
 
   updateDisplay() {
@@ -274,6 +281,8 @@ class GameHub {
       'private': message.private,
       'date': new Date(),
     });
+    // New message arrived!
+    this.gameState.has_unread_chats = true;
   }
   handleMsgStatus(message) {
     this.gamePanel.showModal('Error', message.error);

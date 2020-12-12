@@ -249,6 +249,9 @@ body {
 .tabbed-panel .selectors .tab-selector.active {
   background-color: lightgray;
 }
+.tabbed-panel .selectors .tab-selector.notification {
+  background-color: yellow;
+}
 .tabbed-panel .tab {
   flex-grow: 1;
   display: block;
