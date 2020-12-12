@@ -27,6 +27,9 @@ class GameHub {
     this.socket.onmessage = function(event) {
       this.receiveMessage(JSON.parse(event.data));
     }.bind(this);
+    window.onbeforeunload = function(event) {
+        this.socket.close();
+    }.bind(this);
     // do initial display update
     this.updateDisplay();
   }
@@ -165,6 +168,9 @@ class GameHub {
       var p = new Player(message.registered[i].character, message.registered[i].name);
       this.gameState.players[p.character.id] = p;
     }
+      if(message.character != null) {
+          this.gameState.chosenPlayer = message.character;
+      }
     this.gamePanel.showToast('Welcome!');
   }
   handleMsgUserJoined(message) {

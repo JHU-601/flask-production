@@ -93,6 +93,7 @@ class Player:
         self.called = False         # What was the original purpose of this attribute - currently isn't in use
         self.logger = logging.getLogger(f'server.player{socket.remote_address}')
         self.logger.setLevel(logging.DEBUG)
+        self.connected = True
 
     @property
     def sock_addr(self) -> str:
@@ -101,6 +102,14 @@ class Player:
     @property
     def is_registered(self) -> bool:
         return self.character is not None
+
+    def disconnect(self):
+        self.connected = False
+
+    async def reconnect(self, socket):
+        self.connected = True
+        self.socket = socket
+        await self.game.reconnect_user(self)
 
     async def game_action(self, action, action_description):
         if self.game is not None:
@@ -302,6 +311,28 @@ class GameState:
         self.logger = logging.getLogger(f'game-{self.id}')
         self.logger.setLevel(logging.DEBUG)
 
+        self.complete = False
+
+    async def reconnect_user(self, player: Player):
+        available = [character for character in list(Character) if self.characters[character] is None]
+        registered = []
+        for c in list(Character):
+            if self.characters[c] is not None:
+                registered.append((c, self.characters[c]))
+        await player.send_message(Joined(self.id, available, registered))
+        await player.send_message(Witness(*self.witness_items[player.character]))
+
+        for other in self.players:
+            await player.send_message(Position(other.character, other.location))
+            if other in self.disqualified:
+                await player.send_message(Disqualified(other.character))
+
+        await player.send_message(PlayerTurn(self.current_player.character))
+
+        await self.broadcast(UserJoined(), skip=player)
+
+
+
     def is_accusation_correct(self, accusation):
         return accusation.suspect == self.crime_character and \
             accusation.room == self.crime_room and \
@@ -470,13 +501,17 @@ class GameState:
         if self.current_player == player:
             await self.broadcast(accusation, skip=player)
             if self.is_accusation_correct(accusation):
-                await self.broadcast(Winner(player.character))
+                await self.declare_winner(player.character)
             else:
                 self.disqualified.add(player)
                 await self.broadcast(Disqualified(player.character))
         else:
             self.logger.debug(f'Invalid move, not currently turn of accuser')
             await self.players[player].send_message(Status(f'Invalid move, not currently turn of accuser'))
+
+    async def declare_winner(self, character: Character):
+        self.complete = True
+        await broadcast(Winner(character))
 
     def next_player(self):
         try:

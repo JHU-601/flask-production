@@ -35,11 +35,58 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('server')
 logger.setLevel(logging.DEBUG)
 
+CONNECTED = {}
+DROPPED = {}
+
+def add_connection(ip, player):
+    global CONNECTED
+    if ip in CONNECTED:
+        CONNECTED[ip].append(player)
+    else:
+        CONNECTED[ip] = [player]
+
+async def get_disconnected(ip):
+    if ip in CONNECTED:
+        # try twice to wait for a potential timeout
+        for _ in range(2):
+            for player in CONNECTED[ip]:
+                logger.debug(f"checking for disconnected user {player.display_name}: {player.socket.closed}")
+                if player.socket.closed:
+                    return player
+            # sleep for a very short time to allow async msg to come in
+            await asyncio.sleep(0.2)
+    return None
+
 async def websockopen(socket, path):
     # Listen for messages
-    logger.debug(f"User connected from {socket.remote_address}")
-    player = Player(socket)
-    await player.user_loop()
+    global CONNECTED
+    global DROPPED
+
+    addr = socket.remote_address
+    ip = addr[0]
+    logger.debug(f"User connected from {addr}")
+
+    if ip in DROPPED:
+        logger.debug(f"found disconnected user")
+        player = DROPPED.pop(ip)
+        await player.reconnect(socket)
+        CONNECTED[ip] = player
+    else:
+        player = await get_disconnected(ip)
+        if player is not None:
+            player.reconnect(socket)
+        else:
+            player = Player(socket)
+            add_connection(ip, player)
+
+    try:
+        await player.user_loop()
+    except (websockets.exceptions.ConnectionClosedOK, websockets.exceptions.ConnectionClosedError):
+        if player.game is not None and not player.game.complete:
+            DROPPED[ip] = player
+        else:
+            disconnect_player(ip, player)
+
 
 async def index(request):
     logger.debug(f"Serving index")
