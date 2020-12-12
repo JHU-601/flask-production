@@ -538,7 +538,9 @@ class ChatPanel extends Panel {
     $(this.chatlog).html('');
     for (var i = 0; i < gameState.chat_log.length; i++) {
       var log = gameState.chat_log[i];
-      $(this.chatlog).append('<div class="chatentry">' + log.date.getHours() + ':' + log.date.getMinutes() +' <b>' + log.from + ':</b> ' + log.message + "</div>");
+      var hrs = (log.date.getHours() < 10 ? '0' + log.date.getHours() : log.date.getHours());
+      var mins = (log.date.getMinutes() < 10 ? '0' + log.date.getMinutes() : log.date.getMinutes());
+      $(this.chatlog).append('<div class="chatentry">' + hrs + ':' + mins +' <b>' + log.from + ':</b> ' + log.message + "</div>");
     }
   }
   handleTxtChatKeyPress(e) {
