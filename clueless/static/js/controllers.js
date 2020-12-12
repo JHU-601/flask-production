@@ -113,6 +113,9 @@ class GameHub {
       weapon: weapon,
     };
     this.sendMessage(message);
+    // Update gamestate - move the suggested player
+    this.gameState.players[message.suspect].character.position = message.room;
+    this.updateDisplay();
   }
   sendAccuse(room, suspect, weapon) {
     var message = {
@@ -122,6 +125,9 @@ class GameHub {
       weapon: weapon,
     };
     this.sendMessage(message);
+    // Update gamestate - move the accused player
+    this.gameState.players[message.suspect].character.position = message.room;
+    this.updateDisplay();
   }
   sendChat(message) {
     var message = {
@@ -217,6 +223,8 @@ class GameHub {
       weapon: message.weapon,
       suspect: message.suspect,
     };
+    // Update gamestate - move the suggested player
+    this.gameState.players[message.suspect].character.position = message.room;
   }
   handleMsgSuggestionWitness(message) {
     var player = this.gameState.players[message.character];
@@ -235,6 +243,8 @@ class GameHub {
 
     var msg = player.display_name + ' made an accusation: ' + suspect.name + ' in ' + room.name + ' with the ' + weapon.name;
     this.gamePanel.showToast(msg);
+    // Update gamestate - move the accused player
+    this.gameState.players[message.suspect].character.position = message.room;
   }
   handleMsgWinner(message) {
     // Get which player has won by character id
