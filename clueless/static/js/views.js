@@ -550,7 +550,7 @@ class ChatPanel extends Panel {
     if (e.keyCode == 13) { // enter key
       e.preventDefault();
       if (this.txtChat.value.trim().length > 0) {
-        gameHub.sendChat(this.txtChat.value, $('#selectRecipient').val());
+        gameHub.sendChat(this.txtChat.value, parseInt($('#selectRecipient').val()));
         this.txtChat.value = "";
       }
     }
