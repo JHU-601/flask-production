@@ -163,6 +163,9 @@ class Player:
             self.logger.debug(f'Accusation: {message.room} {message.weapon} {message.suspect}')
 
             await self.game_action(lambda game: game.accuse(self, message), "make an accusation")
+        elif isinstance(message, Chat):
+            self.logger.debug(f'Chat: {message}')
+            await self.game_action(lambda game: game.chat(self, message), "send a chat message")
         else:
             raise ApiError(f"received invalid message from client: {message}")
 
@@ -506,3 +509,12 @@ class GameState:
             new_player.state.end_turn()
             new_player.state.start_turn()
         await self.broadcast(PlayerTurn(self.current_player.character))
+
+    async def chat(self, player: Player, chat: Chat):
+        chat_msg = chat.into_chat_message(player.character)
+        if chat.to is not None:
+            to_player = self.players[chat.to]
+            await to_player.send_message(chat_msg)
+        else:
+            await self.broadcast(chat_msg)
+
