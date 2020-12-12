@@ -260,6 +260,9 @@ class Locations:
             self.called.remove(player.character)
 
     def move_to_hallway(self, player: Player, hallway: Hallway):
+        if self.locations[hallway] is not None:
+            raise LocationError("Hallway is blocked.")
+
         try:
             current_location = self.positions[player.character]
             self._remove_player(player, current_location)
@@ -268,8 +271,7 @@ class Locations:
             # hallway adjacent to their starting position
             if hallway != player.character.first_location:
                 raise LocationError("Cannot move to this location on first turn.")
-        if self.locations[hallway] is not None:
-            raise LocationError("Hallway is blocked.")
+        
 
         self.locations[hallway] = player.character
         self.positions[player.character] = Location(hallway)
