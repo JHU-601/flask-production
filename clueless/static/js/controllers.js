@@ -3,7 +3,7 @@ WEBSOCKET_URL = 'ws://' + window.location.hostname + ':8081';
 class GameState {
   constructor() {
     this.usersJoined = 0;
-    this.players = [];
+    this.players = [null, null, null, null, null, null];
     this.localPlayer = null;
     this.chosenPlayer = null;
     this.playerTurn = null;
@@ -157,7 +157,7 @@ class GameHub {
     this.gameState.gameid = message.id;
     for (var i = 0; i < message.registered.length; i++) {
       var p = new Player(message.registered[i].character, message.registered[i].name);
-      this.gameState.players.push(p);
+      this.gameState.players[p.character.id] = p;
     }
     this.gamePanel.showToast('Welcome!');
   }
@@ -170,7 +170,7 @@ class GameHub {
       this.gameState.localPlayer = p;
       document.title += " (" + p.display_name + ")";
     }
-    this.gameState.players.push(p);
+    this.gameState.players[p.character.id] = p;
     this.gamePanel.showToast(p.display_name + ' has registered.');
   }
   handleMsgWitness(message) {
@@ -186,10 +186,6 @@ class GameHub {
       id: message.item3,
       type: message.type3,
     };
-    // Put all players in starting positions
-    for (var i = 0; i < this.gameState.players.length; i++) {
-      var curPlayer = this.gameState.players[i];
-    }
     var item1 = WitnessItem_fromType(message.item1, message.type1);
     var item2 = WitnessItem_fromType(message.item2, message.type2);
     var item3  = WitnessItem_fromType(message.item3, message.type3);
@@ -202,21 +198,12 @@ class GameHub {
       this.gameState.localPlayer.character.position = message.location;
     }
     // Find and update the right player
-    for (var i = 0; i < this.gameState.players.length; i++) {
-      if (this.gameState.players[i].character.id == message.player) {
-        this.gameState.players[i].character.position = message.location;
-      }
-    }
+    this.gameState.players[message.player].character.position = message.location;
     // I don't think a toast is needed for this since you can see the move happen, but we could always add one.
   }
   handleMsgSuggestion(message) {
     // Get suggesting player by character id
-    var player;
-    for (var i = 0; i < gameHub.gameState.players.length; i++) {
-      if (gameHub.gameState.players[i].character.id == message.player) {
-        player = gameHub.gameState.players[i];
-      }
-    }
+    var player = gameHub.gameState.players[message.player];
     var room = WitnessItem_fromType(message.room, WitnessType.ROOM);
     var suspect = WitnessItem_fromType(message.suspect, WitnessType.CHARACTER);
     var weapon  = WitnessItem_fromType(message.weapon, WitnessType.WEAPON);
@@ -241,12 +228,7 @@ class GameHub {
   }
   handleMsgAccusation(message) {
     // Get which player has won by character id
-    var player;
-    for (var i = 0; i < gameHub.gameState.players.length; i++) {
-      if (gameHub.gameState.players[i].character.id == message.player) {
-        player = gameHub.gameState.players[i];
-      }
-    }
+    var player = gameHub.gameState.players[message.player];
     var room = WitnessItem_fromType(message.room, WitnessType.ROOM);
     var suspect = WitnessItem_fromType(message.suspect, WitnessType.CHARACTER);
     var weapon  = WitnessItem_fromType(message.weapon, WitnessType.WEAPON);
@@ -256,26 +238,16 @@ class GameHub {
   }
   handleMsgWinner(message) {
     // Get which player has won by character id
-    var player;
-    for (var i = 0; i < gameHub.gameState.players.length; i++) {
-      if (gameHub.gameState.players[i].character.id == message.player) {
-        player = gameHub.gameState.players[i];
-      }
-    }
+    var player = gameHub.gameState.players[message.player];
     var msg = player.display_name + " has won!";
     this.gamePanel.showToast(msg);
     this.gamePanel.showModal('Winner!', msg);
   }
   handleMsgDisqualified(message) {
     // Get which player was disqualified by character id
-    var player;
-    var isLocalPlayer;
-    for (var i = 0; i < gameHub.gameState.players.length; i++) {
-      if (gameHub.gameState.players[i].character.id == message.player) {
-        player = gameHub.gameState.players[i];
-        isLocalPlayer = (player.character.id == gameHub.gameState.localPlayer.character.id);
-      }
-    }
+    var player = gameHub.gameState.players[message.player];
+    var isLocalPlayer = (player.character.id == gameHub.gameState.localPlayer.character.id);
+
     if (isLocalPlayer) {
       var msg = "You have been disqualified.";
       this.gamePanel.showToast(msg);
