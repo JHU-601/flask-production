@@ -129,6 +129,10 @@ class GamePanel extends Panel {
     for (var i = 0; i < gameHub.gameState.players.length; i++) {
       $('#player'+gameHub.gameState.players[i].character.id+'_displayname').html(gameHub.gameState.players[i].display_name);
     }
+    // Update player names in the chat box
+    for (var i = 0; i < gameHub.gameState.players.length; i++) {
+      $('#chat'+gameHub.gameState.players[i].character.id).html(gameHub.gameState.players[i].display_name);
+    }
   }
   showModal(title, message) {
     this.modalPanel.show(title, message);
@@ -349,7 +353,6 @@ class InteractionPanel extends Panel {
     this.bottomPanel.display(gameState);
 
     // Display chat notification
-    console.log('hey',this.topPanel.childPanels)
     // if (this.topPanel.childPanels[1] == null) {
     //   return;
     // } else {
@@ -547,14 +550,14 @@ class ChatPanel extends Panel {
     if (e.keyCode == 13) { // enter key
       e.preventDefault();
       if (this.txtChat.value.trim().length > 0) {
-        gameHub.sendChat(this.txtChat.value);
+        gameHub.sendChat(this.txtChat.value, $('#selectRecipient').val());
         this.txtChat.value = "";
       }
     }
   }
   handleBtnSendClick() {
     if (this.txtChat.value.trim().length > 0) {
-      gameHub.sendChat(this.txtChat.value);
+      gameHub.sendChat(this.txtChat.value, $('#selectRecipient').val());
       this.txtChat.value = "";
     }
   }

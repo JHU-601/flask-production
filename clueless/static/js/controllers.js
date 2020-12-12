@@ -136,11 +136,14 @@ class GameHub {
     this.gameState.players[message.suspect].character.position = message.room;
     this.updateDisplay();
   }
-  sendChat(message) {
+  sendChat(message, to) {
     var message = {
       message: 'Chat',
       text: message,
     };
+    if (to.length > 0) {
+      message.to = to;
+    }
     this.sendMessage(message);
   }
   sendComplete() {
