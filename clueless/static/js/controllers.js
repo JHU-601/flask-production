@@ -10,6 +10,7 @@ class GameState {
     this.witnessItems = [null, null, null];
     this.gameid = null;
     this.lastSuggestion = null;
+    this.registered = [];
   }
 }
 
@@ -154,6 +155,10 @@ class GameHub {
   handleMsgJoined(message) {
     this.gamePanel.showScreen2();
     this.gameState.gameid = message.id;
+    for (var i = 0; i < message.registered.length; i++) {
+      var p = new Player(message.registered[i].character, message.registered[i].name);
+      this.gameState.players.push(p);
+    }
   }
   handleMsgUserJoined(message) {
     this.gamePanel.showToast('A new user has entered the lobby.');

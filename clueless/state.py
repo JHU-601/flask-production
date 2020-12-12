@@ -456,7 +456,11 @@ class GameState:
         self.logger.debug(f'adding player from {player.sock_addr}')
         await self.broadcast(UserJoined())
         available = [character for character in list(Character) if self.characters[character] is None]
-        await player.send_message(Joined(self.id, available))
+        registered = []
+        for c in list(Character):
+            if self.characters[c] is not None:
+                registered.append((c, self.characters[c]))
+        await player.send_message(Joined(self.id, available, registered))
         self.players.append(player)
 
     async def accuse(self, player: Player, accuse: Accuse):
