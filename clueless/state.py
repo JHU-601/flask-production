@@ -473,7 +473,8 @@ class GameState:
         for c in list(Character):
             if self.characters[c] is not None:
                 registered.append((c, self.characters[c]))
-        await player.send_message(Joined(self.id, available, registered))
+        players = len(self.players) + 1
+        await player.send_message(Joined(self.id, available, registered, players))
         self.players.append(player)
 
     async def accuse(self, player: Player, accuse: Accuse):
