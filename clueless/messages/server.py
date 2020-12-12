@@ -99,3 +99,8 @@ class Disqualified:
     def __init__(self, player: Character):
         self.player = player
 
+class ChatMessage:
+    def __init__(self, from_player: Character, private: bool, text: str):
+        self.from_player = from_player
+        self.private = private
+        self.text = text

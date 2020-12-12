@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Type, Set, Union, Optional
 from clueless.error import ApiError
 
-from clueless.messages import Hallway, Character, Room, Location, Weapon, Position, Registration, SuggestionStatus, Suggestion, SuggestionWitness, Accusation
+from clueless.messages import Hallway, Character, Room, Location, Weapon, Position, Registration, SuggestionStatus, Suggestion, SuggestionWitness, Accusation, ChatMessage
 from clueless.messages.witness import WitnessType
 
 class JoinGame:
@@ -77,3 +77,12 @@ class Accuse:
 
     def into_accusation(self, player: Character) -> Accusation:
         return Accusation(player, self.room, self.weapon, self.suspect)
+
+class Chat:
+    def __init__(self, text: str, to: Optional[Character]=None):
+        self.text = text
+        self.to = to
+
+    def into_chat_message(self, character: Character):
+        return ChatMessage(character, self.to is not None, self.text)
+
