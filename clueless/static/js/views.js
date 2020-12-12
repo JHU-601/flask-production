@@ -543,7 +543,7 @@ class ChatPanel extends Panel {
       var log = gameState.chat_log[i];
       var hrs = (log.date.getHours() < 10 ? '0' + log.date.getHours() : log.date.getHours());
       var mins = (log.date.getMinutes() < 10 ? '0' + log.date.getMinutes() : log.date.getMinutes());
-      $(this.chatlog).append('<div class="chatentry">' + hrs + ':' + mins +' <b>' + log.from + ':</b> ' + log.message + "</div>");
+      $(this.chatlog).append('<div class="chatentry">' + hrs + ':' + mins +' <b>' + log.from + (log.private? ' (privately)' : '') +':</b> ' + log.message + "</div>");
     }
   }
   handleTxtChatKeyPress(e) {
@@ -557,7 +557,7 @@ class ChatPanel extends Panel {
   }
   handleBtnSendClick() {
     if (this.txtChat.value.trim().length > 0) {
-      gameHub.sendChat(this.txtChat.value, $('#selectRecipient').val());
+      gameHub.sendChat(this.txtChat.value, parseInt($('#selectRecipient').val()));
       this.txtChat.value = "";
     }
   }
