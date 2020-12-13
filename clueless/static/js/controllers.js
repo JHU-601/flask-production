@@ -11,6 +11,7 @@ class GameState {
     this.gameid = null;
     this.lastSuggestion = null;
     this.chat_log = [];
+    this.has_unread_chats = false;
   }
 }
 
@@ -29,6 +30,12 @@ class GameHub {
     }.bind(this);
     // do initial display update
     this.updateDisplay();
+
+    // Update when we re-focus to clear chat notiications
+    var that = this;
+    window.onfocus = function() {
+      that.updateDisplay();
+    }
   }
 
   updateDisplay() {
@@ -59,8 +66,8 @@ class GameHub {
       this.handleMsgWinner(message);
     } else if (message.message == 'Disqualified') {
       this.handleMsgDisqualified(message);
-    } else if (message.message == 'ServerChat') {
-      this.handleMsgServerChat(message);
+    } else if (message.message == 'ChatMessage') {
+      this.handleMsgChatMessage(message);
     } else if (message.message == 'Status') {
       this.handleMsgStatus(message);
     } else if (message.message == 'PlayerTurn') {
@@ -129,11 +136,23 @@ class GameHub {
     this.gameState.players[message.suspect].character.position = message.room;
     this.updateDisplay();
   }
-  sendChat(message) {
+  sendChat(message, to) {
     var message = {
       message: 'Chat',
-      body: message,
+      text: message,
     };
+    if (to != -1) {
+      message.to = parseInt(to);
+    }
+    if (message.to != null) {
+      gameHub.gameState.chat_log.push({
+        'from': gameHub.gameState.players[gameHub.gameState.localPlayerIndex].display_name,
+        'message': message.text,
+        'private': true,
+        'date': new Date(),
+      });
+    }
+    this.updateDisplay();
     this.sendMessage(message);
   }
   sendComplete() {
@@ -263,9 +282,15 @@ class GameHub {
       this.gamePanel.showToast(msg);
     }
   }
-  handleMsgServerChat(message) {
-    // TODO
-    this.gamePanel.showToast('ServerChat: ' + JSON.stringify(message));
+  handleMsgChatMessage(message) {
+    this.gameState.chat_log.push({
+      'from': this.gameState.players[message.from_player].display_name,
+      'message': message.text,
+      'private': message.private,
+      'date': new Date(),
+    });
+    // New message arrived!
+    this.gameState.has_unread_chats = true;
   }
   handleMsgStatus(message) {
     this.gamePanel.showModal('Error', message.error);
