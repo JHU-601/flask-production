@@ -4,7 +4,7 @@ class GameState {
   constructor() {
     this.usersJoined = 0;
     this.players = [null, null, null, null, null, null];
-    this.localPlayer = null;
+    this.localPlayerIndex = null;
     this.chosenPlayer = null;
     this.playerTurn = null;
     this.witnessItems = [null, null, null];
@@ -193,7 +193,7 @@ class GameHub {
   handleMsgRegistration(message) {
     var p = new Player(message.character, message.display_name);
     if (p.character.id == this.gameState.chosenPlayer) {
-      this.gameState.localPlayer = p;
+      this.gameState.localPlayerIndex = p.character.id;
       document.title += " (" + p.display_name + ")";
     }
     this.gameState.players[p.character.id] = p;
@@ -219,10 +219,6 @@ class GameHub {
     this.gamePanel.showToast('The game has started. Your witness items are: ' + item1.name + ', ' + item2.name + ', ' + item3.name);
   }
   handleMsgPosition(message) {
-    // Update localPlayer if needed
-    if (message.player == this.gameState.localPlayer.character.id) {
-      this.gameState.localPlayer.character.position = message.location;
-    }
     // Find and update the right player
     this.gameState.players[message.player].character.position = message.location;
     // I don't think a toast is needed for this since you can see the move happen, but we could always add one.
@@ -276,7 +272,7 @@ class GameHub {
   handleMsgDisqualified(message) {
     // Get which player was disqualified by character id
     var player = gameHub.gameState.players[message.player];
-    var isLocalPlayer = (player.character.id == gameHub.gameState.localPlayer.character.id);
+    var isLocalPlayer = (player.character.id == gameHub.gameState.localPlayerIndex);
 
     if (isLocalPlayer) {
       var msg = "You have been disqualified.";
@@ -305,7 +301,7 @@ class GameHub {
   handleMsgPlayerTurn(message) {
     this.gameState.playerTurn = message.player;
     var player = this.gameState.players[message.player];
-    if (player.character.id == this.gameState.localPlayer.character.id) {
+    if (player.character.id == this.gameState.localPlayerIndex) {
       $('#turn-indicator').html('Your turn!');
       $('#turn-indicator').addClass('yourturn');
     } else {

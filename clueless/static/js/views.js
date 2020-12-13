@@ -251,14 +251,14 @@ class RegistrationPanel extends Panel {
     }
     // Disable all buttons if we already have a character
     for (var i = 0; i < this.characters.length; i++) {
-      if (gameState.localPlayer != null) {
+      if (gameState.localPlayerIndex != null) {
         this.characters[i].disabled = true;
       }
     }
   }
   handleCharacterClick(e) {
     // Ignore this click if we already have chosen a player
-    if (gameHub.gameState.localPlayer != null) {
+    if (gameHub.gameState.localPlayerIndex != null) {
       return;
     }
     // Ignore this click if the character is already taken
@@ -312,8 +312,8 @@ class GameboardPanel extends Panel {
       roomElem.appendChild(playerElem);
     }
     // Show localPlayer
-    if (gameState.localPlayer != null) {
-      this.element.querySelector('#player' + gameState.localPlayer.character.id).classList.add('localPlayer');
+    if (gameState.localPlayerIndex != null) {
+      this.element.querySelector('#player' + gameState.localPlayerIndex).classList.add('localPlayer');
     }
   }
 }
@@ -412,23 +412,35 @@ class TabbedPanel extends Panel {
 class SuggestPanel extends Panel {
   constructor(id) {
     super(id);
-    this.txtRoom = this.element.querySelector('#txtRoom');
+    this.lblRoom = this.element.querySelector('#lblRoom');
     this.txtSuspect = this.element.querySelector('#txtSuspect');
     this.txtWeapon = this.element.querySelector('#txtWeapon');
     this.btnSuggest = this.element.querySelector('#btnSuggest')
     this.btnSuggest.onclick = this.handleBtnSuggestClick.bind(this);
   }
   display(gameState) {
-    // Disable when it's not your turn
     if (!gameState) return;
-    if (gameState && gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+    // Fill the room label with the current room of localplayer
+    if (gameState.localPlayerIndex != null && gameState.players[gameState.localPlayerIndex] != null && gameState.players[gameState.localPlayerIndex].character.position != null) {
+      var room = gameState.players[gameState.localPlayerIndex].character.position;
+      // Taking this out - it may be kind of cool to still see the name of the hallway. Suggest button will be disabled.
+      // Can easily switch it back so that room is displayed as "n/a" in SuggestPanel when in a hallway
+      // if (room >= 10) {
+      //   // Hallways don't count
+      //   this.lblRoom.innerHTML = 'n/a';
+      // } else {
+        this.lblRoom.innerHTML = WitnessItem_fromType(room, WitnessType.ROOM).name;
+      // }
+    }
+    // Disable when it's not your turn
+    if (gameState && gameState.localPlayerIndex != null && gameState.playerTurn == gameState.players[gameState.localPlayerIndex].character.id && gameState.players[gameState.localPlayerIndex].character.position < 10) {
       this.btnSuggest.disabled = false;
     } else {
       this.btnSuggest.disabled = true;
     }
   }
   handleBtnSuggestClick() {
-    gameHub.sendSuggest(this.txtRoom.value, this.txtSuspect.value, this.txtWeapon.value);
+    gameHub.sendSuggest(gameHub.gameState.players[gameHub.gameState.localPlayerIndex].character.position, this.txtSuspect.value, this.txtWeapon.value);
     gameHub.gamePanel.suggestionPanel.show();
   }
 }
@@ -445,7 +457,7 @@ class AccusePanel extends Panel {
   display(gameState) {
     // Disable when it's not your turn
     if (!gameState) return;
-    if (gameState && gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+    if (gameState && gameState.localPlayerIndex != null && gameState.playerTurn == gameState.players[gameState.localPlayerIndex].character.id) {
       this.btnAccuse.disabled = false;
     } else {
       this.btnAccuse.disabled = true;
@@ -479,7 +491,7 @@ class MovePanel extends Panel {
     }
     // Disable when it's not your turn
     if (!gameState) return;
-    if (gameState && gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+    if (gameState.localPlayerIndex != null && gameState.playerTurn == gameState.localPlayerIndex) {
       this.btnMove.disabled = false;
     } else {
       this.btnMove.disabled = true;
@@ -493,10 +505,10 @@ class MovePanel extends Panel {
     if (this.selected == null) {
       gameHub.gamePanel.showModal('Validation Error', 'You must select a direction to move.');
     } else {
-      if (gameHub.gameState.localPlayer.character.position == null) {
-        gameHub.sendMove(gameHub.gameState.localPlayer.character.first_move);
+      if (gameHub.gameState.players[gameHub.gameState.localPlayerIndex].character.position == null) {
+        gameHub.sendMove(gameHub.gameState.players[gameHub.gameState.localPlayerIndex].character.first_move);
       } else {
-        var new_pos = new Position(gameHub.gameState.localPlayer.character.position).getRelativePosition(this.selected);
+        var new_pos = new Position(gameHub.gameState.players[gameHub.gameState.localPlayerIndex].character.position).getRelativePosition(this.selected);
         if (new_pos == null) {
           gameHub.gamePanel.showModal('Validation Error', 'Invalid move.')
         } else {
@@ -516,7 +528,7 @@ class TurnPanel extends Panel {
   display(gameState) {
     // Disable when it's not your turn
     if (!gameState) return;
-    if (gameState.localPlayer && gameState.playerTurn == gameState.localPlayer.character.id) {
+    if (gameState.localPlayerIndex != null && gameState.playerTurn == gameState.localPlayerIndex) {
       this.btnEndTurn.disabled = false;
     } else {
       this.btnEndTurn.disabled = true;
