@@ -161,6 +161,7 @@ class GameHub {
   handleMsgJoined(message) {
     this.gamePanel.showScreen2();
     this.gameState.gameid = message.id;
+    this.gameState.lobby = message.players;
     for (var i = 0; i < message.registered.length; i++) {
       var p = new Player(message.registered[i].character, message.registered[i].name);
       this.gameState.players[p.character.id] = p;
@@ -169,6 +170,7 @@ class GameHub {
   }
   handleMsgUserJoined(message) {
     this.gamePanel.showToast('A new user has entered the lobby.');
+    this.gameState.lobby += 1;
   }
   handleMsgRegistration(message) {
     var p = new Player(message.character, message.display_name);

@@ -97,6 +97,7 @@ class GamePanel extends Panel {
     this.suggestionPanel.hide();
     $('#turn-indicator').hide();
     $('#help-button').hide();
+    $('#players-in-lobby').hide();
   }
   showScreen2() {
     this.homePanel.hide();
@@ -110,6 +111,7 @@ class GamePanel extends Panel {
     this.suggestionPanel.hide();
     $('#turn-indicator').hide();
     $('#help-button').hide();
+    $('#players-in-lobby').show();
   }
   showScreen3() {
     this.homePanel.hide();
@@ -123,6 +125,7 @@ class GamePanel extends Panel {
     this.suggestionPanel.hide();
     $('#turn-indicator').show();
     $('#help-button').show();
+    $('#players-in-lobby').hide();
     // Update player names in the notepad
     for (var i = 0; i < gameHub.gameState.players.length; i++) {
       $('#player'+gameHub.gameState.players[i].character.id+'_displayname').html(gameHub.gameState.players[i].display_name);
@@ -209,6 +212,8 @@ class WaitingRoomPanel extends Panel {
     } else {
       this.btnStartGame.disabled = false;
     }
+    // Display # users in lobby
+    $('#players-in-lobby').html(gameState.lobby + ' users in lobby');
   }
   handleBtnStartGameClick() {
     alert('btnStart clicked');

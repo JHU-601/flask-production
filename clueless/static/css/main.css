@@ -386,7 +386,7 @@ body {
   text-align: center;
 }
 
-#turn-indicator {
+#turn-indicator, #players-in-lobby {
   display: none;
   position: absolute;
   top: 0;
