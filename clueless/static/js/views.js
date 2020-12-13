@@ -97,6 +97,7 @@ class GamePanel extends Panel {
     this.suggestionPanel.hide();
     $('#turn-indicator').hide();
     $('#help-button').hide();
+    $('#witness-items-button').hide();
   }
   showScreen2() {
     this.homePanel.hide();
@@ -110,6 +111,7 @@ class GamePanel extends Panel {
     this.suggestionPanel.hide();
     $('#turn-indicator').hide();
     $('#help-button').hide();
+    $('#witness-items-button').hide();
   }
   showScreen3() {
     this.homePanel.hide();
@@ -123,6 +125,7 @@ class GamePanel extends Panel {
     this.suggestionPanel.hide();
     $('#turn-indicator').show();
     $('#help-button').show();
+    $('#witness-items-button').show();
     // Update player names in the notepad
     for (var i = 0; i < gameHub.gameState.players.length; i++) {
       $('#player'+gameHub.gameState.players[i].character.id+'_displayname').html(gameHub.gameState.players[i].display_name);
@@ -295,6 +298,14 @@ class GameboardPanel extends Panel {
     // Help button click listener
     $('#help-button').click(function() {
       gameHub.gamePanel.showModal('Help', HELP_TEXT);
+    });
+
+    // Witness-items-button click listener
+    $('#witness-items-button').click(function() {
+      var item1 = WitnessItem_fromType(gameHub.gameState.witnessItems[0].id, gameHub.gameState.witnessItems[0].type);
+      var item2 = WitnessItem_fromType(gameHub.gameState.witnessItems[1].id, gameHub.gameState.witnessItems[1].type);
+      var item3 = WitnessItem_fromType(gameHub.gameState.witnessItems[2].id, gameHub.gameState.witnessItems[2].type);
+      gameHub.gamePanel.showModal('Witness Items', "Your witness items are: " + item1.name + ", " + item2.name + ", " + item3.name);
     });
   }
   display(gameState) {
