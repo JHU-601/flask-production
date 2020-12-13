@@ -16,10 +16,11 @@ class Status:
         return "status"
 
 class Joined:
-    def __init__(self, id: str, available: List[Character], registered: List[(Character, str)]):
+    def __init__(self, id: str, available: List[Character], registered: List[(Character, str)], players: int):
         self.id = id
         self.available = available
         self.registered = [{ "character": c, "name": s} for c,s in registered]
+        self.players = players
 
 class UserJoined:
     def __init__(self):
@@ -98,3 +99,8 @@ class Disqualified:
     def __init__(self, player: Character):
         self.player = player
 
+class ChatMessage:
+    def __init__(self, from_player: Character, private: bool, text: str):
+        self.from_player = from_player
+        self.private = private
+        self.text = text

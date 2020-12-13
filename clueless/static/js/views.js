@@ -37,6 +37,8 @@ as to which witness items were selected as the true crime. If you are correct,
 you win! Otherwise, you will be disqualified.</p>
 `;
 
+CHAT_NOTIF = '(!) ';
+
 class Panel {
   constructor(id) {
     this.element = document.getElementById(id);
@@ -98,6 +100,7 @@ class GamePanel extends Panel {
     $('#turn-indicator').hide();
     $('#help-button').hide();
     $('#players-in-lobby').hide();
+    $('#witness-items-button').hide();
   }
   showScreen2() {
     this.homePanel.hide();
@@ -112,6 +115,7 @@ class GamePanel extends Panel {
     $('#turn-indicator').hide();
     $('#help-button').hide();
     $('#players-in-lobby').show();
+    $('#witness-items-button').hide();
   }
   showScreen3() {
     this.homePanel.hide();
@@ -126,9 +130,14 @@ class GamePanel extends Panel {
     $('#turn-indicator').show();
     $('#help-button').show();
     $('#players-in-lobby').hide();
+    $('#witness-items-button').show();
     // Update player names in the notepad
     for (var i = 0; i < gameHub.gameState.players.length; i++) {
       $('#player'+gameHub.gameState.players[i].character.id+'_displayname').html(gameHub.gameState.players[i].display_name);
+    }
+    // Update player names in the chat box
+    for (var i = 0; i < gameHub.gameState.players.length; i++) {
+      $('#chat'+gameHub.gameState.players[i].character.id).html(gameHub.gameState.players[i].display_name);
     }
   }
   showModal(title, message) {
@@ -301,6 +310,14 @@ class GameboardPanel extends Panel {
     $('#help-button').click(function() {
       gameHub.gamePanel.showModal('Help', HELP_TEXT);
     });
+
+    // Witness-items-button click listener
+    $('#witness-items-button').click(function() {
+      var item1 = WitnessItem_fromType(gameHub.gameState.witnessItems[0].id, gameHub.gameState.witnessItems[0].type);
+      var item2 = WitnessItem_fromType(gameHub.gameState.witnessItems[1].id, gameHub.gameState.witnessItems[1].type);
+      var item3 = WitnessItem_fromType(gameHub.gameState.witnessItems[2].id, gameHub.gameState.witnessItems[2].type);
+      gameHub.gamePanel.showModal('Witness Items', "Your witness items are: " + item1.name + ", " + item2.name + ", " + item3.name);
+    });
   }
   display(gameState) {
     for (var i = 0; i < gameState.players.length; i++) {
@@ -331,6 +348,14 @@ class InteractionPanel extends Panel {
     this.turnPanel = new TurnPanel('turn-panel');
 
     this.bottomPanel = new TabbedPanel('bottom-panel', [this.movePanel, this.suggestPanel, this.accusePanel, this.turnPanel]);
+
+    // Special listener: clear the chats notification when we click the chat tab
+    this.topPanel.selectors[1].addEventListener('click', function() {
+      gameHub.gameState.has_unread_chats = false;
+      gameHub.updateDisplay();
+      // Focus on the txtChat
+      $('#txtChat').focus();
+    });
   }
   display(gameState) {
     this.notepadPanel.display(gameState);
@@ -344,6 +369,25 @@ class InteractionPanel extends Panel {
     this.turnPanel.display(gameState);
 
     this.bottomPanel.display(gameState);
+
+    // Display chat notification
+    // if (this.topPanel.childPanels[1] == null) {
+    //   return;
+    // } else {
+      if (gameState.has_unread_chats == true && (this.topPanel.selectedPanel != 1 || !document.hasFocus())) {
+        // Show the tab as yellow
+        this.topPanel.selectors[1].classList.add('notification');
+        // Add chat emoji to page title
+        if (!document.title.includes(CHAT_NOTIF)) {
+          document.title = CHAT_NOTIF + document.title;
+        }
+      } else {
+        // Remove color
+        this.topPanel.selectors[1].classList.remove('notification');
+        // Remove title emoji
+        document.title = document.title.replace(CHAT_NOTIF, '');
+      }
+    // }
   }
 }
 
@@ -520,17 +564,32 @@ class ChatPanel extends Panel {
     this.chatlog = this.element.querySelector('#chatlog');
     this.txtChat = this.element.querySelector('#txtChat');
     this.btnSend = this.element.querySelector('#btnSend');
+    this.txtChat.onkeypress = this.handleTxtChatKeyPress.bind(this);
     this.btnSend.onclick = this.handleBtnSendClick.bind(this);
   }
   display(gameState) {
     $(this.chatlog).html('');
     for (var i = 0; i < gameState.chat_log.length; i++) {
       var log = gameState.chat_log[i];
-      $(this.chatlog).append('<div class="chatentry">' + log.date.getHours() + ':' + log.date.getMinutes() +' <b>' + log.from + ':</b> ' + log.message + "</div>");
+      var hrs = (log.date.getHours() < 10 ? '0' + log.date.getHours() : log.date.getHours());
+      var mins = (log.date.getMinutes() < 10 ? '0' + log.date.getMinutes() : log.date.getMinutes());
+      $(this.chatlog).append('<div class="chatentry">' + hrs + ':' + mins +' <b>' + log.from + (log.private? ' (privately)' : '') +':</b> ' + log.message + "</div>");
+    }
+  }
+  handleTxtChatKeyPress(e) {
+    if (e.keyCode == 13) { // enter key
+      e.preventDefault();
+      if (this.txtChat.value.trim().length > 0) {
+        gameHub.sendChat(this.txtChat.value, $('#selectRecipient').val());
+        this.txtChat.value = "";
+      }
     }
   }
   handleBtnSendClick() {
-    gameHub.sendChat(this.txtChat.value);
+    if (this.txtChat.value.trim().length > 0) {
+      gameHub.sendChat(this.txtChat.value, $('#selectRecipient').val());
+      this.txtChat.value = "";
+    }
   }
 }
 

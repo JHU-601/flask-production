@@ -249,6 +249,9 @@ body {
 .tabbed-panel .selectors .tab-selector.active {
   background-color: lightgray;
 }
+.tabbed-panel .selectors .tab-selector.notification {
+  background-color: yellow;
+}
 .tabbed-panel .tab {
   flex-grow: 1;
   display: block;
@@ -419,4 +422,24 @@ body {
 }
 #help-button:hover {
   background-color: #e254ff;
+}
+
+#witness-items-button {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 100px;
+  background-color: lightgray;
+  padding: 10px;
+  color: black;
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: "Arial";
+  cursor: pointer;
+  border: 3px solid white;
+  margin: 10px;
 }

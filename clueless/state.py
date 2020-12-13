@@ -38,6 +38,7 @@ class PlayerState:
 
     def __str__(self):
         return f'in_turn: {self.in_turn}; moved: {self.moved}; suggest: {self.suggest}; suggest_comp: {self.suggestion_completed}; accused: {self.accused}'
+
     # Reset all values at the end of a players turn
     def end_turn(self):
         self._check_turn()
@@ -163,6 +164,9 @@ class Player:
             self.logger.debug(f'Accusation: {message.room} {message.weapon} {message.suspect}')
 
             await self.game_action(lambda game: game.accuse(self, message), "make an accusation")
+        elif isinstance(message, Chat):
+            self.logger.debug(f'Chat: {message}')
+            await self.game_action(lambda game: game.chat(self, message), "send a chat message")
         else:
             raise ApiError(f"received invalid message from client: {message}")
 
@@ -221,6 +225,16 @@ class Locations:
             val += f'{player}: ' +  (str(location) if location is not None else 'start')
         return val
 
+    def is_available(self, location: Location):
+        if location.is_room:
+            return True
+        try:
+            return self.positions[location] is not None
+        except KeyError:
+            return True
+
+
+
     def is_called(self, player: Player):
         return player.character in self.called
 
@@ -260,6 +274,9 @@ class Locations:
             self.called.remove(player.character)
 
     def move_to_hallway(self, player: Player, hallway: Hallway):
+        if self.locations[hallway] is not None:
+            raise LocationError("Hallway is blocked.")
+
         try:
             current_location = self.positions[player.character]
             self._remove_player(player, current_location)
@@ -268,8 +285,7 @@ class Locations:
             # hallway adjacent to their starting position
             if hallway != player.character.first_location:
                 raise LocationError("Cannot move to this location on first turn.")
-        if self.locations[hallway] is not None:
-            raise LocationError("Hallway is blocked.")
+        
 
         self.locations[hallway] = player.character
         self.positions[player.character] = Location(hallway)
@@ -316,6 +332,8 @@ class GameState:
             [w for w in list(Weapon) if w != self.crime_weapon],
             [r for r in list(Room) if r != self.crime_room],
         )]
+        self.logger.debug(f'crime character: {self.crime_character}; crime weapon: {self.crime_weapon}; '
+                          f'crime room: {self.crime_room}')
         random.shuffle(items)
         items_iter = iter(items)
         for player in self.players:
@@ -460,7 +478,8 @@ class GameState:
         for c in list(Character):
             if self.characters[c] is not None:
                 registered.append((c, self.characters[c]))
-        await player.send_message(Joined(self.id, available, registered))
+        players = len(self.players) + 1
+        await player.send_message(Joined(self.id, available, registered, players))
         self.players.append(player)
 
     async def accuse(self, player: Player, accuse: Accuse):
@@ -473,7 +492,15 @@ class GameState:
                 await self.broadcast(Winner(player.character))
             else:
                 self.disqualified.add(player)
-                await self.broadcast(Disqualified(player.character))
+                # check for number of disqualified players
+                if len(self.disqualified) < 5:
+                    await self.broadcast(Disqualified(player.character))
+                elif len(self.disqualified) == 5:
+                    for curPlayer in self.players:
+                        if curPlayer not in self.disqualified:
+                            self.logger.debug(f'Five players disqualified, ending game.')
+                            await self.broadcast(Winner(player.character));
+
         else:
             self.logger.debug(f'Invalid move, not currently turn of accuser')
             await self.players[player].send_message(Status(f'Invalid move, not currently turn of accuser'))
@@ -491,11 +518,17 @@ class GameState:
 
     async def complete_turn(self, player: Player):
         try:
+            has_moved = player.state.moved
+            can_move = any([self.locations.is_available(loc) for loc in player.location.adjacent])
+            if not has_moved and can_move and not self.locations.is_called(player):
+                return await player.send_message(Status("You must move before ending your turn."))
             self.logger.debug(f'ending turn for {player.character}: {player.state}')
             player.state.end_turn()
             self.logger.debug(f'ended turn for {player.character}: {player.state}')
         except StateError as e:
             return await player.send_message(Status(e.msg))
+        except AttributeError as e:
+            return await player.send_message(Status("You must make a move before ending your turn."))
 
         new_player = self.next_player()
         self.logger.debug(f'starting turn for {new_player.character}: {new_player.state}')
@@ -506,3 +539,12 @@ class GameState:
             new_player.state.end_turn()
             new_player.state.start_turn()
         await self.broadcast(PlayerTurn(self.current_player.character))
+
+    async def chat(self, player: Player, chat: Chat):
+        chat_msg = chat.into_chat_message(player.character)
+        if chat.to is not None:
+            to_player = self.players[chat.to]
+            await to_player.send_message(chat_msg)
+        else:
+            await self.broadcast(chat_msg)
+
