@@ -381,7 +381,7 @@ class GameState:
     def validate_suggestion_response(self, response_player: Player, response: SuggestionResponse):
         denied = response.witness is None
         has_item = False
-        for item in self.witness_items[player.character]:
+        for item in self.witness_items[response_player.character]:
             if (isinstance(item, Room) and item == self.suggestion.room) or \
                (isinstance(item, Weapon) and item == self.suggestion.weapon) or \
                (isinstance(item, Character) and item == self.suggestion.character):
