@@ -337,6 +337,9 @@ body {
 #notepad-panel table td.check.no {
   background-color: red;
 }
+#notepad-panel table td.check.maybe {
+  background-color: yellow;
+}
 
 /* ModalPanel */
 .modal {
