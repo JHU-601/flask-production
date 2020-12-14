@@ -405,10 +405,10 @@ class GameState:
         if self.queried_player != response_player:
             return await response_player.send_message(Status("Wait your turn to respond."))
         # check response for cheating
-        is_valid = self.validate_suggestion_response(response_player, response)
+        #is_valid = self.validate_suggestion_response(response_player, response)
 
-        if not is_valid:
-            return await response_player.send_message(Status("Invalid suggestion reponse"))
+        #if not is_valid:
+        #    return await response_player.send_message(Status("Invalid suggestion reponse"))
 
         status = response.into_status(response_player.character)
 
