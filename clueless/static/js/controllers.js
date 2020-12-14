@@ -247,7 +247,7 @@ class GameHub {
     this.gameState.suggestion_number = 0;
   }
   handleMsgSuggestionStatus(message) {
-    var player = gameHub.gameState.players[message.player];
+    var player = gameHub.gameState.players[message.character];
     var msg;
     if (message.witnessed) {
       msg = player.display_name + ' provided a response.';
