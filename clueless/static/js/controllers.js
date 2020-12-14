@@ -120,9 +120,6 @@ class GameHub {
       weapon: weapon,
     };
     this.sendMessage(message);
-    // Update gamestate - move the suggested player
-    this.gameState.players[message.suspect].character.position = message.room;
-    this.updateDisplay();
   }
   sendAccuse(room, suspect, weapon) {
     var message = {
@@ -132,9 +129,6 @@ class GameHub {
       weapon: weapon,
     };
     this.sendMessage(message);
-    // Update gamestate - move the accused player
-    this.gameState.players[message.suspect].character.position = message.room;
-    this.updateDisplay();
   }
   sendChat(message, to) {
     var message = {
@@ -279,6 +273,7 @@ class GameHub {
       var msg = "You have been disqualified.";
       this.gamePanel.showToast(msg);
       this.gamePanel.showModal('Disqualified!', msg);
+      this.sendEndTurn();
     } else {
       var msg = player.display_name + " has been disqualified.";
       this.gamePanel.showToast(msg);
