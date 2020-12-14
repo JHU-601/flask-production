@@ -237,6 +237,8 @@ class GameHub {
     };
     // Update gamestate - move the suggested player
     this.gameState.players[message.suspect].character.position = message.room;
+
+    this.gameState.suggestion_number = 0;
   }
   handleMsgSuggestionWitness(message) {
     var player = this.gameState.players[message.character];
@@ -256,6 +258,7 @@ class GameHub {
     var numStillPlaying = 5 - numDisqualified;
     if (this.gameState.suggestion_number == numStillPlaying) {
       this.gamePanel.suggestionPanel.hide();
+      console.log('dismissing window', numDisqualified, numStillPlaying, this.gameState.suggestion_number);
       this.gameState.suggestion_number = 0;
     }
   }
