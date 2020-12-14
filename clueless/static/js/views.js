@@ -751,6 +751,8 @@ class SuggestionPanel extends Panel {
   }
   handleBtnOkayClick() {
     this.hide();
+    this.element.querySelector('#lblStatus').innerHTML = 'Waiting for players to answer...';
+    this.element.querySelector('#btnOkay').disabled = true;
   }
 }
 
