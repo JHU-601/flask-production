@@ -247,6 +247,14 @@ class GameHub {
     this.gameState.suggestion_number = 0;
   }
   handleMsgSuggestionStatus(message) {
+    var player = gameHub.gameState.players[message.player];
+    var msg;
+    if (message.witnessed) {
+      msg = player.display_name + ' provided a response.';
+    } else {
+      msg = player.display_name + ' did not provide a response.';
+    }
+    this.gamePanel.showToast(msg);
     this.gamePanel.suggestionQueryPanel.hide();
     if (this.gameState.playerTurn == this.gameState.players[this.gameState.localPlayerIndex].character.id) {
       this.gameState.suggestion_number += 1;
