@@ -495,6 +495,7 @@ class GameState:
                 # check for number of disqualified players
                 if len(self.disqualified) < 5:
                     await self.broadcast(Disqualified(player.character))
+                    await self.complete_turn(player)
                 elif len(self.disqualified) == 5:
                     for curPlayer in self.players:
                         if curPlayer not in self.disqualified:
