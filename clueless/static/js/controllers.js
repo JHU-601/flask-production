@@ -12,6 +12,7 @@ class GameState {
     this.lastSuggestion = null;
     this.chat_log = [];
     this.has_unread_chats = false;
+    this.suggestion_number = 0;
   }
 }
 
@@ -120,9 +121,6 @@ class GameHub {
       weapon: weapon,
     };
     this.sendMessage(message);
-    // Update gamestate - move the suggested player
-    this.gameState.players[message.suspect].character.position = message.room;
-    this.updateDisplay();
   }
   sendAccuse(room, suspect, weapon) {
     var message = {
@@ -132,9 +130,6 @@ class GameHub {
       weapon: weapon,
     };
     this.sendMessage(message);
-    // Update gamestate - move the accused player
-    this.gameState.players[message.suspect].character.position = message.room;
-    this.updateDisplay();
   }
   sendChat(message, to) {
     var message = {
@@ -242,14 +237,32 @@ class GameHub {
     };
     // Update gamestate - move the suggested player
     this.gameState.players[message.suspect].character.position = message.room;
+
+    this.gameState.suggestion_number = 0;
   }
   handleMsgSuggestionWitness(message) {
     var player = this.gameState.players[message.character];
     var item = WitnessItem_fromType(message.witness, message.type);
     this.gamePanel.suggestionPanel.update(player, item);
+    this.gameState.suggestion_number = 0;
   }
   handleMsgSuggestionStatus(message) {
     this.gamePanel.suggestionQueryPanel.hide();
+    if (this.gameState.playerTurn == this.gameState.players[this.gameState.localPlayerIndex].character.id) {
+      this.gameState.suggestion_number += 1;
+      var numDisqualified = 0;
+      for (var i = 0; i < this.gameState.players.length; i++) {
+        if (this.gameState.players[i].disqualified) {
+          numDisqualified += 1;
+        }
+      }
+      var numStillPlaying = 5 - numDisqualified;
+      if (this.gameState.suggestion_number == numStillPlaying) {
+        this.gamePanel.suggestionPanel.hide();
+        this.gamePanel.showModal('No reply.', 'No one was able to provide an answer to your query.');
+        this.gameState.suggestion_number = 0;
+      }
+    }
   }
   handleMsgAccusation(message) {
     // Get which player has won by character id
@@ -274,7 +287,7 @@ class GameHub {
     // Get which player was disqualified by character id
     var player = gameHub.gameState.players[message.player];
     var isLocalPlayer = (player.character.id == gameHub.gameState.localPlayerIndex);
-
+    player.disqualified = true;
     if (isLocalPlayer) {
       var msg = "You have been disqualified.";
       this.gamePanel.showToast(msg);
