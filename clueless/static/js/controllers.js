@@ -12,6 +12,7 @@ class GameState {
     this.lastSuggestion = null;
     this.chat_log = [];
     this.has_unread_chats = false;
+    this.suggestion_number = 0;
   }
 }
 
@@ -241,9 +242,22 @@ class GameHub {
     var player = this.gameState.players[message.character];
     var item = WitnessItem_fromType(message.witness, message.type);
     this.gamePanel.suggestionPanel.update(player, item);
+    this.gameState.suggestion_number = 0;
   }
   handleMsgSuggestionStatus(message) {
+    this.gameState.suggestion_number += 1;
     this.gamePanel.suggestionQueryPanel.hide();
+    var numDisqualified = 0;
+    for (var i = 0; i < this.gameState.players.length; i++) {
+      if (this.gameState.players[i].disqualified) {
+        numDisqualified += 1;
+      }
+    }
+    var numStillPlaying = 6 - numDisqualified;
+    if (this.gameState.suggestion_number == numStillPlaying) {
+      this.gamePanel.suggestionPanel.hide();
+      this.gameState.suggestion_number = 0;
+    }
   }
   handleMsgAccusation(message) {
     // Get which player has won by character id
@@ -268,7 +282,7 @@ class GameHub {
     // Get which player was disqualified by character id
     var player = gameHub.gameState.players[message.player];
     var isLocalPlayer = (player.character.id == gameHub.gameState.localPlayerIndex);
-
+    player.disqualified = true;
     if (isLocalPlayer) {
       var msg = "You have been disqualified.";
       this.gamePanel.showToast(msg);

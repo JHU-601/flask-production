@@ -606,13 +606,17 @@ class NotepadPanel extends Panel {
   }
   handleCheckboxClick(e) {
     // Toggle checked class
-    if (!e.target.classList.contains('yes') && !e.target.classList.contains('no')) {
-      e.target.classList.add('yes');
-    } else if (e.target.classList.contains('yes')) {
+    // Starting: none of these classes
+    if (e.target.classList.contains('yes')) {
       e.target.classList.remove('yes');
+      e.target.classList.add('maybe');
+    } else if (e.target.classList.contains('maybe')) {
+      e.target.classList.remove('maybe');
       e.target.classList.add('no');
-    } else {
+    } else if (e.target.classList.contains('no')) {
       e.target.classList.remove('no');
+    } else { // has no class yet
+      e.target.classList.add('yes');
     }
   }
 }
