@@ -518,7 +518,7 @@ class GameState:
         # validate player's turn who's making accusation
         if self.current_player == player:
             # Update the player location and mark them as called
-            self.locations.call_player(suggestion.suspect, suggestion.room)
+            self.locations.call_player(accusation.suspect, accusation.room)
 
             await self.broadcast(accusation, skip=player)
             if self.is_accusation_correct(accusation):
