@@ -229,7 +229,7 @@ class Locations:
         if location.is_room:
             return True
         try:
-            return self.positions[location] is not None
+            return self.locations[location] is not None
         except KeyError:
             return True
 
@@ -442,7 +442,7 @@ class GameState:
 
         if not player.state.moved and not self.locations.is_called(player):
             return await player.send_message(Status("Player must move before making a suggestion."))
-        if player.location != Location(suggest.room):
+        if not self.locations.positions[player.character] == suggest.room:
             return await player.send_message(Status("Player must be in the room specified in their suggestion"))
 
         try:
