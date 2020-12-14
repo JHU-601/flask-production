@@ -273,7 +273,7 @@ class GameHub {
       var msg = "You have been disqualified.";
       this.gamePanel.showToast(msg);
       this.gamePanel.showModal('Disqualified!', msg);
-      this.sendEndTurn();
+      this.sendComplete();
     } else {
       var msg = player.display_name + " has been disqualified.";
       this.gamePanel.showToast(msg);
