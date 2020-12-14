@@ -424,7 +424,7 @@ class GameState:
         # Update the player location and mark them as called
         self.locations.call_player(suggestion.suspect, suggestion.room)
 
-        await self.broadcast(suggestion, skip=player)
+        await self.broadcast(suggestion)
 
         # Set things up for the querying process
         players = itertools.chain(self.players[player.character + 1:], self.players[:player.character])
