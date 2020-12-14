@@ -247,19 +247,21 @@ class GameHub {
     this.gameState.suggestion_number = 0;
   }
   handleMsgSuggestionStatus(message) {
-    this.gameState.suggestion_number += 1;
     this.gamePanel.suggestionQueryPanel.hide();
-    var numDisqualified = 0;
-    for (var i = 0; i < this.gameState.players.length; i++) {
-      if (this.gameState.players[i].disqualified) {
-        numDisqualified += 1;
+    if (this.gameState.playerTurn == this.gameState.players[this.gameState.localPlayerIndex].character.id) {
+      this.gameState.suggestion_number += 1;
+      var numDisqualified = 0;
+      for (var i = 0; i < this.gameState.players.length; i++) {
+        if (this.gameState.players[i].disqualified) {
+          numDisqualified += 1;
+        }
       }
-    }
-    var numStillPlaying = 5 - numDisqualified;
-    if (this.gameState.suggestion_number == numStillPlaying) {
-      this.gamePanel.suggestionPanel.hide();
-      console.log('dismissing window', numDisqualified, numStillPlaying, this.gameState.suggestion_number);
-      this.gameState.suggestion_number = 0;
+      var numStillPlaying = 5 - numDisqualified;
+      if (this.gameState.suggestion_number == numStillPlaying) {
+        this.gamePanel.suggestionPanel.hide();
+        this.gamePanel.showModal('No reply.', 'No one was able to provide an answer to your query.');
+        this.gameState.suggestion_number = 0;
+      }
     }
   }
   handleMsgAccusation(message) {
