@@ -253,7 +253,7 @@ class GameHub {
         numDisqualified += 1;
       }
     }
-    var numStillPlaying = 6 - numDisqualified;
+    var numStillPlaying = 5 - numDisqualified;
     if (this.gameState.suggestion_number == numStillPlaying) {
       this.gamePanel.suggestionPanel.hide();
       this.gameState.suggestion_number = 0;
