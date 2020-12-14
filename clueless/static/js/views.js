@@ -669,6 +669,7 @@ class SuggestionQueryPanel extends Panel {
     this.element.querySelector('#suggest3').innerHTML = suggestedItems[2].name;
     this.element.querySelector('#lblWitness1').innerHTML = playerItems[0].name;
     this.element.querySelector('#witness1').disabled = true;
+    this.element.querySelector('#witness1').checked = false;
     // Check if in
     for (var i = 0; i < suggestedItems.length; i++) {
       if (suggestedItems[i].equals(playerItems[0])) {
@@ -678,6 +679,7 @@ class SuggestionQueryPanel extends Panel {
     }
     this.element.querySelector('#lblWitness2').innerHTML = playerItems[1].name;
     this.element.querySelector('#witness2').disabled = true;
+    this.element.querySelector('#witness2').checked = false;
     // Check if in
     for (var i = 0; i < suggestedItems.length; i++) {
       if (suggestedItems[i].equals(playerItems[1])) {
@@ -687,6 +689,7 @@ class SuggestionQueryPanel extends Panel {
     }
     this.element.querySelector('#lblWitness3').innerHTML = playerItems[2].name;
     this.element.querySelector('#witness3').disabled = true;
+    this.element.querySelector('#witness3').checked = false;
     // Check if in
     for (var i = 0; i < suggestedItems.length; i++) {
       if (suggestedItems[i].equals(playerItems[2])) {
