@@ -268,7 +268,7 @@ class GameHub {
     // Get which player was disqualified by character id
     var player = gameHub.gameState.players[message.player];
     var isLocalPlayer = (player.character.id == gameHub.gameState.localPlayerIndex);
-
+    player.disqualified = true;
     if (isLocalPlayer) {
       var msg = "You have been disqualified.";
       this.gamePanel.showToast(msg);
