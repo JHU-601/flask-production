@@ -377,15 +377,42 @@ class GameState:
         if players:
             await asyncio.wait([player.send_message(message) for player in self.players if player != skip])
 
+
+    def validate_suggestion_response(self, response_player: Player, response: SuggestionResponse):
+        denied = response.witness is None
+        has_item = False
+        for item in self.witness_items[player.character]:
+            if (isinstance(item, Room) and item == self.suggestion.room) or \
+               (isinstance(item, Weapon) and item == self.suggestion.weapon) or \
+               (isinstance(item, Character) and item == self.suggestion.character):
+                has_item = True
+                break
+        if denied and has_item:
+            return False
+        elif denied:
+            return True
+
+        if (isinstance(response.witness, Room) and response.witness != self.suggestion.room) or \
+           isinstance(response.witness, Character) and response.witness != self.suggestion.suspect or \
+           isinstance(response.witness, Weapon) and response.witness != self.suggestion.weapon:
+            return False
+        return True
+
+
     async def suggestion_response(self, response_player: Player, response: SuggestionResponse):
         if self.suggestion_player is None:
             return await response_player.send_message(Status("Cannot respond to suggestion, no suggestion was made."))
         if self.queried_player != response_player:
             return await response_player.send_message(Status("Wait your turn to respond."))
+        # check response for cheating
+        is_valid = self.validate_suggestion_response(response_player, response)
+
+        if not is_valid:
+            return await response_player.send_message(Status("Invalid suggestion reponse"))
 
         status = response.into_status(response_player.character)
 
-        # TODO: check response for cheating
+
         if response.witness is not None:
             witness = response.into_witness(response_player.character)
             await self.suggestion_player.send_message(witness)
@@ -432,6 +459,7 @@ class GameState:
         self.suggestion_query = filter(lambda p: p not in self.disqualified, players)
         self.suggestion_player = player
         self.queried_player = next(self.suggestion_query)
+        self.suggestion = suggestion
 
         await self.queried_player.send_message(SuggestionQuery())
 
