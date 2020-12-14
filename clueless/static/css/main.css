@@ -80,6 +80,9 @@ body {
   left: 50%;
   transform: translate(-50%, 0);
 }
+#btnStartGame {
+  display: none;
+}
 
 #waitingroom-panel #listOfPlayers {
   margin-top: 20px;
