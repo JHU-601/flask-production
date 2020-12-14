@@ -382,9 +382,9 @@ class GameState:
         denied = response.witness is None
         has_item = False
         for item in self.witness_items[response_player.character]:
-            if (isinstance(item, Room) and item == self.suggestion.room) or \
-               (isinstance(item, Weapon) and item == self.suggestion.weapon) or \
-               (isinstance(item, Character) and item == self.suggestion.character):
+            if (isinstance(item, Room) and item == self.current_suggestion.room) or \
+               (isinstance(item, Weapon) and item == self.current_suggestion.weapon) or \
+               (isinstance(item, Character) and item == self.current_suggestion.character):
                 has_item = True
                 break
         if denied and has_item:
@@ -392,9 +392,9 @@ class GameState:
         elif denied:
             return True
 
-        if (isinstance(response.witness, Room) and response.witness != self.suggestion.room) or \
-           isinstance(response.witness, Character) and response.witness != self.suggestion.suspect or \
-           isinstance(response.witness, Weapon) and response.witness != self.suggestion.weapon:
+        if (isinstance(response.witness, Room) and response.witness != self.current_suggestion.room) or \
+           isinstance(response.witness, Character) and response.witness != self.current_suggestion.suspect or \
+           isinstance(response.witness, Weapon) and response.witness != self.current_suggestion.weapon:
             return False
         return True
 
@@ -420,6 +420,7 @@ class GameState:
             self.suggestion_player = None
             self.suggestion_query = None
             self.queried_player = None
+            self.current_suggestion = None
         else:
             await self.broadcast(status)
             try:
@@ -429,6 +430,7 @@ class GameState:
                 self.suggestion_player = None
                 self.suggestion_query = None
                 self.queried_player = None
+                self.current_suggestion = None
                 return
             await self.queried_player.send_message(SuggestionQuery())
 
@@ -459,7 +461,7 @@ class GameState:
         self.suggestion_query = filter(lambda p: p not in self.disqualified, players)
         self.suggestion_player = player
         self.queried_player = next(self.suggestion_query)
-        self.suggestion = suggestion
+        self.current_suggestion = suggestion
 
         await self.queried_player.send_message(SuggestionQuery())
 
